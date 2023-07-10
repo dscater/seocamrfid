@@ -13,7 +13,10 @@
 </li>
 
 {{-- menu-is-opening menu-open --}}
-<li class="nav-item @if (request()->is('obras*') || request()->is('materials*') || request()->is('material_obras*')) menu-is-opening menu-open active @endif">
+<li class="nav-item @if (request()->is('obras*') ||
+        request()->is('materials*') ||
+        request()->is('material_obras*') ||
+        request()->is('solicitud_obras*')) menu-is-opening menu-open active @endif">
     <a href="#" class="nav-link">
         <i class="nav-icon far fa-list-alt"></i>
         <p>Obras <i class="fas fa-angle-left right"></i></p>
@@ -26,8 +29,14 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('materials.index') }}"
-                class="nav-link {{ request()->is('materials*') ? 'active' : '' }}">
+            <a href="{{ route('solicitud_obras.index') }}"
+                class="nav-link {{ request()->is('solicitud_obras*') ? 'active' : '' }}">
+                <i class="nav-icon far fa-circle"></i>
+                <p>Solicitud de Obras</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('materials.index') }}" class="nav-link {{ request()->is('materials*') ? 'active' : '' }}">
                 <i class="nav-icon far fa-circle"></i>
                 <p>Materiales</p>
             </a>
@@ -43,7 +52,8 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="{{ route('herramientas.index') }}" class="nav-link {{ request()->is('herramientas*') ? 'active' : '' }}">
+            <a href="{{ route('herramientas.index') }}"
+                class="nav-link {{ request()->is('herramientas*') ? 'active' : '' }}">
                 <i class="nav-icon far fa-circle"></i>
                 <p>Herramientas</p>
             </a>
@@ -59,8 +69,7 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('razon_social.index') }}"
-        class="nav-link {{ request()->is('razon_social*') ? 'active' : '' }}">
+    <a href="{{ route('razon_social.index') }}" class="nav-link {{ request()->is('razon_social*') ? 'active' : '' }}">
         <i class="nav-icon fa fa-hospital"></i>
         <p>Razón social</p>
     </a>

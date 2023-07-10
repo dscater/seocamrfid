@@ -1,10 +1,10 @@
-let nroNotificaciones = $('#nroNotificaciones');
-let contenedorNotificaciones = $('#contenedorNotificaciones');
-let totalNotificaciones = $('#totalNotificaciones');
+let nroNotificaciones = $("#nroNotificaciones");
+let contenedorNotificaciones = $("#contenedorNotificaciones");
+let totalNotificaciones = $("#totalNotificaciones");
 let sw = false;
 
-$(document).ready(function() {
-    totalNotificaciones.val('0');
+$(document).ready(function () {
+    totalNotificaciones.val("0");
     notificaciones();
     sw = false;
     setInterval(notificaciones, 2000);
@@ -13,17 +13,19 @@ $(document).ready(function() {
 function notificaciones() {
     $.ajax({
         type: "GET",
-        url: $('#urlNotificaciones').val(),
+        url: $("#urlNotificaciones").val(),
         dataType: "json",
-        success: function(response) {
+        success: function (response) {
             if (parseInt(totalNotificaciones.val()) != response.total) {
                 totalNotificaciones.val(response.total);
                 contenedorNotificaciones.html(response.html);
             }
-            if (parseInt(nroNotificaciones.text()) < parseInt(response.sinVer)) {
-                mensajeNotificacion2('Tienes notificaciones para ver', 'bg-warning', 'Notificaciones');
+            if (
+                parseInt(nroNotificaciones.text()) < parseInt(response.sinVer)
+            ) {
+                toastr.warning("Tienes notificaciones para ver");
                 nroNotificaciones.text(response.sinVer);
             }
-        }
+        },
     });
 }

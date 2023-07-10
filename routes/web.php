@@ -167,7 +167,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notificacions', 'NotificacionController@index')->name('notificacions.index');
 
     Route::get('notificacions/{notificacion}', 'NotificacionController@show')->name('notificacions.show');
-    
+
+    // SOLICITUD OBRAS
+    Route::get('solicitud_obras/solicitudes_obra/{obra}', 'SolicitudObraController@solicitudes_obra')->name('solicitud_obras.solicitudes_obra');
+    Route::get('solicitud_obras/show/{solicitud_obra}', 'SolicitudObraController@show')->name('solicitud_obras.show');
+    Route::get('solicitud_obras', 'SolicitudObraController@index')->name('solicitud_obras.index');
+    Route::get('solicitud_obras/create/{obra}', 'SolicitudObraController@create')->name('solicitud_obras.create');
+    Route::post('solicitud_obras/store/{obra}', 'SolicitudObraController@store')->name('solicitud_obras.store');
+
     // REPORTES
     Route::get('reportes', 'ReporteController@index')->name('reportes.index');
 
@@ -176,7 +183,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reportes/personal', 'ReporteController@personal')->name('reportes.personal');
 
     Route::get('reportes/materiales_obras', 'ReporteController@materiales_obras')->name('reportes.materiales_obras');
-    
+
     Route::get('reportes/infoMateriales', 'ReporteController@infoMateriales')->name('reportes.infoMateriales');
 
     Route::get('reportes/ingresos_salidas', 'ReporteController@ingresos_salidas')->name('reportes.ingresos_salidas');

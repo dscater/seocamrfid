@@ -4808,6 +4808,8 @@ input[type="button"].btn-block {
 }
 
 .card-title {
+  font-weight: bold;
+  font-size:1.05em;
   margin-bottom: 0.75rem;
 }
 

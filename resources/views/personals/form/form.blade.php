@@ -17,8 +17,6 @@
             {{ Form::text('materno', null, ['class' => 'form-control']) }}
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-md-4">
         <div class="form-group">
             <label>C.I.*</label>
@@ -34,22 +32,22 @@
         <div class="form-group">
             <label>Expedido*</label>
             {{ Form::select(
-    'ci_exp',
-    [
-        '' => 'Seleccione...',
-        'LP' => 'LA PAZ',
-        'CB' => 'COCHABAMBA',
-        'SC' => 'SANTA CRUZ',
-        'PT' => 'POTOSI',
-        'OR' => 'ORURO',
-        'CH' => 'CHUQUISACA',
-        'TJ' => 'TARIJA',
-        'BN' => 'BENI',
-        'PD' => 'PANDO',
-    ],
-    null,
-    ['class' => 'form-control', 'required'],
-) }}
+                'ci_exp',
+                [
+                    '' => 'Seleccione...',
+                    'LP' => 'LA PAZ',
+                    'CB' => 'COCHABAMBA',
+                    'SC' => 'SANTA CRUZ',
+                    'PT' => 'POTOSI',
+                    'OR' => 'ORURO',
+                    'CH' => 'CHUQUISACA',
+                    'TJ' => 'TARIJA',
+                    'BN' => 'BENI',
+                    'PD' => 'PANDO',
+                ],
+                null,
+                ['class' => 'form-control', 'required'],
+            ) }}
         </div>
     </div>
     <div class="col-md-6">
@@ -58,8 +56,6 @@
             {{ Form::text('domicilio', null, ['class' => 'form-control', 'required']) }}
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-md-4">
         <div class="form-group">
             <label>Celular</label>
@@ -68,18 +64,10 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label>Asignar Obra*</label>
-            {{ Form::select('obra_id', $array_obras, null, ['class' => 'form-control', 'required']) }}
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
             <label>Foto</label>
             <input type="file" name="foto" class="form-control">
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-md-4">
         <div class="form-group">
             <label>Familiar Referencia</label>
@@ -96,6 +84,20 @@
         <div class="form-group">
             <label>Celular</label>
             {{ Form::text('cel_familiar', null, ['class' => 'form-control']) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Cargo*</label>
+            {{ Form::text('cargo', null, ['class' => 'form-control', 'required']) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Habilitado*</label>
+            <input type="checkbox" name="habilitado" value="1"
+                {{ isset($personal) && $personal->habilitado ? 'checked' : '' }} data-bootstrap-switch
+                data-off-color="danger" data-on-color="success" data-on-text="SI" data-off-text="NO">
         </div>
     </div>
 </div>

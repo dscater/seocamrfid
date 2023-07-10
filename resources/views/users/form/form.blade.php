@@ -34,22 +34,22 @@
         <div class="form-group">
             <label>Expedido*</label>
             {{ Form::select(
-    'ci_exp',
-    [
-        '' => 'Seleccione...',
-        'LP' => 'LA PAZ',
-        'CB' => 'COCHABAMBA',
-        'SC' => 'SANTA CRUZ',
-        'PT' => 'POTOSI',
-        'OR' => 'ORURO',
-        'CH' => 'CHUQUISACA',
-        'TJ' => 'TARIJA',
-        'BN' => 'BENI',
-        'PD' => 'PANDO',
-    ],
-    null,
-    ['class' => 'form-control', 'required'],
-) }}
+                'ci_exp',
+                [
+                    '' => 'Seleccione...',
+                    'LP' => 'LA PAZ',
+                    'CB' => 'COCHABAMBA',
+                    'SC' => 'SANTA CRUZ',
+                    'PT' => 'POTOSI',
+                    'OR' => 'ORURO',
+                    'CH' => 'CHUQUISACA',
+                    'TJ' => 'TARIJA',
+                    'BN' => 'BENI',
+                    'PD' => 'PANDO',
+                ],
+                null,
+                ['class' => 'form-control', 'required'],
+            ) }}
         </div>
     </div>
     <div class="col-md-6">
@@ -95,16 +95,24 @@
         <div class="form-group">
             <label>Tipo Usuario*</label>
             {{ Form::select(
-    'tipo',
-    [
-        '' => 'Seleccione...',
-        'ADMINISTRADOR' => 'ADMINISTRADOR',
-        'AUXILIAR' => 'AUXILIAR',
-        'JEFE DE OBRA' => 'JEFE DE OBRA',
-    ],
-    isset($usuario) ? $usuario->user->tipo : null,
-    ['class' => 'form-control', 'required', 'id' => 'tipo'],
-) }}
+                'tipo',
+                [
+                    '' => 'Seleccione...',
+                    'ADMINISTRADOR' => 'ADMINISTRADOR',
+                    'AUXILIAR' => 'AUXILIAR',
+                    'JEFE DE OBRA' => 'JEFE DE OBRA',
+                ],
+                isset($usuario) ? $usuario->user->tipo : null,
+                ['class' => 'form-control', 'required', 'id' => 'tipo'],
+            ) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Habilitado*</label>
+            <input type="checkbox" name="habilitado" value="1"
+                {{ isset($usuario) && $usuario->habilitado ? 'checked' : '' }} data-bootstrap-switch
+                data-off-color="danger" data-on-color="success" data-on-text="SI" data-off-text="NO">
         </div>
     </div>
 </div>

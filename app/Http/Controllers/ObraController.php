@@ -2,9 +2,11 @@
 
 namespace app\Http\Controllers;
 
+use app\DatosUsuario;
 use Illuminate\Http\Request;
 use app\Obra;
 use app\Personal;
+use Illuminate\Support\Facades\Auth;
 
 class ObraController extends Controller
 {
@@ -14,7 +16,17 @@ class ObraController extends Controller
         if ($request->texto) {
             $texto = $request->texto;
         }
-        $obras = Obra::where('nombre', 'LIKE', "%$texto%")->get();
+        $obras = [];
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where('nombre', 'LIKE', "%$texto%")->where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where('nombre', 'LIKE', "%$texto%")->where("auxiliar_id", Auth::user()->id)->get();
+            }
+        } else {
+            $obras = Obra::where('nombre', 'LIKE', "%$texto%")->get();
+        }
+
         if ($request->ajax()) {
             $html = view('obras.parcial.lista', compact('obras'))->render();
             return response()->JSON([
@@ -27,7 +39,31 @@ class ObraController extends Controller
 
     public function create()
     {
-        return view('obras.create');
+        $array_jefes[""] = "Seleccione...";
+        $array_auxiliars[""] = "Seleccione...";
+
+        $jefes = DatosUsuario::select('datos_usuarios.*')
+            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+            ->where('datos_usuarios.habilitado', 1)
+            ->where('users.tipo', "JEFE DE OBRA")
+            ->where('users.estado', 1)
+            ->get();
+
+        foreach ($jefes as $jefe) {
+            $array_jefes[$jefe->user_id] = $jefe->full_name;
+        }
+
+        $auxiliars = DatosUsuario::select('datos_usuarios.*')
+            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+            ->where('datos_usuarios.habilitado', 1)
+            ->where('users.estado', 1)
+            ->where('users.tipo', "AUXILIAR")
+            ->get();
+
+        foreach ($auxiliars as $auxiliar) {
+            $array_auxiliars[$auxiliar->user_id] = $auxiliar->full_name;
+        }
+        return view('obras.create', compact("array_jefes", "array_auxiliars"));
     }
 
     public function store(Request $request)
@@ -38,7 +74,31 @@ class ObraController extends Controller
 
     public function edit(Obra $obra)
     {
-        return view('obras.edit', compact('obra'));
+        $array_jefes[""] = "Seleccione...";
+        $array_auxiliars[""] = "Seleccione...";
+
+        $jefes = DatosUsuario::select('datos_usuarios.*')
+            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+            ->where('datos_usuarios.habilitado', 1)
+            ->where('users.tipo', "JEFE DE OBRA")
+            ->where('users.estado', 1)
+            ->get();
+
+        foreach ($jefes as $jefe) {
+            $array_jefes[$jefe->user_id] = $jefe->full_name;
+        }
+
+        $auxiliars = DatosUsuario::select('datos_usuarios.*')
+            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+            ->where('datos_usuarios.habilitado', 1)
+            ->where('users.estado', 1)
+            ->where('users.tipo', "AUXILIAR")
+            ->get();
+
+        foreach ($auxiliars as $auxiliar) {
+            $array_auxiliars[$auxiliar->user_id] = $auxiliar->full_name;
+        }
+        return view('obras.edit', compact('obra', "array_jefes", "array_auxiliars"));
     }
 
     public function update(Obra $obra, Request $request)

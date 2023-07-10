@@ -70,6 +70,9 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
+        if (!isset($request->habilitado)) {
+            $request["habilitado"] = 0;
+        }
         $request['fecha_registro'] = date('Y-m-d');
         $usuario = new DatosUsuario(array_map('mb_strtoupper', $request->all()));
         $nombre_usuario = UserController::nombreUsuario($request->nombre, $request->paterno);
@@ -114,6 +117,9 @@ class UserController extends Controller
 
     public function update(DatosUsuario $usuario, UserUpdateRequest $request)
     {
+        if (!isset($request->habilitado)) {
+            $request["habilitado"] = 0;
+        }
         $usuario->update(array_map('mb_strtoupper', $request->except('foto')));
         $usuario->user->tipo = $request->tipo;
         if ($request->hasFile('foto')) {

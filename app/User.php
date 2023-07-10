@@ -22,6 +22,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ["full_name"];
+
+    public function getFullNameAttribute()
+    {
+        if ($this->datosUsuario) {
+            return $this->datosUsuario->nombre . ' ' . $this->datosUsuario->paterno . ' ' . $this->datosUsuario->materno;
+        }
+        return $this->name;
+    }
+
     public function datosUsuario()
     {
         return $this->hasOne('app\DatosUsuario', 'user_id', 'id');

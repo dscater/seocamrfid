@@ -17,16 +17,14 @@ class PersonalController extends Controller
 
     public function create()
     {
-        $obras = Obra::all();
-        $array_obras[''] = 'Seleccione...';
-        foreach ($obras as $value) {
-            $array_obras[$value->id] = $value->nombre;
-        }
-        return view('personals.create', compact('array_obras'));
+        return view('personals.create');
     }
 
     public function store(Request $request)
     {
+        if (!isset($request->habilitado)) {
+            $request["habilitado"] = 0;
+        }
         $request['fecha_registro'] = date('Y-m-d');
         $nuevo_personal = new Personal(array_map('mb_strtoupper', $request->all()));
         $nuevo_personal->foto = 'user_default.png';
@@ -45,16 +43,14 @@ class PersonalController extends Controller
 
     public function edit(Personal $personal)
     {
-        $obras = Obra::all();
-        $array_obras[''] = 'Seleccione...';
-        foreach ($obras as $value) {
-            $array_obras[$value->id] = $value->nombre;
-        }
-        return view('personals.edit', compact('personal', 'array_obras'));
+        return view('personals.edit', compact('personal'));
     }
 
     public function update(Personal $personal, Request $request)
     {
+        if (!isset($request->habilitado)) {
+            $request["habilitado"] = 0;
+        }
         $personal->update(array_map('mb_strtoupper', $request->except('foto')));
         if ($request->hasFile('foto')) {
             // antiguo

@@ -20,6 +20,9 @@
     <link rel="stylesheet"
         href="{{ asset('template/AdminLTE-3.0.5/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('select2/dist/css/select2.min.css') }}">
+
     <!-- SweetAlert2 -->
     <link rel="stylesheet"
         href="{{ asset('template/AdminLTE-3.0.5/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
@@ -63,7 +66,8 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
                 </li>
                 {{-- <li class="nav-item d-none d-sm-inline-block">
                     <a href="index3.html" class="nav-link">Home</a>
@@ -117,8 +121,10 @@
                                 <div class="col-4 text-center">
                                 </div>
                                 <div class="col-4 text-center">
-                                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();" class="btn btn-default">salir</a>
+                                    <a href="{{ route('logout') }}"
+                                        onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"
+                                        class="btn btn-default">salir</a>
                                 </div>
                             </div>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -226,15 +232,18 @@
 
     <!-- DataTables -->
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('template/AdminLTE-3.0.5/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}">
-    </script>
+    <script src="{{ asset('template/AdminLTE-3.0.5/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}">
     </script>
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}">
     </script>
 
+    <!-- Bootstrap-Switch -->
+    <script src="{{ asset('template/AdminLTE-3.0.5/plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+
     <!-- SweetAlert2 -->
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+
     <!-- Toastr -->
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/toastr/toastr.min.js') }}"></script>
 
@@ -243,7 +252,7 @@
     <script src="{{ asset('Highcharts/code/highcharts-3d.src.js') }}"></script>
     <script src="{{ asset('Highcharts/code/modules/exporting.js') }}"></script>
     <script src="{{ asset('Highcharts/code/modules/export-data.js') }}"></script>
-    
+
     <!-- JQUERY VALIDATE -->
     <script src="{{ asset('template/AdminLTE-3.0.5/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 
@@ -252,6 +261,9 @@
 
     <!-- OPTIONAL SCRIPTS -->
     <script src="{{ asset('template/AdminLTE-3.0.5/dist/js/demo.js') }}"></script>
+
+    <!-- Select2 -->
+    <script src="{{ asset('select2/dist/js/select2.full.min.js') }}"></script>
 
     <!-- PAGE SCRIPTS -->
     <script src="{{ asset('template/AdminLTE-3.0.5/dist/js/pages/dashboard2.js') }}"></script>
@@ -326,9 +338,26 @@
             })
         }
 
+        // select2
+        $('.select2').select2();
+
+        // bootstrap-switch
+        $("input[data-bootstrap-switch]").each(function() {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        });
+
         @if ($stock_bajo == 'SI')
-            mensajeNotificacion2('Existen materiales con un stock por debajo del mínimo permitido','bg-danger','Revisar Stock Materiales');
+            mensajeNotificacion2('Existen materiales con un stock por debajo del mínimo permitido', 'bg-danger',
+                'Revisar Stock Materiales');
         @endif
+
+        // swal.fire({
+        //     title: "Correcto",
+        //     icon: "success",
+        //     text: "prueba",
+        //     confirmButtonText: "Aceptar",
+        //     confirmButtonColor: "#bd2130"
+        // });
     </script>
 
     <script src="{{ asset('js/notificacion.js') }}"></script>
