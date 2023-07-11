@@ -25,6 +25,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <div class="card-header">
+                            <div class="col-md-3">
+                                <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
+                                        class="fa fa-arrow-left"></i> Volver a Obras</a>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <table id="example2" class="table data-table table-bordered table-hover">
                                 <thead>
@@ -51,12 +57,16 @@
                                             <td>{{ $solicitud_obra->c_material }}</td>
                                             <td>{{ $solicitud_obra->c_herramientas }}</td>
                                             <td>{{ $solicitud_obra->c_personal }}</td>
-                                            <td>{{ $solicitud_obra->aprobado_admin_txt }}</td>
-                                            <td>{{ $solicitud_obra->aprobado_aux_txt }}</td>
+                                            <td><span
+                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_admin ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_admin_txt }}</span>
+                                            </td>
+                                            <td><span
+                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_aux ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_aux_txt }}</span>
+                                            </td>
                                             <td>{{ $solicitud_obra->fecha_registro }}</td>
                                             <td class="btns-opciones">
                                                 <a href="{{ route('solicitud_obras.show', $solicitud_obra->id) }}"
-                                                    class="modificar"><i class="fa fa-eye" data-toggle="tooltip"
+                                                    class="ir-evaluacion"><i class="fa fa-eye" data-toggle="tooltip"
                                                         data-placement="left" title="Ver Solicitud"></i></a>
                                             </td>
                                         </tr>

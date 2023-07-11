@@ -10,5 +10,11 @@ class SolicitudMaterial extends Model
         "solicitud_obra_id",
         "material_id",
         "cantidad",
+        "aprobado"
     ];
+
+    public function material()
+    {
+        return $this->belongsTo(Material::class, 'material_id');
+    }
 }

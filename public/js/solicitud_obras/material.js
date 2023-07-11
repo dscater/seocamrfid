@@ -96,12 +96,13 @@ $(document).ready(function () {
         editables.each(function (index) {
             if (index == 0) {
                 let select_elem = $(this).children(".input_form");
-                array_valores[1] = select_elem.val();
+                array_valores[select_elem.attr("data-index")] =
+                    select_elem.val();
             }
             if (index == 1) {
                 let input = $(this).children(".input_form");
                 if (input.val().trim() != "") {
-                    array_valores[2] = input.val();
+                    array_valores[input.attr("data-index")] = input.val();
                 } else {
                     errors = true;
                 }
@@ -142,9 +143,9 @@ $(document).ready(function () {
                 let input_valores = card_body.children(".valores");
                 let array_valores = input_valores.val().split("|");
                 if (array_valores[0] != "0") {
-                    let input_el_clone = $(input_eliminado).clone();
+                    let input_el_clone = $(input_eliminado_material).clone();
                     input_el_clone.val(array_valores[0]);
-                    eliminados.append(input_el_clone);
+                    eliminados_material.append(input_el_clone);
                 }
                 contenedor_elem.remove();
             }

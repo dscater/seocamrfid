@@ -44,8 +44,7 @@ class NotificacionController extends Controller
 
         $total = count($notificacions);
         $sinVer = count($notificacions_noVistos);
-        $html = '<span class="dropdown-item dropdown-header" id="txtNroNotificaciones">' . $sinVer . ' Notificaciones</span>
-        <div class="dropdown-divider"></div>';
+        $html = '';
 
         foreach ($notificacions as $value) {
             $visto = 'visto';
@@ -65,9 +64,6 @@ class NotificacionController extends Controller
                     <div class="dropdown-divider"></div>';
         }
 
-        $html .= '<div class="dropdown-divider"></div>
-        <div class="dropdown-divider"></div>
-        <a href="' . route('notificacions.index') . '" class="dropdown-item dropdown-footer">Ver todas las notificaciones</a>';
 
         return response()->JSON([
             'sw' => true,

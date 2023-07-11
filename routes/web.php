@@ -96,9 +96,27 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('obras/edit/{obra}', 'ObraController@edit')->name('obras.edit');
 
+    Route::get('obras/show/{obra}', 'ObraController@show')->name('obras.show');
+
     Route::put('obras/update/{obra}', 'ObraController@update')->name('obras.update');
 
     Route::delete('obras/destroy/{obra}', 'ObraController@destroy')->name('obras.destroy');
+
+
+    // NOTAS OBRAS
+    Route::get('obras/notas/{obra}', 'NotaObrasController@index')->name('nota_obras.index');
+
+    Route::get('obras/notas/create/{obra}', 'NotaObrasController@create')->name('nota_obras.create');
+
+    Route::post('obras/notas/store/{obra}', 'NotaObrasController@store')->name('nota_obras.store');
+
+    Route::get('obras/notas/edit/{nota_obra}', 'NotaObrasController@edit')->name('nota_obras.edit');
+
+    Route::get('obras/notas/show/{nota_obra}', 'NotaObrasController@show')->name('nota_obras.show');
+
+    Route::put('obras/notas/update/{nota_obra}', 'NotaObrasController@update')->name('nota_obras.update');
+
+    Route::delete('obras/notas/destroy/{nota_obra}', 'NotaObrasController@destroy')->name('nota_obras.destroy');
 
     // MATERIALES
     Route::get('materials', 'MaterialController@index')->name('materials.index');
@@ -169,11 +187,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notificacions/{notificacion}', 'NotificacionController@show')->name('notificacions.show');
 
     // SOLICITUD OBRAS
+    Route::post('solicitud_obras/cambiaEstado/{solicitud_obra}', 'SolicitudObraController@cambiaEstado')->name('solicitud_obras.cambiaEstado');
     Route::get('solicitud_obras/solicitudes_obra/{obra}', 'SolicitudObraController@solicitudes_obra')->name('solicitud_obras.solicitudes_obra');
     Route::get('solicitud_obras/show/{solicitud_obra}', 'SolicitudObraController@show')->name('solicitud_obras.show');
     Route::get('solicitud_obras', 'SolicitudObraController@index')->name('solicitud_obras.index');
     Route::get('solicitud_obras/create/{obra}', 'SolicitudObraController@create')->name('solicitud_obras.create');
     Route::post('solicitud_obras/store/{obra}', 'SolicitudObraController@store')->name('solicitud_obras.store');
+    Route::get('solicitud_obras/edit/{solicitud_obra}', 'SolicitudObraController@edit')->name('solicitud_obras.edit');
+    Route::put('solicitud_obras/update/{solicitud_obra}', 'SolicitudObraController@update')->name('solicitud_obras.update');
+    Route::delete('solicitud_obras/destroy/{solicitud_obra}', 'SolicitudObraController@destroy')->name('solicitud_obras.destroy');
 
     // REPORTES
     Route::get('reportes', 'ReporteController@index')->name('reportes.index');

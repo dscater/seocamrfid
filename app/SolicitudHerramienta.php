@@ -11,6 +11,12 @@ class SolicitudHerramienta extends Model
         "herramienta_id",
         "dias_uso",
         "fecha_asignacion",
-        "fecha_finalización",
+        "fecha_finalizacion",
+        "aprobado"
     ];
+
+    public function herramienta()
+    {
+        return $this->belongsTo(Herramienta::class, 'herramienta_id');
+    }
 }

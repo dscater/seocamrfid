@@ -30,12 +30,11 @@
                             <h3 class="card-title">Ver notificación</h3>
                         </div>
                         <div class="card-body">
-                            {{count(Auth::user()->notificacions_user)}}
                             <p><b>Tipo:</b> {{ $notificacion->notificacion->tipo }}
                                 @if ($notificacion->notificacion->tipo == 'MATERIAL')
                                     <p><b>Registro:</b> {{ $notificacion->notificacion->material->mo->material->nombre }}
                                     </p>
-                                @else
+                                @elseif($notificacion->notificacion->tipo == 'HERRAMIENTA')
                                     <p><b>Registro:</b> {{ $notificacion->notificacion->monitoreo->herramienta->nombre }}
                                     </p>
                                 @endif
@@ -44,6 +43,10 @@
                             <p><b>Fecha Hora:</b>
                                 {{ date('d/m/Y H:i a', strtotime($notificacion->notificacion->fecha . ' ' . $notificacion->notificacion->hora)) }}
                             </p>
+                            @if ($notificacion->notificacion->tipo == 'SOLICITUD')
+                                <p><a href="{{ route('solicitud_obras.show', $notificacion->notificacion->registro_id) }}" class="btn btn-primary">Ver
+                                        solicitud</a></p>
+                            @endif
                         </div>
                     </div>
                     <!-- /.card -->

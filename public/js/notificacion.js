@@ -26,6 +26,7 @@ function notificaciones() {
                 toastr.warning("Tienes notificaciones para ver");
                 nroNotificaciones.text(response.sinVer);
             }
+            $("#txtNroNotificaciones").text(`${response.sinVer} Notificaciones`);
         },
     });
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 10-07-2023 a las 22:20:35
+-- Tiempo de generación: 11-07-2023 a las 18:45:20
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 7.4.19
 
@@ -199,7 +199,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (25, '2023_07_10_142310_create_solicitud_personals_table', 5),
 (26, '2023_07_10_142311_create_obra_herramientas_table', 5),
 (27, '2023_07_10_142956_create_obra_personals_table', 5),
-(28, '2023_07_10_143453_create_solicitud_notas_table', 6);
+(29, '2023_07_10_143453_create_solicitud_notas_table', 6),
+(30, '2023_07_11_141822_create_nota_obras_table', 6);
 
 -- --------------------------------------------------------
 
@@ -227,6 +228,29 @@ INSERT INTO `monitoreo_herramientas` (`id`, `herramienta_id`, `accion`, `fecha_r
 (4, 2, 'SALIDA', '2021-08-04', '2021-08-04 20:24:18', '2021-08-04 20:24:18'),
 (5, 1, 'INGRESO', '2021-08-04', '2021-08-04 20:24:22', '2021-08-04 20:24:22'),
 (6, 2, 'INGRESO', '2021-08-17', '2021-08-17 19:51:32', '2021-08-17 19:51:32');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `nota_obras`
+--
+
+CREATE TABLE `nota_obras` (
+  `id` bigint UNSIGNED NOT NULL,
+  `obra_id` bigint UNSIGNED NOT NULL,
+  `nota` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_registro` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `nota_obras`
+--
+
+INSERT INTO `nota_obras` (`id`, `obra_id`, `nota`, `fecha_registro`, `created_at`, `updated_at`) VALUES
+(2, 1, 'NOTA #1 MODIFICADO', '2023-07-11', '2023-07-11 18:42:10', '2023-07-11 18:44:49'),
+(3, 1, 'NOTA #2', '2023-07-11', '2023-07-11 18:44:41', '2023-07-11 18:44:41');
 
 -- --------------------------------------------------------
 
@@ -307,24 +331,24 @@ INSERT INTO `notificacion_users` (`id`, `notificacion_id`, `user_id`, `visto`, `
 (20, 7, 1, 1, '2021-08-04 20:23:24', '2021-08-04 20:23:30'),
 (21, 7, 2, 0, '2021-08-04 20:23:24', '2021-08-04 20:23:24'),
 (22, 7, 4, 0, '2021-08-04 20:23:24', '2021-08-04 20:23:24'),
-(23, 8, 1, 0, '2021-08-04 20:23:43', '2021-08-04 20:23:43'),
+(23, 8, 1, 1, '2021-08-04 20:23:43', '2023-07-11 16:42:51'),
 (24, 8, 2, 0, '2021-08-04 20:23:43', '2021-08-04 20:23:43'),
 (25, 8, 3, 0, '2021-08-04 20:23:43', '2021-08-04 20:23:43'),
 (26, 8, 4, 0, '2021-08-04 20:23:43', '2021-08-04 20:23:43'),
-(27, 9, 1, 0, '2021-08-04 20:24:09', '2021-08-04 20:24:09'),
+(27, 9, 1, 1, '2021-08-04 20:24:09', '2023-07-11 16:42:51'),
 (28, 9, 2, 0, '2021-08-04 20:24:09', '2021-08-04 20:24:09'),
 (29, 9, 4, 0, '2021-08-04 20:24:09', '2021-08-04 20:24:09'),
-(30, 10, 1, 0, '2021-08-04 20:24:18', '2021-08-04 20:24:18'),
+(30, 10, 1, 1, '2021-08-04 20:24:18', '2023-07-11 16:42:51'),
 (31, 10, 2, 0, '2021-08-04 20:24:18', '2021-08-04 20:24:18'),
 (32, 10, 4, 0, '2021-08-04 20:24:18', '2021-08-04 20:24:18'),
-(33, 11, 1, 0, '2021-08-04 20:24:22', '2021-08-04 20:24:22'),
+(33, 11, 1, 1, '2021-08-04 20:24:22', '2023-07-11 16:42:51'),
 (34, 11, 2, 0, '2021-08-04 20:24:22', '2021-08-04 20:24:22'),
 (35, 11, 4, 0, '2021-08-04 20:24:22', '2021-08-04 20:24:22'),
-(36, 12, 1, 0, '2021-08-17 19:48:25', '2021-08-17 19:48:25'),
+(36, 12, 1, 1, '2021-08-17 19:48:25', '2023-07-11 16:42:51'),
 (37, 12, 2, 0, '2021-08-17 19:48:25', '2021-08-17 19:48:25'),
 (38, 12, 3, 1, '2021-08-17 19:48:25', '2021-08-17 19:49:20'),
 (39, 12, 4, 0, '2021-08-17 19:48:25', '2021-08-17 19:48:25'),
-(40, 13, 1, 0, '2021-08-17 19:51:33', '2021-08-17 19:51:33'),
+(40, 13, 1, 1, '2021-08-17 19:51:33', '2023-07-11 16:42:51'),
 (41, 13, 2, 0, '2021-08-17 19:51:33', '2021-08-17 19:51:33'),
 (42, 13, 4, 0, '2021-08-17 19:51:33', '2021-08-17 19:51:33');
 
@@ -341,6 +365,7 @@ CREATE TABLE `obras` (
   `auxiliar_id` bigint UNSIGNED DEFAULT NULL,
   `fecha_obra` date DEFAULT NULL,
   `descripcion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `estado` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'POR INICIAR',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -349,11 +374,11 @@ CREATE TABLE `obras` (
 -- Volcado de datos para la tabla `obras`
 --
 
-INSERT INTO `obras` (`id`, `nombre`, `jefe_id`, `auxiliar_id`, `fecha_obra`, `descripcion`, `created_at`, `updated_at`) VALUES
-(1, 'OBRA 1', 3, 2, '2023-07-10', 'PRUEBA ASIGNACION FECHA, JEFE DE OBRA Y AUXILIAR', '2021-08-04 20:16:28', '2023-07-10 19:29:14'),
-(2, 'OBRA 2', 6, 2, '2023-07-21', 'PRUEBA #2 ASIGNACION POR MODIFICACION', '2021-08-04 20:16:31', '2023-07-10 19:29:59'),
-(3, 'OBRA 3', 3, 2, '2023-07-31', '', '2021-08-04 20:16:31', '2023-07-10 19:30:10'),
-(4, 'OBRA #4', 6, 2, '2023-07-15', 'NUEVA OBRA', '2023-07-10 19:30:31', '2023-07-10 19:31:38');
+INSERT INTO `obras` (`id`, `nombre`, `jefe_id`, `auxiliar_id`, `fecha_obra`, `descripcion`, `estado`, `created_at`, `updated_at`) VALUES
+(1, 'OBRA 1', 3, 2, '2023-07-10', 'PRUEBA ASIGNACION FECHA, JEFE DE OBRA Y AUXILIAR', 'EN PROCESO', '2021-08-04 20:16:28', '2023-07-11 18:07:28'),
+(2, 'OBRA 2', 6, 2, '2023-07-21', 'PRUEBA #2 ASIGNACION POR MODIFICACION', 'POR INICIAR', '2021-08-04 20:16:31', '2023-07-11 17:30:42'),
+(3, 'OBRA 3', 3, 2, '2023-07-31', '', 'POR INICIAR', '2021-08-04 20:16:31', '2023-07-10 19:30:10'),
+(4, 'OBRA #4', 6, 2, '2023-07-15', 'NUEVA OBRA', 'POR INICIAR', '2023-07-10 19:30:31', '2023-07-10 19:31:38');
 
 -- --------------------------------------------------------
 
@@ -465,7 +490,8 @@ CREATE TABLE `solicitud_herramientas` (
   `herramienta_id` bigint UNSIGNED NOT NULL,
   `dias_uso` int NOT NULL,
   `fecha_asignacion` date NOT NULL,
-  `fecha_finalización` date NOT NULL,
+  `fecha_finalizacion` date NOT NULL,
+  `aprobado` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -481,6 +507,7 @@ CREATE TABLE `solicitud_materials` (
   `solicitud_obra_id` bigint UNSIGNED NOT NULL,
   `material_id` bigint UNSIGNED NOT NULL,
   `cantidad` double(24,2) NOT NULL,
+  `aprobado` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -525,6 +552,7 @@ CREATE TABLE `solicitud_personals` (
   `id` bigint UNSIGNED NOT NULL,
   `solicitud_obra_id` bigint UNSIGNED NOT NULL,
   `personal_id` bigint UNSIGNED NOT NULL,
+  `aprobado` int NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -609,6 +637,13 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `monitoreo_herramientas`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `nota_obras`
+--
+ALTER TABLE `nota_obras`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `nota_obras_obra_id_foreign` (`obra_id`);
 
 --
 -- Indices de la tabla `notificacions`
@@ -738,7 +773,7 @@ ALTER TABLE `material_obras`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `monitoreo_herramientas`
@@ -747,16 +782,22 @@ ALTER TABLE `monitoreo_herramientas`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT de la tabla `nota_obras`
+--
+ALTER TABLE `nota_obras`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `notificacions`
 --
 ALTER TABLE `notificacions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `notificacion_users`
 --
 ALTER TABLE `notificacion_users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT de la tabla `obras`
@@ -792,13 +833,13 @@ ALTER TABLE `razon_socials`
 -- AUTO_INCREMENT de la tabla `solicitud_herramientas`
 --
 ALTER TABLE `solicitud_herramientas`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_materials`
 --
 ALTER TABLE `solicitud_materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_notas`
@@ -810,13 +851,13 @@ ALTER TABLE `solicitud_notas`
 -- AUTO_INCREMENT de la tabla `solicitud_obras`
 --
 ALTER TABLE `solicitud_obras`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_personals`
 --
 ALTER TABLE `solicitud_personals`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
@@ -846,6 +887,12 @@ ALTER TABLE `ingreso_salidas`
 ALTER TABLE `material_obras`
   ADD CONSTRAINT `material_obras_material_id_foreign` FOREIGN KEY (`material_id`) REFERENCES `materials` (`id`),
   ADD CONSTRAINT `material_obras_obra_id_foreign` FOREIGN KEY (`obra_id`) REFERENCES `obras` (`id`);
+
+--
+-- Filtros para la tabla `nota_obras`
+--
+ALTER TABLE `nota_obras`
+  ADD CONSTRAINT `nota_obras_obra_id_foreign` FOREIGN KEY (`obra_id`) REFERENCES `obras` (`id`);
 
 --
 -- Filtros para la tabla `notificacion_users`

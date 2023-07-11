@@ -25,10 +25,14 @@
                             </div>
                         @endif
                         <div class="nombre_cliente">
-                            <a href="{{ route('material_obras.index', $obra->id) }}">{{ $obra->nombre }}</a>
+                            <a href="{{ route('obras.show', $obra->id) }}">{{ $obra->nombre }}</a>
                         </div>
                         <div class="ocupacion_cliente">
                             {{ $obra->descripcion }}
+                        </div>
+                        <div class="ocupacion_cliente">
+                            <span
+                                class="badge badge-{{ $obra->estado == 'POR INICIAR' ? 'warning' : ($obra->estado == 'EN PROCESO' ? 'primary' : 'success') }} text-xs">{{ $obra->estado }}</span>
                         </div>
                         <div class="info_adicional">
                             Jefe de Obra: {{ $obra->jefe_obra ? $obra->jefe_obra->full_name : 'S/A' }}
@@ -52,14 +56,23 @@
                             <a href="{{ route('material_obras.index', $obra->id) }}"
                                 class="btn bg-teal btn-flat btn-block">Movimiento Materiales</a>
                         </div>
-                        @if (Auth::user()->tipo == 'JEFE DE OBRA')
-                            <div class="info_adicional mt-1">
-                                <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
-                                    class="btn btn-primary text-white btn-flat btn-block">Solicitudes
-                                    ({{ $obra->c_solicitudes }})
-                                </a>
-                            </div>
-                        @endif
+                        <div class="info_adicional mt-1">
+                            <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
+                                class="btn btn-primary text-white btn-flat btn-block">Solicitudes
+                                ({{ $obra->c_solicitudes }})
+                            </a>
+                        </div>
+                        <div class="info_adicional mt-1">
+                            <a href="{{ route('nota_obras.index', $obra->id) }}"
+                                class="btn bg-lime text-white btn-flat btn-block">Notas
+                                ({{ count($obra->nota_obras) }})
+                            </a>
+                        </div>
+                        <div class="info_adicional mt-1">
+                            <a href="{{ route('obras.show', $obra->id) }}"
+                                class="btn btn-info text-white btn-flat btn-block">Ver
+                                Obra</a>
+                        </div>
                     </div>
                 </div>
             </div>

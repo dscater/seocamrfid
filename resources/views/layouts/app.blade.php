@@ -90,8 +90,14 @@
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge" id="nroNotificaciones">0</span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="contenedorNotificaciones">
-
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header" id="txtNroNotificaciones"></span>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>
+                        <div id="contenedorNotificaciones"></div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ route('notificacions.index') }}" class="dropdown-item dropdown-footer">Ver todas
+                            las notificaciones</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown user user-menu">
@@ -316,6 +322,16 @@
             max: $.validator.format("El valor debe ser menor o igual que {0}"),
             min: $.validator.format("El valor debe ser mayor o igual que {0}"),
         });
+
+        toastr.options = {
+            "debug": false,
+            "positionClass": "toast-bottom-right",
+            "onclick": null,
+            "fadeIn": 300,
+            "fadeOut": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000
+        }
 
         function mensajeNotificacion(mensaje, tipo) {
             let Toast = Swal.mixin({

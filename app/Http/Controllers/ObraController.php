@@ -68,6 +68,7 @@ class ObraController extends Controller
 
     public function store(Request $request)
     {
+        $request["estado"] = "POR INICIAR";
         Obra::create(array_map('mb_strtoupper', $request->all()));
         return redirect()->route('obras.index')->with('bien', 'Registro realizado con éxito');
     }
@@ -109,7 +110,7 @@ class ObraController extends Controller
 
     public function show(Obra $obra)
     {
-        return 'mostrar cargo';
+        return view('obras.show', compact('obra'));
     }
 
     public function destroy(Obra $obra)

@@ -49,10 +49,6 @@ class SolicitudObra extends Model
     {
         return $this->hasMany(SolicitudPersonal::class, 'solicitud_obra_id');
     }
-    public function solicitud_notas()
-    {
-        return $this->hasMany(SolicitudNota::class, 'solicitud_obra_id');
-    }
 
     public function obra()
     {

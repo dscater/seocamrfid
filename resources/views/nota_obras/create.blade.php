@@ -8,15 +8,14 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Solicitud de Obras - Nuevo</h1>
+                    <h1 class="m-0">Obras - Nueva Nota</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right bg-white">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('obras.index') }}">Obras</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('solicitud_obras.index') }}">Solicitud de Obras</a>
                         <li class="breadcrumb-item"><a
-                                href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}">{{ $obra->nombre }}</a>
+                                href="{{ route('nota_obras.index', $obra->id) }}">{{ $obra->nombre }}</a>
                         </li>
                         <li class="breadcrumb-item active">Nuevo</li>
                     </ol>
@@ -33,20 +32,20 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
+                                    <a href="{{ route('nota_obras.index', $obra->id) }}"
                                         class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i> Volver a
                                         {{ $obra->nombre }}</a>
                                 </div>
                                 <div class="col-md-12">
-                                    <h3 class="card-title text-center w-100">Nueva Solicitud</h3>
+                                    <h3 class="card-title text-center w-100">Nueva Nota</h3>
                                 </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
-                        {{ Form::open(['route' => ['solicitud_obras.store', $obra->id], 'method' => 'post', 'files' => true, 'id' => 'formSolicitud']) }}
+                        {{ Form::open(['route' => ['nota_obras.store', $obra->id], 'method' => 'post', 'files' => true, 'id' => 'formSolicitud']) }}
                         <div class="card-body">
-                            @include('solicitud_obras.form.form')
-                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> REGISTRAR SOLICITUD</button>
+                            @include('nota_obras.form.form')
+                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> REGISTRAR NOTA</button>
                         </div>
                         {{ Form::close() }}
                         <!-- /.card-body -->
@@ -61,9 +60,4 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/solicitud_obras/elementos.js') }}"></script>
-    <script src="{{ asset('js/solicitud_obras/material.js') }}"></script>
-    <script src="{{ asset('js/solicitud_obras/herramienta.js') }}"></script>
-    <script src="{{ asset('js/solicitud_obras/personal.js') }}"></script>
-    <script src="{{ asset('js/solicitud_obras/create.js') }}"></script>
 @endsection

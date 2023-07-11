@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Solicitud de Obras - Nuevo</h1>
+                    <h1 class="m-0">Solicitud de Obras - Modificar</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right bg-white">
@@ -18,7 +18,7 @@
                         <li class="breadcrumb-item"><a
                                 href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}">{{ $obra->nombre }}</a>
                         </li>
-                        <li class="breadcrumb-item active">Nuevo</li>
+                        <li class="breadcrumb-item active">Modificar</li>
                     </ol>
                 </div>
             </div>
@@ -38,15 +38,16 @@
                                         {{ $obra->nombre }}</a>
                                 </div>
                                 <div class="col-md-12">
-                                    <h3 class="card-title text-center w-100">Nueva Solicitud</h3>
+                                    <h3 class="card-title text-center w-100">Modificar Solicitud</h3>
                                 </div>
                             </div>
                         </div>
                         <!-- /.card-header -->
-                        {{ Form::open(['route' => ['solicitud_obras.store', $obra->id], 'method' => 'post', 'files' => true, 'id' => 'formSolicitud']) }}
+                        {{ Form::model($solicitud_obra, ['route' => ['solicitud_obras.update', $solicitud_obra->id], 'method' => 'put', 'files' => true, 'id' => 'formSolicitud']) }}
                         <div class="card-body">
                             @include('solicitud_obras.form.form')
-                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> REGISTRAR SOLICITUD</button>
+                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> ACTUALIZAR
+                                SOLICITUD</button>
                         </div>
                         {{ Form::close() }}
                         <!-- /.card-body -->

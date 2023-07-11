@@ -23,15 +23,25 @@
     <section class="content">
         <div class="container-fluid">
 
-            <div class="row">
+            <div class="row mb-2">
                 @if (Auth::user()->tipo == 'ADMINISTRADOR')
-                    <div class="col-md-12">
-                        <a href="{{ route('obras.create') }}" class="btn btn-primary">
+                    <div class="col-md-3">
+                        <a href="{{ route('obras.create') }}" class="btn btn-primary btn-block">
                             <i class="fa fa-plus"></i>
                             <span>Nueva Obra</span>
                         </a>
                     </div>
                 @endif
+                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                    <div class="col-md-3">
+                        <a href="{{ route('solicitud_obras.index') }}" class="btn btn-primary btn-block">
+                            <i class="fa fa-list-alt"></i>
+                            <span>Solicitudes</span>
+                        </a>
+                    </div>
+                @endif
+            </div>
+            <div class="row mb-1">
                 <div class="col-md-4" style="margin-top:5px;">
                     <div class="panel panel-default">
                         <div class="row">
@@ -53,7 +63,7 @@
                 </div>
             </div>
 
-            <div class="row mt-3 contenedor_lista" id="contenedorLista">
+            <div class="row mt-1 contenedor_lista" id="contenedorLista">
                 @include('obras.parcial.lista')
             </div>
         </div>

@@ -29,12 +29,16 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i> Volver a Obras</a>
+                                    <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
+                                            class="fa fa-arrow-left"></i> Volver a Obras</a>
                                 </div>
-                                <div class="col-md-3">
-                                    <a href="{{ route('solicitud_obras.create', $obra->id) }}"
-                                        class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Nueva Solicitud</a>
-                                </div>
+                                @if (Auth::user()->tipo == 'JEFE DE OBRA' && $obra->estado != 'CONCLUIDA')
+                                    <div class="col-md-3">
+                                        <a href="{{ route('solicitud_obras.create', $obra->id) }}"
+                                            class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Nueva Solicitud
+                                            {{ $obra->nombre }}</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <div class="card-body">
@@ -63,13 +67,27 @@
                                             <td>{{ $solicitud_obra->c_material }}</td>
                                             <td>{{ $solicitud_obra->c_herramientas }}</td>
                                             <td>{{ $solicitud_obra->c_personal }}</td>
-                                            <td>{{ $solicitud_obra->aprobado_admin_txt }}</td>
-                                            <td>{{ $solicitud_obra->aprobado_aux_txt }}</td>
+                                            <td><span
+                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_admin ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_admin_txt }}</span>
+                                            </td>
+                                            <td><span
+                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_aux ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_aux_txt }}</span>
+                                            </td>
                                             <td>{{ $solicitud_obra->fecha_registro }}</td>
                                             <td class="btns-opciones">
                                                 <a href="{{ route('solicitud_obras.show', $solicitud_obra->id) }}"
-                                                    class="modificar"><i class="fa fa-eye" data-toggle="tooltip"
+                                                    class="ir-evaluacion"><i class="fa fa-eye" data-toggle="tooltip"
                                                         data-placement="left" title="Ver Solicitud"></i></a>
+                                                @if (Auth::user()->tipo == 'JEFE DE OBRA' && $solicitud_obra->obra->estado != 'CONCLUIDA')
+                                                    <a href="{{ route('solicitud_obras.edit', $solicitud_obra->id) }}"
+                                                        class="modificar"><i class="fa fa-edit" data-toggle="tooltip"
+                                                            data-placement="left" title="Modificar"></i></a>
+                                                    <a href="#"
+                                                        data-url="{{ route('solicitud_obras.destroy', $solicitud_obra->id) }}"
+                                                        data-toggle="modal" data-target="#modal-eliminar"
+                                                        class="eliminar"><i class="fa fa-trash" data-toggle="tooltip"
+                                                            data-placement="left" title="Eliminar"></i></a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -120,6 +138,20 @@
             scrollCollapse: true,
             language: lenguaje,
             pageLength: 25
+        });
+
+        // ELIMINAR
+        $(document).on('click', 'table tbody tr td.btns-opciones a.eliminar', function(e) {
+            e.preventDefault();
+            let material = $(this).parents('tr').children('td').eq(1).text();
+            $('#mensajeEliminar').html(`¿Está seguro(a) de eliminar la solicitud?`);
+            let url = $(this).attr('data-url');
+            console.log($(this).attr('data-url'));
+            $('#formEliminar').prop('action', url);
+        });
+
+        $('#btnEliminar').click(function() {
+            $('#formEliminar').submit();
         });
     </script>
 @endsection
