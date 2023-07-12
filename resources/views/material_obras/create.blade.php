@@ -31,14 +31,11 @@
                             <h3 class="card-title">Nuevo Registro</h3>
                         </div>
                         <!-- /.card-header -->
-                        {{ Form::open(['route' => 'material_obras.store', 'method' => 'post', 'files' => true]) }}
                         <div class="card-body">
                             @include('material_obras.form.form')
                             <a href="{{ route('material_obras.index', $obra->id) }}" class="btn btn-default"><i
                                     class="fa fa-arrow-left"></i> VOLVER</a>
-                            <button class="btn btn-info"><i class="fa fa-save"></i> GUARDAR</button>
                         </div>
-                        {{ Form::close() }}
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
@@ -67,4 +64,5 @@
     <script src="{{ asset('js/material_obras/elementos.js') }}"></script>
     <script src="{{ asset('js/material_obras/ingresos.js') }}"></script>
     <script src="{{ asset('js/material_obras/salidas.js') }}"></script>
+    <script src="{{ asset('js/material_obras/create.js') }}"></script>
 @endsection

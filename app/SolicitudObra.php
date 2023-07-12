@@ -8,12 +8,11 @@ class SolicitudObra extends Model
 {
     protected $fillable = [
         "obra_id",
-        "aprobado_admin",
-        "aprobado_aux",
+        "aprobado",
         "fecha_registro",
     ];
 
-    protected $appends = ["c_material", "c_herramientas", "c_personal", "aprobado_admin_txt", "aprobado_aux_txt"];
+    protected $appends = ["c_material", "c_herramientas", "c_personal", "aprobado_txt"];
 
     public function getCMaterialAttribute()
     {
@@ -27,13 +26,9 @@ class SolicitudObra extends Model
     {
         return count($this->solicitud_personals);
     }
-    public function getAprobadoAdminTxtAttribute()
+    public function getAprobadoTxtAttribute()
     {
-        return $this->aprobado_admin ? "SI" : "NO";
-    }
-    public function getAprobadoAuxTxtAttribute()
-    {
-        return $this->aprobado_aux ? "SI" : "NO";
+        return $this->aprobado ? "SI" : "NO";
     }
 
     // RELACIONES

@@ -42,8 +42,7 @@
                                         <th>Materiales</th>
                                         <th>Herramientas</th>
                                         <th>Personal</th>
-                                        <th>Aprobado por Administrador</th>
-                                        <th>Aprobado por Auxiliar</th>
+                                        <th>Aprobado</th>
                                         <th>Fecha Registro</th>
                                         <th>Opciones</th>
                                     </tr>
@@ -60,10 +59,7 @@
                                             <td>{{ $solicitud_obra->c_herramientas }}</td>
                                             <td>{{ $solicitud_obra->c_personal }}</td>
                                             <td><span
-                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_admin ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_admin_txt }}</span>
-                                            </td>
-                                            <td><span
-                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado_aux ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_aux_txt }}</span>
+                                                    class="text-xs badge badge-{{ strtolower($solicitud_obra->aprobado ? 'success' : 'danger') }}">{{ $solicitud_obra->aprobado_txt }}</span>
                                             </td>
                                             <td>{{ $solicitud_obra->fecha_registro }}</td>
                                             <td class="btns-opciones">
@@ -106,7 +102,6 @@
             columns: [{
                     width: "5%"
                 },
-                null,
                 null,
                 null,
                 null,

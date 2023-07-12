@@ -11,4 +11,9 @@ class ObraHerramienta extends Model
         "herramienta_id",
         "fecha_registro",
     ];
+
+    public function herramienta()
+    {
+        return $this->belongsTo(Herramienta::class, 'herramienta_id');
+    }
 }

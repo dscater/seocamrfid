@@ -1,4 +1,4 @@
-<div class="row" id="principal_ingresos">
+<div class="row oculto" id="principal_ingresos">
     <div class="col-md-12">
         <h4 class="card-title">Materiales Solicitados</h4>
     </div>
@@ -32,17 +32,11 @@
                                 <td>{{ $sm->disponible }}</td>
                                 <td>{{ $sm->cantidad_usada }}</td>
                                 <td>
-                                    <div>
-                                        <p><strong>Administrador:</strong><span
-                                                class="text-xs badge badge-{{ $sm->aprobado_admin ? 'success' : 'danger' }}">{{ $sm->aprobado_admin ? 'SI' : 'NO' }}</span>
-                                        </p>
-                                        <p><strong>Auxiliar:</strong><span
-                                                class="text-xs badge badge-{{ $sm->aprobado_aux ? 'success' : 'danger' }}">{{ $sm->aprobado_aux ? 'SI' : 'NO' }}</span>
-                                        </p>
-                                    </div>
+                                    <span
+                                        class="text-xs badge badge-{{ $sm->aprobado ? 'success' : 'danger' }}">{{ $sm->aprobado ? 'SI' : 'NO' }}</span>
                                 </td>
                                 <td class="text-center accion">
-                                    @if ($sm->aprobado_admin && $sm->aprobado_aux)
+                                    @if ($sm->aprobado)
                                         <button type="button" class="btn btn-primary btn-xs btn_ingresa"
                                             {{ $sm->disponible <= 0 ? 'disabled' : '' }}>Ingresar a la
                                             obra</button>
@@ -62,28 +56,18 @@
         </table>
     </div>
     <div class="col-md-12">
-        <form action="">
-            <div class="row">
-                <div class="col-md-12">
-                    <h4>Lista de Materiales a Ingresar</h4>
-                </div>
+        {{ Form::open(['route' => 'material_obras.store', 'method' => 'post', 'files' => true]) }}
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="text-center font-weight-bold">Lista de Materiales a Ingresar</h4>
+                <hr>
             </div>
-            <div class="row" id="contenedor_ingresos">
-
-            </div>
-            @if ($errors->any())
-                <div class="row">
-                    <div class="col-md-12 alert alert-danger">
-                        Tienes los sgtes. errores:
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
-            <button class="btn btn-primary"><i class="fa fa-save"></i> REGISTRAR INGRESOS</button>
-        </form>
+        </div>
+        <input type="hidden" name="obra_id"value="{{ $obra->id }}">
+        <input type="hidden" name="tipo"value="INGRESO">
+        <div class="row mb-3" id="contenedor_ingresos">
+        </div>
+        <button class="btn btn-primary"><i class="fa fa-save"></i> REGISTRAR INGRESOS</button>
+        {{ Form::close() }}
     </div>
 </div>

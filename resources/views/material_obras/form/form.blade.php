@@ -16,11 +16,25 @@
 </div>
 <div class="row mb-2">
     <div class="col-md-6">
-        <button type="button" class="btn bg-teal btn-block"><i class="fa fa-sign-in-alt"></i> INGRESOS</button>
+        <button type="button" id="btnIngresos" class="btn bg-teal btn-block"><i class="fa fa-sign-in-alt"></i>
+            INGRESOS</button>
     </div>
     <div class="col-md-6">
-        <button type="button" class="btn bg-teal btn-block"><i class="fa fa-sign-out-alt"></i> SALIDAS</button>
+        <button type="button" id="btnSalidas" class="btn bg-teal btn-block"><i class="fa fa-sign-out-alt"></i>
+            SALIDAS</button>
     </div>
 </div>
+@if ($errors->any())
+    <div class="row">
+        <div class="col-md-12 alert alert-danger">
+            Tienes los sgtes. errores:
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+@endif
 @include('material_obras.parcial.ingresos')
 @include('material_obras.parcial.salidas')

@@ -11,6 +11,17 @@ class MaterialObra extends Model
         'obra_id', 'fecha_registro', 'estado'
     ];
 
+    protected $appends = ["existe_salida_material"];
+
+    public function getExisteSalidaMaterialAttribute()
+    {
+        $salidas = IngresoSalida::where("mo_id", $this->id)->where("tipo", "SALIDA")->where("estado", 1)->get();
+        if (count($salidas) > 0) {
+            return true;
+        }
+        return false;
+    }
+
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');

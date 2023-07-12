@@ -13,9 +13,13 @@ class SolicitudHerramienta extends Model
         "fecha_asignacion",
         "fecha_finalizacion",
         "ingreso",
-        "aprobado_admin",
-        "aprobado_aux"
+        "aprobado",
     ];
+
+    public function solicitud_obra()
+    {
+        return $this->belongsTo(SolicitudObra::class, 'solicitud_obra_id');
+    }
 
     public function herramienta()
     {

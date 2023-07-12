@@ -65,6 +65,16 @@
                                                             @foreach ($solicitud_obra->solicitud_materials as $value)
                                                                 <div class="col-md-12 elem">
                                                                     <div class="card contenedor_datos">
+                                                                        <div class="card-header">
+                                                                            @if ($value->aprobado == 1)
+                                                                                <span
+                                                                                    class="rounded bg-success p-1 text-xs">Aprobado
+                                                                                    <i class="fa fa-check"></i></span>
+                                                                            @else
+                                                                                <span class="rounded bg-gray p-1 text-xs">En
+                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                            @endif
+                                                                        </div>
                                                                         <div class="card-body pb-1">
                                                                             <p class="mb-1 editable">
                                                                                 <strong>Nombre:
@@ -98,6 +108,16 @@
                                                             @foreach ($solicitud_obra->solicitud_herramientas as $value)
                                                                 <div class="col-md-12 elem">
                                                                     <div class="card contenedor_datos">
+                                                                        <div class="card-header">
+                                                                            @if ($value->aprobado == 1)
+                                                                                <span
+                                                                                    class="rounded bg-success p-1 text-xs">Aprobado
+                                                                                    <i class="fa fa-check"></i></span>
+                                                                            @else
+                                                                                <span class="rounded bg-gray p-1 text-xs">En
+                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                            @endif
+                                                                        </div>
                                                                         <div class="card-body pb-1">
                                                                             <p class="mb-0 editable">
                                                                                 <strong>Nombre:
@@ -139,6 +159,16 @@
                                                             @foreach ($solicitud_obra->solicitud_personals as $value)
                                                                 <div class="col-md-12 elem">
                                                                     <div class="card contenedor_datos">
+                                                                        <div class="card-header">
+                                                                            @if ($value->aprobado == 1)
+                                                                                <span
+                                                                                    class="rounded bg-success p-1 text-xs">Aprobado
+                                                                                    <i class="fa fa-check"></i></span>
+                                                                            @else
+                                                                                <span class="rounded bg-gray p-1 text-xs">En
+                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                            @endif
+                                                                        </div>
                                                                         <div class="card-body pb-1">
                                                                             <p class="mb-1 editable">
                                                                                 <strong>Nombre:
@@ -166,38 +196,23 @@
                                 </div>
                                 <div class="col-md-12 text-center">
                                     <label class="text-sm">ESTADO ACTUAL</label>
-                                    <p><strong>Aprobado por Administrador: </strong> <span
-                                            class="text-xs badge badge-{{ $solicitud_obra->aprobado_admin ? 'success' : 'danger' }}">{{ $solicitud_obra->aprobado_admin_txt }}</span>
+                                    <p><strong>Aprobado: </strong> <span
+                                            class="text-xs badge badge-{{ $solicitud_obra->aprobado ? 'success' : 'danger' }}">{{ $solicitud_obra->aprobado_txt }}</span>
                                     </p>
-                                    <p><strong>Aprobado por Auxiliar: </strong> <span
-                                            class="text-xs badge badge-{{ $solicitud_obra->aprobado_aux ? 'success' : 'danger' }}">{{ $solicitud_obra->aprobado_aux_txt }}</span>
-                                    </p>
-                                    <input type="hidden" id="estado"
-                                        value="{{ Auth::user()->tipo == 'ADMINISTRADOR' ? $solicitud_obra->aprobado_admin : $solicitud_obra->aprobado_aux }}">
+                                    <input type="hidden" id="estado" value="{{ $solicitud_obra->aprobado }}">
                                 </div>
-                                <div class="col-md-12 text-center">
-                                    @if (Auth::user()->tipo == 'ADMINISTRADOR')
-                                        @if ($solicitud_obra->aprobado_admin)
-                                            <button type="button" id="btnCambiarEstado" class="btn btn-warning">DESAPROBAR
-                                                COMO
-                                                {{ Auth::user()->tipo }}</button>
+                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'ADMINISTRADOR')
+                                    <div class="col-md-12 text-center">
+                                        @if ($solicitud_obra->aprobado == 1)
+                                            <button type="button" id="btnCambiarEstado"
+                                                class="btn btn-warning">DESAPROBAR
+                                                SOLICITUD</button>
                                         @else
                                             <button type="button" id="btnCambiarEstado" class="btn btn-primary">APROBAR
-                                                COMO
-                                                {{ Auth::user()->tipo }}</button>
+                                                SOLICITUD</button>
                                         @endif
-                                    @elseif(Auth::user()->tipo == 'AUXILIAR')
-                                        @if ($solicitud_obra->aprobado_aux)
-                                            <button type="button" id="btnCambiarEstado" class="btn btn-warning">DESAPROBAR
-                                                COMO
-                                                {{ Auth::user()->tipo }}</button>
-                                        @else
-                                            <button type="button" id="btnCambiarEstado" class="btn btn-primary">APROBAR
-                                                COMO
-                                                {{ Auth::user()->tipo }}</button>
-                                        @endif
-                                    @endif
-                                </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

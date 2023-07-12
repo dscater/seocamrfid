@@ -46,7 +46,7 @@
                         </div>
                         <div class="info_adicional">
                             Materiales con stock bajo: <span
-                                class="badge bg-{{ $obra->stock_bajo > 0 ? 'success' : 'danger' }}">{{ $obra->stock_bajo }}</span>
+                                class="badge bg-{{ $obra->stock_bajo > 0 ? 'warning' : 'success' }}">{{ $obra->stock_bajo }}</span>
                         </div>
                         <div class="info_adicional">
                             Cantidad Personal: <span

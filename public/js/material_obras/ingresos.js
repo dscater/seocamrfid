@@ -5,6 +5,7 @@ $(document).ready(function () {
         let nuevo_elemento = $(elemento_ingreso).clone();
         let fila = $(this).parents("tr.fila");
         let id = fila.attr("data-id");
+        let nombre = fila.children("td").eq(2).text();
         let disponible = fila.attr("data-disponible");
         if (!existeElementoIngreso(id) && parseFloat(disponible) > 0) {
             nuevo_elemento.attr("data-id", id);
@@ -12,10 +13,12 @@ $(document).ready(function () {
             let material_id = fila.attr("data-material");
             let cantidad_disp = disponible;
             nuevo_elemento.attr("data-disponible", cantidad_disp);
+            nuevo_elemento.find(".nombre_material").text(nombre);
             nuevo_elemento.find("input.i_solicitud_id").val(solicitud_id);
             nuevo_elemento.find("input.i_ingreso_material_id").val(material_id);
             nuevo_elemento.find("input.i_ingreso_cantidad").val(cantidad_disp);
             contenedor_ingresos.append(nuevo_elemento);
+            toastr.success("Registro agregado");
         } else {
             swal.fire({
                 title: "Error",
@@ -31,7 +34,9 @@ $(document).ready(function () {
         "keyup change",
         "input.i_ingreso_cantidad",
         function () {
-            let disponible = $(this).parents(".elemento").attr("data-disponible");
+            let disponible = $(this)
+                .parents(".elemento")
+                .attr("data-disponible");
             let valor = $(this).val();
             console.log("AAA");
             console.log(disponible);
@@ -48,6 +53,13 @@ $(document).ready(function () {
             }
         }
     );
+
+    // quitar
+    contenedor_ingresos.on("click", ".elemento button.quitar", function (e) {
+        e.preventDefault();
+        let elemento = $(this).parents(".elemento");
+        elemento.remove();
+    });
 });
 
 function existeElementoIngreso(id) {

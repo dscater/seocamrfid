@@ -38,6 +38,13 @@
                                         class="btn btn-info btn-block"><i class="fa fa-sync"></i>
                                         Nuevo Movimiento</a>
                                 </div>
+                                @if (Auth::user()->tipo == 'JEFE DE OBRA' && $obra->estado != 'CONCLUIDA')
+                                    <div class="col-md-3">
+                                        <a href="{{ route('solicitud_obras.create', $obra->id) }}"
+                                            class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Nueva Solicitud
+                                            {{ $obra->nombre }}</a>
+                                    </div>
+                                @endif
                             </div>
 
                         </div>
@@ -83,7 +90,7 @@
 
                                 <div class="col-md-6">
                                     <h4>MATERIALES ASIGNADOS</h4>
-                                    <table class="table table-bordered">
+                                    <table class="datatable1 table table-bordered">
                                         <thead>
                                             <tr class="bg-teal">
                                                 <th>Fecha Registro</th>
@@ -112,12 +119,14 @@
                                                         {{-- <a href="{{ route('material_obras.edit', $material_obra->id) }}"
                                                             class="modificar"><i class="fa fa-edit" data-toggle="tooltip"
                                                                 data-placement="left" title="Modificar"></i></a> --}}
-
-                                                        <a href="#"
-                                                            data-url="{{ route('material_obras.destroy', $material_obra->id) }}"
-                                                            data-toggle="modal" data-target="#modal-eliminar"
-                                                            class="eliminar"><i class="fa fa-trash" data-toggle="tooltip"
-                                                                data-placement="left" title="Eliminar"></i></a>
+                                                        @if (!$material_obra->existe_salida_material)
+                                                            <a href="#"
+                                                                data-url="{{ route('material_obras.destroy', $material_obra->id) }}"
+                                                                data-toggle="modal" data-target="#modal-eliminar"
+                                                                class="eliminar"><i class="fa fa-trash"
+                                                                    data-toggle="tooltip" data-placement="left"
+                                                                    title="Eliminar"></i></a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -127,7 +136,7 @@
 
                                 <div class="col-md-6">
                                     <h4>INGRESOS Y SALIDAS</h4>
-                                    <table id="example2" class="table table-bordered">
+                                    <table id="example2" class="datatable2 table table-bordered">
                                         <thead>
                                             <tr class="bg-gray">
                                                 <th>Fecha Registro</th>
@@ -183,10 +192,24 @@
             mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
 
-        $('table.data-table').DataTable({
+        $('table.datatable1').DataTable({
             columns: [
                 null,
                 null,
+                null,
+                null,
+                null,
+                {
+                    width: "10%"
+                },
+            ],
+            scrollCollapse: true,
+            language: lenguaje,
+            pageLength: 25
+        });
+
+        $('table.datatable2').DataTable({
+            columns: [
                 null,
                 null,
                 null,

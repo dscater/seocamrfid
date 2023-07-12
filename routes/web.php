@@ -104,6 +104,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('obras/destroy/{obra}', 'ObraController@destroy')->name('obras.destroy');
 
+    // OBRAS HERRAMIENTAS
+    Route::get('obras/herramientas/{obra}', 'ObraHerramientaController@index')->name('obra_herramientas.index');
+
+    // OBRAS PERSONAL
+    Route::get('obras/personals/{obra}', 'ObraPersonalController@index')->name('obra_personals.index');
 
     // NOTAS OBRAS
     Route::get('obras/notas/{obra}', 'NotaObrasController@index')->name('nota_obras.index');

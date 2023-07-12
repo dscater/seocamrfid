@@ -28,3 +28,10 @@
         <p>Obras</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('personals.index') }}" class="nav-link {{ request()->is('personals*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-users"></i>
+        <p>Personal</p>
+    </a>
+</li>

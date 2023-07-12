@@ -11,8 +11,7 @@ class SolicitudMaterial extends Model
         "material_id",
         "cantidad",
         "cantidad_usada",
-        "aprobado_admin",
-        "aprobado_aux"
+        "aprobado",
     ];
 
     protected $appends = ["disponible"];
@@ -21,6 +20,11 @@ class SolicitudMaterial extends Model
     {
         return $this->cantidad - $this->cantidad_usada;
     }
+    public function solicitud_obra()
+    {
+        return $this->belongsTo(SolicitudObra::class, 'solicitud_obra_id');
+    }
+
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id');
