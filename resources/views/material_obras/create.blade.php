@@ -34,6 +34,8 @@
                         {{ Form::open(['route' => 'material_obras.store', 'method' => 'post', 'files' => true]) }}
                         <div class="card-body">
                             @include('material_obras.form.form')
+                            <a href="{{ route('material_obras.index', $obra->id) }}" class="btn btn-default"><i
+                                    class="fa fa-arrow-left"></i> VOLVER</a>
                             <button class="btn btn-info"><i class="fa fa-save"></i> GUARDAR</button>
                         </div>
                         {{ Form::close() }}
@@ -51,15 +53,18 @@
 @section('scripts')
     <script>
         @if (session('bien'))
-            mensajeNotificacion('{{ session('bien') }}','success');
+            mensajeNotificacion('{{ session('bien') }}', 'success');
         @endif
 
         @if (session('info'))
-            mensajeNotificacion('{{ session('info') }}','info');
+            mensajeNotificacion('{{ session('info') }}', 'info');
         @endif
 
         @if (session('error'))
-            mensajeNotificacion('{{ session('error') }}','error');
+            mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
     </script>
+    <script src="{{ asset('js/material_obras/elementos.js') }}"></script>
+    <script src="{{ asset('js/material_obras/ingresos.js') }}"></script>
+    <script src="{{ asset('js/material_obras/salidas.js') }}"></script>
 @endsection

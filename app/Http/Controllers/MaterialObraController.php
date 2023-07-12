@@ -41,6 +41,16 @@ class MaterialObraController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            "solicitud_id_ingresos" => "required",
+            "material_id_ingresos" => "required",
+            "cantidad_ingresos" => "required",
+        ], [
+            "solicitud_id_ingresos.required" => "Algó esta equivocado en el formulario intente nuevamente",
+            "material_id_ingresos.required" => "Algó esta equivocado en el formulario intente nuevamente",
+            "cantidad_ingresos.required" => "Debes ingresar la cantidad que ingresara en cada material de la lista",
+        ]);
+        return $request;
         $tipo = $request->tipo;
         $material = Material::find($request->material_id);
         $existe = MaterialObra::where('material_id', $request->material_id)
@@ -143,12 +153,15 @@ class MaterialObraController extends Controller
     public function destroy(MaterialObra $material_obra)
     {
         foreach ($material_obra->ingresos_salidas as $is) {
-            $is->estado = 0;
-            $is->save();
+            $notificacions = Notificacion::where("registro_id", $is->id)->where("tipo", "MATERIAL")->get();
+            foreach ($notificacions as $noti) {
+                $noti->notificacions_user()->delete();
+                $noti->delete();
+            }
+            $is->delete();
         }
 
-        $material_obra->estado = 0;
-        $material_obra->save();
+        $material_obra->delete();
         return redirect()->route('material_obras.index', $material_obra->obra->id)->with('bien', 'Registro eliminado correctamente');
     }
 }

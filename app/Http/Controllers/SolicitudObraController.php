@@ -86,7 +86,9 @@ class SolicitudObraController extends Controller
             $solicitud_obra->solicitud_materials()->create([
                 "material_id" => $array_material[1],
                 "cantidad" => $array_material[2],
-                "aprobado" => 0,
+                "cantidad_usada" => 0,
+                "aprobado_admin" => 0,
+                "aprobado_aux" => 0,
             ]);
         }
 
@@ -97,7 +99,9 @@ class SolicitudObraController extends Controller
                 "dias_uso" => $array_herramienta[2],
                 "fecha_asignacion" => $array_herramienta[3],
                 "fecha_finalizacion" => $array_herramienta[4],
-                "aprobado" => 0,
+                "ingreso" => 0,
+                "aprobado_admin" => 0,
+                "aprobado_aux" => 0,
             ]);
         }
 
@@ -105,7 +109,9 @@ class SolicitudObraController extends Controller
             $array_personal = explode("|", $personals[$i]);
             $solicitud_obra->solicitud_personals()->create([
                 "personal_id" => $array_personal[1],
-                "aprobado" => 0,
+                "ingreso" => 0,
+                "aprobado_admin" => 0,
+                "aprobado_aux" => 0,
             ]);
         }
 
@@ -165,7 +171,9 @@ class SolicitudObraController extends Controller
                 $solicitud_obra->solicitud_materials()->create([
                     "material_id" => $array_material[1],
                     "cantidad" => $array_material[2],
-                    "aprobado" => 0,
+                    "cantidad_usada" => 0,
+                    "aprobado_admin" => 0,
+                    "aprobado_aux" => 0,
                 ]);
             } else {
                 $solicitud_material = SolicitudMaterial::find($array_material[0]);
@@ -186,7 +194,9 @@ class SolicitudObraController extends Controller
                     "dias_uso" => $array_herramienta[2],
                     "fecha_asignacion" => $array_herramienta[3],
                     "fecha_finalizacion" => $array_herramienta[4],
-                    "aprobado" => 0,
+                    "ingreso" => 0,
+                    "aprobado_admin" => 0,
+                    "aprobado_aux" => 0,
                 ]);
             } else {
                 $solicitud_herramienta = SolicitudHerramienta::find($array_herramienta[0]);
@@ -206,7 +216,9 @@ class SolicitudObraController extends Controller
                 $solicitud_obra->aprobado_aux = 0;;
                 $solicitud_obra->solicitud_personals()->create([
                     "personal_id" => $array_personal[1],
-                    "aprobado" => 0,
+                    "ingreso" => 0,
+                    "aprobado_admin" => 0,
+                    "aprobado_aux" => 0,
                 ]);
             } else {
                 $solicitud_personal = SolicitudPersonal::find($array_personal[0]);
@@ -277,25 +289,48 @@ class SolicitudObraController extends Controller
             $solicitud_obra->aprobado_aux = $request->estado;
         }
         $solicitud_obra->save();
-        if ($solicitud_obra->aprobado_admin == 1 || $solicitud_obra->aprobado_aux == 1) {
+
+        if (Auth::user()->tipo == 'ADMINISTRADOR' && $solicitud_obra->aprobado_admin == 1) {
             $solicitud_obra->solicitud_materials()->update([
-                "aprobado" => 1,
+                "aprobado_admin" => 1,
             ]);
             $solicitud_obra->solicitud_herramientas()->update([
-                "aprobado" => 1,
+                "aprobado_admin" => 1,
             ]);
             $solicitud_obra->solicitud_personals()->update([
-                "aprobado" => 1,
+                "aprobado_admin" => 1,
             ]);
-        } else {
+        } elseif (Auth::user()->tipo == 'ADMINISTRADOR' && $solicitud_obra->aprobado_admin == 0) {
             $solicitud_obra->solicitud_materials()->update([
-                "aprobado" => 0,
+                "aprobado_admin" => 0,
             ]);
             $solicitud_obra->solicitud_herramientas()->update([
-                "aprobado" => 0,
+                "aprobado_admin" => 0,
             ]);
             $solicitud_obra->solicitud_personals()->update([
-                "aprobado" => 0,
+                "aprobado_admin" => 0,
+            ]);
+        }
+
+        if (Auth::user()->tipo == 'AUXILIAR' && $solicitud_obra->aprobado_aux == 1) {
+            $solicitud_obra->solicitud_materials()->update([
+                "aprobado_aux" => 1,
+            ]);
+            $solicitud_obra->solicitud_herramientas()->update([
+                "aprobado_aux" => 1,
+            ]);
+            $solicitud_obra->solicitud_personals()->update([
+                "aprobado_aux" => 1,
+            ]);
+        } elseif (Auth::user()->tipo == 'AUXILIAR' && $solicitud_obra->aprobado_aux == 0) {
+            $solicitud_obra->solicitud_materials()->update([
+                "aprobado_aux" => 0,
+            ]);
+            $solicitud_obra->solicitud_herramientas()->update([
+                "aprobado_aux" => 0,
+            ]);
+            $solicitud_obra->solicitud_personals()->update([
+                "aprobado_aux" => 0,
             ]);
         }
 

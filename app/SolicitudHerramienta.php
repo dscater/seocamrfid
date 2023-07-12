@@ -12,7 +12,9 @@ class SolicitudHerramienta extends Model
         "dias_uso",
         "fecha_asignacion",
         "fecha_finalizacion",
-        "aprobado"
+        "ingreso",
+        "aprobado_admin",
+        "aprobado_aux"
     ];
 
     public function herramienta()

@@ -26,9 +26,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <div class="col-md-3">
-                                <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
-                                        class="fa fa-arrow-left"></i> Volver a Obras</a>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
+                                            class="fa fa-arrow-left"></i> Volver a Obras</a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">

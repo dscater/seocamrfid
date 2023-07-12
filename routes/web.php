@@ -88,6 +88,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('personals/destroy/{personal}', 'PersonalController@destroy')->name('personals.destroy');
 
     // OBRAS
+    Route::post('obras/cambiaEstado/{obra}', 'ObraController@cambiaEstado')->name('obras.cambiaEstado');
+
     Route::get('obras', 'ObraController@index')->name('obras.index');
 
     Route::get('obras/create', 'ObraController@create')->name('obras.create');
@@ -185,6 +187,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notificacions', 'NotificacionController@index')->name('notificacions.index');
 
     Route::get('notificacions/{notificacion}', 'NotificacionController@show')->name('notificacions.show');
+
+    // MOVIMIENTOS
+    Route::get('obras/movimientos/{obra}', 'MovimientoController@index')->name('movimientos.index');
 
     // SOLICITUD OBRAS
     Route::post('solicitud_obras/cambiaEstado/{solicitud_obra}', 'SolicitudObraController@cambiaEstado')->name('solicitud_obras.cambiaEstado');

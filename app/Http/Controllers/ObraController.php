@@ -69,6 +69,8 @@ class ObraController extends Controller
     public function store(Request $request)
     {
         $request["estado"] = "POR INICIAR";
+        $request["check_jefe"] = 0;
+        $request["check_aux"] = 0;
         Obra::create(array_map('mb_strtoupper', $request->all()));
         return redirect()->route('obras.index')->with('bien', 'Registro realizado con éxito');
     }
@@ -122,5 +124,17 @@ class ObraController extends Controller
             $obra->delete();
             return redirect()->route('obras.index')->with('bien', 'Registro eliminado correctamente');
         }
+    }
+
+    public function cambiaEstado(Obra $obra, Request $request)
+    {
+        if (Auth::user()->tipo == 'JEFE DE OBRA') {
+            $obra->check_jefe = $request->estado;
+        }
+        if (Auth::user()->tipo == 'AUXILIAR') {
+            $obra->check_aux = $request->estado;
+        }
+        $obra->save();
+        return response()->JSON(true);
     }
 }

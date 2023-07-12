@@ -14,7 +14,13 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Foto</label>
+            <input type="file" name="foto" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-8">
         <div class="form-group">
             <label>Descripción</label>
             {{ Form::text('descripcion', null, ['class' => 'form-control']) }}

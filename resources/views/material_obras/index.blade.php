@@ -27,9 +27,19 @@
                     <div class="card">
                         <div class="card-header">
                             {{-- <h3 class="card-title"></h3> --}}
-                            <a href="{{ route('material_obras.create', $obra->id) }}" class="btn btn-info"><i
-                                    class="fa fa-plus"></i>
-                                Nuevo Registro</a>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a href="{{ route('movimientos.index', $obra->id) }}"
+                                        class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i>
+                                        Volver a Movimientos</a>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="{{ route('material_obras.create', $obra->id) }}"
+                                        class="btn btn-info btn-block"><i class="fa fa-sync"></i>
+                                        Nuevo Movimiento</a>
+                                </div>
+                            </div>
+
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -131,7 +141,7 @@
                                                 $cont = 1;
                                                 $ingresos_salidas = app\IngresoSAlida::where('obra_id', $obra->id)
                                                     ->where('estado', 1)
-                                                    ->orderBy('created_at','desc')
+                                                    ->orderBy('created_at', 'desc')
                                                     ->get();
                                             @endphp
                                             @foreach ($ingresos_salidas as $ingreso_salida)
@@ -162,15 +172,15 @@
 @section('scripts')
     <script>
         @if (session('bien'))
-            mensajeNotificacion('{{ session('bien') }}','success');
+            mensajeNotificacion('{{ session('bien') }}', 'success');
         @endif
 
         @if (session('info'))
-            mensajeNotificacion('{{ session('info') }}','info');
+            mensajeNotificacion('{{ session('info') }}', 'info');
         @endif
 
         @if (session('error'))
-            mensajeNotificacion('{{ session('error') }}','error');
+            mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
 
         $('table.data-table').DataTable({

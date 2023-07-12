@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Obra extends Model
 {
-    protected $fillable = ['nombre', 'jefe_id', "auxiliar_id", 'fecha_obra', 'descripcion', "estado"];
+    protected $fillable = ['nombre', 'jefe_id', "auxiliar_id", 'fecha_obra', 'descripcion', "check_jefe", "check_aux", "estado"];
 
     protected $appends = ["stock_bajo", "c_material", "c_herramientas", "c_personal", "c_solicitudes"];
 
@@ -49,7 +49,7 @@ class Obra extends Model
 
     public function obra_personals()
     {
-        return $this->hasMany(Personal::class, 'obra_id');
+        return $this->hasMany(ObraPersonal::class, 'obra_id');
     }
 
     public function obra_herramientas()

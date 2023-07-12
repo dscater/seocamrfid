@@ -9,7 +9,9 @@ class SolicitudPersonal extends Model
     protected $fillable = [
         "solicitud_obra_id",
         "personal_id",
-        "aprobado"
+        "ingreso",
+        "aprobado_admin",
+        "aprobado_aux"
     ];
 
     public function personal()

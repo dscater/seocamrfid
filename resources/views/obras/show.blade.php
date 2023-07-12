@@ -59,7 +59,10 @@
                                                 <option value="">Seleccione...</option>
                                                 <option value="POR INICIAR">POR INICIAR</option>
                                                 <option value="EN PROCESO">EN PROCESO</option>
-                                                <option value="CONCLUIDA">CONCLUIDA</option>
+                                                @if ($obra->check_jefe == 1 && $obra->check_aux == 1)
+                                                    <option value="CONCLUIDA">
+                                                        CONCLUIDA</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
@@ -71,6 +74,46 @@
                                     </div>
                                 </form>
                             </div>
+                        @elseif(Auth::user()->tipo == 'AUXILIAR' || Auth::user()->tipo == 'JEFE DE OBRA')
+                            <div class="card-footer">
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h4 class="card-title text-center w-100">CONCLUIR OBRA</h4>
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <label class="text-sm">ESTADO ACTUAL</label>
+                                        <p><strong>Obra concluida - Jefe de Obra: </strong> <span
+                                                class="text-xs badge badge-{{ $obra->check_jefe ? 'success' : 'danger' }}"><i
+                                                    class="fa fa-{{ $obra->check_jefe ? 'check' : 'times' }}"></i></span>
+                                        </p>
+                                        <p><strong>Obra concluida - Auxiliar: </strong> <span
+                                                class="text-xs badge badge-{{ $obra->check_aux ? 'success' : 'danger' }}"><i
+                                                    class="fa fa-{{ $obra->check_aux ? 'check' : 'times' }}"></i></span>
+                                        </p>
+                                        <input type="hidden" id="estado"
+                                            value="{{ Auth::user()->tipo == 'JEFE DE OBRA' ? $obra->check_jefe : $obra->check_aux }}">
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        @if (Auth::user()->tipo == 'JEFE DE OBRA')
+                                            @if ($obra->check_jefe)
+                                                <button type="button" id="btnCambiarEstado" class="btn btn-warning">QUITAR
+                                                    CHECK</button>
+                                            @else
+                                                <button type="button" id="btnCambiarEstado"
+                                                    class="btn btn-primary">CONCLUIR OBRA</button>
+                                            @endif
+                                        @elseif(Auth::user()->tipo == 'AUXILIAR')
+                                            @if ($obra->check_aux)
+                                                <button type="button" id="btnCambiarEstado" class="btn btn-warning">QUITAR
+                                                    CHECK</button>
+                                            @else
+                                                <button type="button" id="btnCambiarEstado"
+                                                    class="btn btn-primary">CONCLUIR OBRA</button>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                     </div>
                     <!-- /.card -->
@@ -80,6 +123,52 @@
             <!-- /.row -->
         </div>
     </section>
+    <input type="hidden" id="urlCambiaEstadoSolicitud" value="{{ route('obras.cambiaEstado', $obra->id) }}">
 @endsection
 @section('scripts')
+    <script>
+        let btnCambiarEstado = $("#btnCambiarEstado");
+        let estado = $("#estado").val();
+        $(document).ready(function() {
+            btnCambiarEstado.click(function() {
+                let valor = 0;
+                let mensaje = "¿Estás seguro(a) de marcar como <strong>NO TERMINADA</strong> LA OBRA?"
+                if (estado == 0) {
+                    mensaje = "¿Estás seguro(a) de marcar como <strong>TERMINADA</strong> LA OBRA?";
+                    valor = 1;
+                }
+                Swal.fire({
+                    title: "Confirmación",
+                    html: mensaje,
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: "Si, estoy seguro(a)",
+                    cancelButtonText: "Cancelar",
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#dc3545",
+                }).then((result) => {
+                    if (result.value) {
+                        actualizaEstado(valor)
+                    }
+                });
+            });
+        });
+
+        function actualizaEstado(estado) {
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('#token').val()
+                },
+                type: "POST",
+                url: $("#urlCambiaEstadoSolicitud").val(),
+                data: {
+                    estado
+                },
+                dataType: "json",
+                success: function(response) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
 @endsection

@@ -41,21 +41,27 @@
                             Auxiliar: {{ $obra->auxiliar ? $obra->auxiliar->full_name : 'S/A' }}
                         </div>
                         <div class="info_adicional">
-                            Materiales asignados: <span class="badge bg-green">{{ $obra->c_material }}</span>
+                            Materiales asignados: <span
+                                class="badge bg-{{ $obra->c_material > 0 ? 'success' : 'danger' }}">{{ $obra->c_material }}</span>
                         </div>
                         <div class="info_adicional">
-                            Materiales con stock bajo: <span class="badge bg-red">{{ $obra->stock_bajo }}</span>
+                            Materiales con stock bajo: <span
+                                class="badge bg-{{ $obra->stock_bajo > 0 ? 'success' : 'danger' }}">{{ $obra->stock_bajo }}</span>
                         </div>
                         <div class="info_adicional">
-                            Cantidad Personal: <span class="badge bg-red">{{ $obra->c_personal }}</span>
+                            Cantidad Personal: <span
+                                class="badge bg-{{ $obra->c_personal > 0 ? 'success' : 'danger' }}">{{ $obra->c_personal }}</span>
                         </div>
                         <div class="info_adicional">
-                            Cantidad Herramientas: <span class="badge bg-red">{{ $obra->c_herramientas }}</span>
+                            Cantidad Herramientas: <span
+                                class="badge bg-{{ $obra->c_herramientas > 0 ? 'success' : 'danger' }}">{{ $obra->c_herramientas }}</span>
                         </div>
-                        <div class="info_adicional">
-                            <a href="{{ route('material_obras.index', $obra->id) }}"
-                                class="btn bg-teal btn-flat btn-block">Movimiento Materiales</a>
-                        </div>
+                        @if (Auth::user()->tipo == 'JEFE DE OBRA')
+                            <div class="info_adicional">
+                                <a href="{{ route('movimientos.index', $obra->id) }}"
+                                    class="btn bg-teal btn-flat btn-block">Administrar Movmientos</a>
+                            </div>
+                        @endif
                         <div class="info_adicional mt-1">
                             <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
                                 class="btn btn-primary text-white btn-flat btn-block">Solicitudes

@@ -26,7 +26,7 @@ class HerramientaController extends Controller
     {
         $request['fecha_registro'] = date('Y-m-d');
         $request['estado'] = 'INGRESO';
-        $nueva_herramienta = herramienta::create(array_map('mb_strtoupper', $request->all()));
+        $nueva_herramienta = herramienta::create(array_map('mb_strtoupper', $request->except("foto")));
         $nuevo_monitoreo = MonitoreoHerramienta::create([
             'herramienta_id' => $nueva_herramienta->id,
             'accion' => 'INGRESO',
@@ -42,6 +42,16 @@ class HerramientaController extends Controller
             'fecha' => date('Y-m-d'),
             'hora' => date('H:i:s'),
         ]);
+
+        if ($request->hasFile('foto')) {
+            //obtener el archivo
+            $file_foto = $request->file('foto');
+            $extension = "." . $file_foto->getClientOriginalExtension();
+            $nom_foto = $nueva_herramienta->id . time() . $extension;
+            $file_foto->move(public_path() . "/imgs/herramientas/", $nom_foto);
+            $nueva_herramienta->foto = $nom_foto;
+            $nueva_herramienta->save();
+        }
 
         $users = User::where('estado', 1)->whereIn('tipo', ['ADMINISTRADOR', 'AUXILIAR'])->get();
         foreach ($users as $u) {
@@ -61,7 +71,22 @@ class HerramientaController extends Controller
 
     public function update(herramienta $herramienta, Request $request)
     {
-        $herramienta->update(array_map('mb_strtoupper', $request->all()));
+        $herramienta->update(array_map('mb_strtoupper', $request->except("foto")));
+        if ($request->hasFile('foto')) {
+            // antiguo
+            $antiguo = $herramienta->foto;
+            if ($antiguo != 'default.png') {
+                \File::delete(public_path() . '/imgs/herramientas/' . $antiguo);
+            }
+
+            //obtener el archivo
+            $file_foto = $request->file('foto');
+            $extension = "." . $file_foto->getClientOriginalExtension();
+            $nom_foto = $herramienta->id . time() . $extension;
+            $file_foto->move(public_path() . "/imgs/herramientas/", $nom_foto);
+            $herramienta->foto = $nom_foto;
+            $herramienta->save();
+        }
         return redirect()->route('herramientas.index')->with('bien', 'Registro modificado con éxito');
     }
 

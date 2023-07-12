@@ -156,35 +156,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">NOTAS</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="row" id="contenedor_notas">
-                                                        @if (isset($solicitud_obra))
-                                                            @foreach ($solicitud_obra->solicitud_notas as $value)
-                                                                <div class="col-md-12 elem">
-                                                                    <div class="card contenedor_datos">
-                                                                        <div class="card-body pb-1">
-                                                                            <p class="mb-1 editable">
-                                                                                <strong>Nota:
-                                                                                </strong><span>{{ $value->nota }}</span>
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -207,8 +178,7 @@
                                 <div class="col-md-12 text-center">
                                     @if (Auth::user()->tipo == 'ADMINISTRADOR')
                                         @if ($solicitud_obra->aprobado_admin)
-                                            <button type="button" id="btnCambiarEstado"
-                                                class="btn btn-warning">DESAPROBAR
+                                            <button type="button" id="btnCambiarEstado" class="btn btn-warning">DESAPROBAR
                                                 COMO
                                                 {{ Auth::user()->tipo }}</button>
                                         @else
@@ -218,8 +188,7 @@
                                         @endif
                                     @elseif(Auth::user()->tipo == 'AUXILIAR')
                                         @if ($solicitud_obra->aprobado_aux)
-                                            <button type="button" id="btnCambiarEstado"
-                                                class="btn btn-warning">DESAPROBAR
+                                            <button type="button" id="btnCambiarEstado" class="btn btn-warning">DESAPROBAR
                                                 COMO
                                                 {{ Auth::user()->tipo }}</button>
                                         @else
@@ -250,10 +219,11 @@
         $(document).ready(function() {
             btnCambiarEstado.click(function() {
                 let valor = 0;
+                let mensaje = "¿Estás seguro(a) de <strong>DESAPROBAR</strong> esta solicitud?"
                 if (estado == 0) {
+                    mensaje = "¿Estás seguro(a) de <strong>APROBAR</strong> esta solicitud?"
                     valor = 1;
                 }
-                let mensaje = "¿Estás seguro(a) de <strong>APROBAR</strong> esta solicitud?"
                 Swal.fire({
                     title: "Confirmación",
                     html: mensaje,

@@ -32,7 +32,25 @@
                                 @foreach ($solicitud_obra->solicitud_materials as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-body pb-1 {{ $value->aprobado == 1 ? 'bg-teal' : '' }}">
+                                            @if ($value->aprobado_admin == 1 || $value->aprobado_aux)
+                                                <div class="card-header">
+                                                    @if ($value->aprobado_admin == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-gray p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @endif
+                                                    @if ($value->aprobado_aux == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-white p-1 text-xs"><i
+                                                                class="fa fa-check text-gray"></i></span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                            <div class="card-body pb-1">
                                                 <input type="hidden" name="materials[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->material_id }}|{{ $value->cantidad }}">
                                                 <p class="mb-1 editable">
@@ -47,7 +65,7 @@
                                                         class="input_form oculto">
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($value->aprobado_admin == 0 && $value->aprobado_aux == 0)
                                                 <div class="card-footer">
                                                     <button type="button" class="btn btn-xs btn-danger eliminar"><i
                                                             class="fa fa-trash"></i></button>
@@ -112,7 +130,25 @@
                                 @foreach ($solicitud_obra->solicitud_herramientas as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-body pb-1 {{ $value->aprobado == 1 ? 'bg-teal' : '' }}">
+                                            @if ($value->aprobado_admin == 1 || $value->aprobado_aux)
+                                                <div class="card-header">
+                                                    @if ($value->aprobado_admin == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-gray p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @endif
+                                                    @if ($value->aprobado_aux == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-white p-1 text-xs"><i
+                                                                class="fa fa-check text-gray"></i></span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                            <div class="card-body pb-1">
                                                 <input type="hidden" name="herramientas[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->herramienta_id }}|{{ $value->dias_uso }}|{{ $value->fecha_asignacion }}|{{ $value->fecha_finalizacion }}">
                                                 <p class="mb-0 editable">
@@ -142,7 +178,7 @@
                                                         class="input_form oculto">
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($value->aprobado_admin == 0 && $value->aprobado_aux == 0)
                                                 <div class="card-footer">
                                                     <button type="button" class="btn btn-xs btn-danger eliminar"><i
                                                             class="fa fa-trash"></i></button>
@@ -195,7 +231,25 @@
                                 @foreach ($solicitud_obra->solicitud_personals as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-body pb-1 {{ $value->aprobado == 1 ? 'bg-teal' : '' }}">
+                                            @if ($value->aprobado_admin == 1 || $value->aprobado_aux)
+                                                <div class="card-header">
+                                                    @if ($value->aprobado_admin == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-gray p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @endif
+                                                    @if ($value->aprobado_aux == 1)
+                                                        <span class="rounded bg-success p-1 text-xs"><i
+                                                                class="fa fa-check"></i></span>
+                                                    @else
+                                                        <span class="rounded bg-white p-1 text-xs"><i
+                                                                class="fa fa-check text-gray"></i></span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                            <div class="card-body pb-1">
                                                 <input type="hidden" name="personals[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->personal_id }}">
                                                 <p class="mb-1 editable">
@@ -207,7 +261,7 @@
                                                     </select>
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($value->aprobado_admin == 0 && $value->aprobado_aux == 0)
                                                 <div class="card-footer">
                                                     <button type="button" class="btn btn-xs btn-danger eliminar"><i
                                                             class="fa fa-trash"></i></button>

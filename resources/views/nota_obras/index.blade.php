@@ -49,22 +49,24 @@
                                             <p class="mb-0"><strong>Fecha de registro:
                                                 </strong>{{ $value->fecha_registro }}</p>
                                         </div>
-                                        <div class="card-footer">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <a href="{{ route('nota_obras.edit', $value->id) }}"
-                                                        class="btn btn-warning modificar"><i class="fa fa-edit"
-                                                            data-toggle="tooltip" data-placement="left"
-                                                            title="Modificar"></i></a>
-                                                    <a href="#"
-                                                        data-url="{{ route('nota_obras.destroy', $value->id) }}"
-                                                        data-toggle="modal" data-target="#modal-eliminar"
-                                                        class="eliminar btn btn-danger text-sm"><i class="fa fa-trash"
-                                                            data-toggle="tooltip" data-placement="left"
-                                                            title="Eliminar"></i></a>
+                                        @if (Auth::user()->tipo == 'JEFE DE OBRA')
+                                            <div class="card-footer">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a href="{{ route('nota_obras.edit', $value->id) }}"
+                                                            class="btn btn-warning modificar"><i class="fa fa-edit"
+                                                                data-toggle="tooltip" data-placement="left"
+                                                                title="Modificar"></i></a>
+                                                        <a href="#"
+                                                            data-url="{{ route('nota_obras.destroy', $value->id) }}"
+                                                            data-toggle="modal" data-target="#modal-eliminar"
+                                                            class="eliminar btn btn-danger text-sm"><i class="fa fa-trash"
+                                                                data-toggle="tooltip" data-placement="left"
+                                                                title="Eliminar"></i></a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             </div>
