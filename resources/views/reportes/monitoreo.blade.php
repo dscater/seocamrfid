@@ -185,7 +185,7 @@
                             <br>
                             FECHA DE FINALIZACIÓN: {{ $h->asignacion_herramienta->fecha_fin }}
                             <br>
-                            DÍAS DE USO: {{ (int) ($h->tiempo_uso / 24) }}
+                            DÍAS DE USO: {{ (float) number_format($h->tiempo_uso / 24, 2, '.', '') }}
                             <br>
                             INGRESO HORAS: {{ $h->tiempo_almacen ? $h->tiempo_almacen : $h->tiempo_ingreso }}<br>
                             SALIDA HORAS: {{ $h->tiempo_uso ? $h->tiempo_uso : $h->tiempo_salida }}

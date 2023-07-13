@@ -77,6 +77,17 @@
     <script>
         @if (session('bien'))
             mensajeNotificacion('{{ session('bien') }}', 'success');
+            let mensaje = `Copia realizada con éxito`;
+            @if (session('no_asignadas') == 'si')
+                mensaje += "<br>Herramientas no asignadas:<br>{!! session('herramientas_no_asignadas') !!}";
+            @endif
+            swal.fire({
+                title: "Correcto",
+                icon: "success",
+                html: mensaje,
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#28a745",
+            });
         @endif
 
         @if (session('info'))
@@ -98,6 +109,8 @@
         });
 
         $('#btnCopiar').click(function() {
+            $(this).prop("disabled", true);
+            $(this).text("Copiando...");
             if ($("#txtNombre").val().trim() != "") {
                 $('#formCopiar').submit();
             } else {
@@ -108,6 +121,8 @@
                     confirmButtonText: "Aceptar",
                     confirmButtonColor: "#28a745",
                 });
+                $(this).removeAttr("disabled");
+                $(this).text("Si, copiar");
             }
         });
 

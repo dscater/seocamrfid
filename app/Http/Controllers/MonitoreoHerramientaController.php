@@ -103,6 +103,7 @@ class MonitoreoHerramientaController extends Controller
                 $total_horas = Herramienta::horasTranscurridas($ultima_salida->fecha_registro, $ultima_salida->hora, $nuevo_monitoreo->fecha_registro, $nuevo_monitoreo->hora);
                 $existe_uso->total_uso += (float)$existe_uso->total_uso + $total_horas;
             }
+            $existe_uso->save();
         }
 
         $users = User::where('estado', 1)->whereIn('tipo', ['ADMINISTRADOR', 'AUXILIAR'])->get();

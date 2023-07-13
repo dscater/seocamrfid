@@ -145,47 +145,71 @@
         .img_celda img {
             width: 45px;
         }
+
+        .break_page {
+            page-break-after: always;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
-    <div class="encabezado">
-        <div class="logo">
-            <img src="{{ asset('imgs/' . app\RazonSocial::first()->logo) }}">
+    @php
+        $cont = 0;
+    @endphp
+    @foreach ($obras as $obra)
+        <div class="encabezado">
+            <div class="logo">
+                <img src="{{ asset('imgs/' . app\RazonSocial::first()->logo) }}">
+            </div>
+            <h2 class="titulo">
+                {{ app\RazonSocial::first()->nombre }}
+            </h2>
+            <h4 class="texto">LISTA DE MATERIALES EN OBRAS</h4>
+            <h4 class="fecha">Expedido: {{ date('Y-m-d') }}</h4>
         </div>
-        <h2 class="titulo">
-            {{ app\RazonSocial::first()->nombre }}
-        </h2>
-        <h4 class="texto">LISTA DE MATERIALES EN OBRAS</h4>
-        <h4 class="fecha">Expedido: {{ date('Y-m-d') }}</h4>
-    </div>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Obra</th>
-                <th>Material</th>
-                <th>Ingresos</th>
-                <th>Salidas</th>
-                <th width="10%">Cantidad Actual</th>
-                <th width="13%">Fecha Registro</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $cont = 1;
-            @endphp
-            @foreach ($materiales as $material)
-                <tr>
-                    <td>{{ $material->obra->nombre }}</td>
-                    <td>{{ $material->material->nombre }}</td>
-                    <td>{{ $material->total_ingresos }}</td>
-                    <td>{{ $material->total_salidas }}</td>
-                    <td>{{ $material->stock_actual }}</td>
-                    <td>{{ $material->fecha_registro }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        <h4 class="centreado" style="margin-bottom: 3px;">{{ $obra->nombre }}</h4>
+        @foreach ($obra->materials as $m)
+            <table border="1" style="margin-top:10px;">
+                <thead>
+                    <tr>
+                        <th colspan="4">{{ $m->material->nombre }}<br>Disponible:{{ $m->stock_actual }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4">Ingresos y Salidas</th>
+                    </tr>
+                    <tr>
+                        <th width="8%">#</th>
+                        <th>Cantidad</th>
+                        <th>Tipo</th>
+                        <th width="13%">Fecha Registro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $numero = 1;
+                    @endphp
+                    @foreach ($m->ingresos_salidas as $is)
+                        <tr>
+                            <td>{{ $numero++ }}</td>
+                            <td>{{ $is->cantidad }}</td>
+                            <td>{{ $is->tipo }}</td>
+                            <td>{{ $is->fecha_registro }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endforeach
+        @php
+            $cont++;
+        @endphp
+        @if ($cont < count($obras))
+            <div class="break_page"></div>
+        @endif
+    @endforeach
 </body>
 
 </html>

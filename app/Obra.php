@@ -6,7 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Obra extends Model
 {
-    protected $fillable = ['nombre', 'jefe_id', "auxiliar_id", 'fecha_obra', 'descripcion', "check_jefe", "check_aux", "estado"];
+    protected $fillable = [
+        'nombre',
+        'jefe_id',
+        "auxiliar_id",
+        'fecha_obra',
+        'descripcion',
+        "check_jefe",
+        "check_aux",
+        "estado"
+    ];
 
     protected $appends = [
         "stock_bajo", "c_material", "c_herramientas", "c_personal",

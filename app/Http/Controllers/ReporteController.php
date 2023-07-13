@@ -105,7 +105,11 @@ class ReporteController extends Controller
         if ($obra != 'todos') {
             $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('material_obras.estado', 1)->where('obra_id', $obra)->orderBy('obras.nombre', 'asc')->get();
         }
-        $pdf = PDF::loadView('reportes.materiales_obras', compact('materiales'))->setPaper('letter', 'portrait');
+        $obras = Obra::all();
+        if ($obra != "todos") {
+            $obras = Obra::where("id", $obra)->get();
+        }
+        $pdf = PDF::loadView('reportes.materiales_obras', compact('obras'))->setPaper('letter', 'portrait');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
@@ -325,7 +329,7 @@ class ReporteController extends Controller
         foreach ($herramientas as $h) {
             $series["data"][] = [
                 "name" => $h->nombre,
-                "y" => (int)($h->tiempo_uso / 24),
+                "y" => (float)(number_format(($h->tiempo_uso / 24), 2, ".", "")),
             ];
         }
         return response()->JSON([

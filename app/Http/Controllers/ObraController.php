@@ -3,9 +3,16 @@
 namespace app\Http\Controllers;
 
 use app\DatosUsuario;
+use app\Notificacion;
+use app\NotificacionUser;
 use Illuminate\Http\Request;
 use app\Obra;
 use app\Personal;
+use app\SolicitudHerramienta;
+use app\SolicitudMaterial;
+use app\SolicitudObra;
+use app\SolicitudPersonal;
+use app\User;
 use Illuminate\Support\Facades\Auth;
 
 class ObraController extends Controller
@@ -140,7 +147,99 @@ class ObraController extends Controller
 
     public function copiar(Obra $obra, Request $request)
     {
-        return $request;
-        return $obra;
+        // crear la obra
+        $nueva_obra = new Obra([
+            "nombre" => mb_strtoupper($request->nombre),
+            "jefe_id" => $obra->jefe_id,
+            "auxiliar_id" => $obra->auxiliar_id,
+            "fecha_obra" => $obra->fecha_obra,
+            "descripcion" => $obra->descripcion,
+            "check_jefe" => 0,
+            "check_aux" => 0,
+            "estado" => "POR INICIAR"
+        ]);
+
+        $nueva_obra->save();
+
+        // crear la solicitud de obra
+        $nueva_solicitud_obra = SolicitudObra::create([
+            "obra_id" => $nueva_obra->id,
+            "aprobado" => 0,
+            "fecha_registro" => date("Y-m-d")
+        ]);
+
+        // solicitud materials
+        foreach ($obra->solicitud_obra->solicitud_materials as $sm) {
+            $solicitud_material = SolicitudMaterial::create([
+                "solicitud_obra_id" => $nueva_solicitud_obra->id,
+                "material_id" => $sm->material_id,
+                "cantidad" => $sm->cantidad,
+                "cantidad_usada" => 0,
+                "aprobado" => 0,
+            ]);
+        }
+
+        // solicitud herramientas
+        $no_asignadas = false;
+        $herramientas_no_asignadas = "<ul>";
+
+        foreach ($obra->solicitud_obra->solicitud_herramientas as $sh) {
+            if (!$sh->herramienta->asignacion_herramienta) {
+                $solicitud_herramienta = SolicitudHerramienta::create([
+                    "solicitud_obra_id" => $nueva_solicitud_obra->id,
+                    "herramienta_id" => $sh->herramienta_id,
+                    "dias_uso" => $sh->dias_uso,
+                    "fecha_asignacion" => $sh->fecha_asignacion,
+                    "fecha_finalizacion" => $sh->fecha_finalizacion,
+                    "ingreso" => 0,
+                    "aprobado" => 0,
+                ]);
+            } else {
+                $no_asignadas = true;
+                $herramientas_no_asignadas .= "<li>" . $sh->herramienta->nombre . "</li>";
+            }
+        }
+        $herramientas_no_asignadas .= "</ul>";
+
+        // solicitud personals
+        foreach ($obra->solicitud_obra->solicitud_personals as $sp) {
+            $solicitud_personal = SolicitudPersonal::create([
+                "solicitud_obra_id" => $nueva_solicitud_obra->id,
+                "personal_id" => $sp->personal_id,
+                "ingreso" => 0,
+                "aprobado" => 0,
+            ]);
+        }
+
+        // notas
+        foreach ($obra->nota_obras as $no) {
+            $solicitud_personal = SolicitudPersonal::create([
+                "obra_id" => $no->obra_id,
+                "nota" => $no->nota,
+                "fecha_registro" => date("Y-m-d")
+            ]);
+        }
+
+        $nueva_notificacion = Notificacion::create([
+            'registro_id' => $nueva_solicitud_obra->id,
+            'tipo'  => 'SOLICITUD',
+            'accion' => "NUEVO",
+            'mensaje' => "SE REALZÓ UNA SOLICITUD PARA LA OBRA: " . $nueva_solicitud_obra->obra->nombre,
+            'fecha' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+        ]);
+
+        $users = User::where('estado', 1)->whereIn('tipo', ["ADMINISTRADOR", "AUXILIAR"])->get();
+        foreach ($users as $u) {
+            NotificacionUser::create([
+                'notificacion_id' => $nueva_notificacion->id,
+                'user_id' => $u->id,
+                'visto' => 0
+            ]);
+        }
+        return redirect()->route('obras.index')
+            ->with('no_asignadas', $no_asignadas ? "si" : "no")
+            ->with('herramientas_no_asignadas', $herramientas_no_asignadas)
+            ->with('bien', 'Registro realizado con éxito');
     }
 }

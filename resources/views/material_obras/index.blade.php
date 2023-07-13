@@ -37,136 +37,137 @@
                                     <a href="{{ route('material_obras.create', $obra->id) }}"
                                         class="btn btn-info btn-block"><i class="fa fa-sync"></i>
                                         Nuevo Movimiento</a>
-                          
+
+                                </div>
+
                             </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="bg-teal" width="150px">Nombre: </td>
+                                                    <td>{{ $obra->nombre }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-teal">Descripción: </td>
+                                                    <td>{{ $obra->descripcion }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @php
+                                        $stock_bajo = count(
+                                            app\MaterialObra::where('obra_id', $obra->id)
+                                                ->where('estado_stock', 'BAJO')
+                                                ->where('estado', 1)
+                                                ->get(),
+                                        );
+                                    @endphp
+                                    <div class="col-md-6">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="bg-teal" width="165px">Materiales asignados: </td>
+                                                    <td>{{ count($obra->materials) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-teal">Materiales con stock bajo: </td>
+                                                    <td>{{ $stock_bajo }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <td class="bg-teal" width="150px">Nombre: </td>
-                                                <td>{{ $obra->nombre }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-teal">Descripción: </td>
-                                                <td>{{ $obra->descripcion }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                @php
-                                    $stock_bajo = count(
-                                        app\MaterialObra::where('obra_id', $obra->id)
-                                            ->where('estado_stock', 'BAJO')
-                                            ->where('estado', 1)
-                                            ->get(),
-                                    );
-                                @endphp
-                                <div class="col-md-6">
-                                    <table class="table table-bordered">
-                                        <tbody>
-                                            <tr>
-                                                <td class="bg-teal" width="165px">Materiales asignados: </td>
-                                                <td>{{ count($obra->materials) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="bg-teal">Materiales con stock bajo: </td>
-                                                <td>{{ $stock_bajo }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <h4>MATERIALES ASIGNADOS</h4>
-                                    <table class="datatable1 table table-bordered">
-                                        <thead>
-                                            <tr class="bg-teal">
-                                                <th>Fecha Registro</th>
-                                                <th>Material</th>
-                                                <th>Stock Mínimo</th>
-                                                <th>Stock Actual</th>
-                                                <th>Estado Stock</th>
-                                                <th>Opciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($material_obras as $material_obra)
-                                                @php
-                                                    $color_stock = '';
-                                                    if ($material_obra->estado_stock == 'BAJO') {
-                                                        $color_stock = 'stock_bajo';
-                                                    }
-                                                @endphp
-                                                <tr class="{{ $color_stock }}">
-                                                    <td>{{ $material_obra->fecha_registro }}</td>
-                                                    <td>{{ $material_obra->material->nombre }}</td>
-                                                    <td>{{ $material_obra->stock_minimo }}</td>
-                                                    <td>{{ $material_obra->stock_actual }}</td>
-                                                    <td>{{ $material_obra->estado_stock }}</td>
-                                                    <td class="btns-opciones">
-                                                        {{-- <a href="{{ route('material_obras.edit', $material_obra->id) }}"
+                                    <div class="col-md-6">
+                                        <h4>MATERIALES ASIGNADOS</h4>
+                                        <small class="text-gray d-flex w-100 justify-content-end">Para una busqueda mas especifica use comillas("Texto")</small>
+                                        <table class="datatable1 table table-bordered">
+                                            <thead>
+                                                <tr class="bg-teal">
+                                                    <th>Fecha Registro</th>
+                                                    <th>Material</th>
+                                                    <th>Stock Mínimo</th>
+                                                    <th>Stock Actual</th>
+                                                    <th>Estado Stock</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($material_obras as $material_obra)
+                                                    @php
+                                                        $color_stock = '';
+                                                        if ($material_obra->estado_stock == 'BAJO') {
+                                                            $color_stock = 'stock_bajo';
+                                                        }
+                                                    @endphp
+                                                    <tr class="{{ $color_stock }}">
+                                                        <td>{{ $material_obra->fecha_registro }}</td>
+                                                        <td>{{ $material_obra->material->nombre }}</td>
+                                                        <td>{{ $material_obra->stock_minimo }}</td>
+                                                        <td>{{ $material_obra->stock_actual }}</td>
+                                                        <td>{{ $material_obra->estado_stock }}</td>
+                                                        <td class="btns-opciones">
+                                                            {{-- <a href="{{ route('material_obras.edit', $material_obra->id) }}"
                                                             class="modificar"><i class="fa fa-edit" data-toggle="tooltip"
                                                                 data-placement="left" title="Modificar"></i></a> --}}
-                                                        @if (!$material_obra->existe_salida_material)
-                                                            <a href="#"
-                                                                data-url="{{ route('material_obras.destroy', $material_obra->id) }}"
-                                                                data-toggle="modal" data-target="#modal-eliminar"
-                                                                class="eliminar"><i class="fa fa-trash"
-                                                                    data-toggle="tooltip" data-placement="left"
-                                                                    title="Eliminar"></i></a>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                            @if (!$material_obra->existe_salida_material)
+                                                                <a href="#"
+                                                                    data-url="{{ route('material_obras.destroy', $material_obra->id) }}"
+                                                                    data-toggle="modal" data-target="#modal-eliminar"
+                                                                    class="eliminar"><i class="fa fa-trash"
+                                                                        data-toggle="tooltip" data-placement="left"
+                                                                        title="Eliminar"></i></a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                                <div class="col-md-6">
-                                    <h4>INGRESOS Y SALIDAS</h4>
-                                    <table id="example2" class="datatable2 table table-bordered">
-                                        <thead>
-                                            <tr class="bg-gray">
-                                                <th>Fecha Registro</th>
-                                                <th>Material</th>
-                                                <th>Cantidad</th>
-                                                <th>Tipo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $cont = 1;
-                                                $ingresos_salidas = app\IngresoSAlida::where('obra_id', $obra->id)
-                                                    ->where('estado', 1)
-                                                    ->orderBy('created_at', 'desc')
-                                                    ->get();
-                                            @endphp
-                                            @foreach ($ingresos_salidas as $ingreso_salida)
-                                                <tr>
-                                                    <td>{{ $ingreso_salida->fecha_registro }}</td>
-                                                    <td>{{ $ingreso_salida->mo->material->nombre }}</td>
-                                                    <td>{{ $ingreso_salida->cantidad }}</td>
-                                                    <td>{{ $ingreso_salida->tipo }}</td>
+                                    <div class="col-md-6">
+                                        <h4>INGRESOS Y SALIDAS</h4>
+                                        <table id="example2" class="datatable2 table table-bordered">
+                                            <thead>
+                                                <tr class="bg-gray">
+                                                    <th>Fecha Registro</th>
+                                                    <th>Material</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Tipo</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $cont = 1;
+                                                    $ingresos_salidas = app\IngresoSAlida::where('obra_id', $obra->id)
+                                                        ->where('estado', 1)
+                                                        ->orderBy('created_at', 'desc')
+                                                        ->get();
+                                                @endphp
+                                                @foreach ($ingresos_salidas as $ingreso_salida)
+                                                    <tr>
+                                                        <td>{{ $ingreso_salida->fecha_registro }}</td>
+                                                        <td>{{ $ingreso_salida->mo->material->nombre }}</td>
+                                                        <td>{{ $ingreso_salida->cantidad }}</td>
+                                                        <td>{{ $ingreso_salida->tipo }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- /.card-body -->
                         </div>
-                        <!-- /.card-body -->
+                        <!-- /.card -->
                     </div>
-                    <!-- /.card -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
+                <!-- /.row -->
             </div>
-            <!-- /.row -->
-        </div>
     </section>
 
     @include('modal.eliminar')

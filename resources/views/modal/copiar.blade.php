@@ -18,6 +18,15 @@
                         </div>
                     </div>
                 </form>
+                <p class="mb-0"><strong>Nota:</strong><br>La copia a realizarse sera de:</p>
+                <ol>
+                    <li>La Obra</li>
+                    <li>Solicitud de Materiales</li>
+                    <li>Solicitud de Herramientas (Tomar en cuenta si una herramienta esta asignada en una obra no se
+                        copiara el registro) </li>
+                    <li>Solicitud de Personal</li>
+                    <li>Notas</li>
+                </ol>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">No, cancelar</button>

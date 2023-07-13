@@ -61,16 +61,19 @@
                                             <p><strong>Fecha de asignación:
                                                 </strong>{{ $value->personal->fecha_registro }}</p>
                                         </div>
-                                        <div class="card-footer">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <button type="button" onclick="quitarRegistro({{ $value->id }})"
-                                                        class="btn btn-sm btn-danger btn-block">QUITAR DE
-                                                        LA
-                                                        OBRA</button>
+                                        @if ($obra->estado != 'CONCLUIDA')
+                                            <div class="card-footer">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" onclick="quitarRegistro({{ $value->id }})"
+                                                            class="btn btn-sm btn-danger btn-block">QUITAR DE
+                                                            LA
+                                                            OBRA</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
+
                                     </div>
                                 @endforeach
                             </div>

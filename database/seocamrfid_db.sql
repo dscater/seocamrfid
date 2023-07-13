@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 13-07-2023 a las 04:05:27
+-- Tiempo de generación: 13-07-2023 a las 15:37:27
 -- Versión del servidor: 8.0.30
 -- Versión de PHP: 7.4.19
 
@@ -80,7 +80,7 @@ CREATE TABLE `herramientas` (
 
 INSERT INTO `herramientas` (`id`, `nombre`, `rfid`, `descripcion`, `estado`, `foto`, `fecha_registro`, `created_at`, `updated_at`) VALUES
 (1, 'HERRAMIENTA 1', '111', '', 'INGRESO', '11689114439.jpg', '2021-08-04', '2021-08-04 20:18:43', '2023-07-11 22:27:19'),
-(2, 'HERRAMIENTA 2', '222', '', 'SALIDA', NULL, '2021-08-04', '2021-08-04 20:23:24', '2023-07-13 01:15:36'),
+(2, 'HERRAMIENTA 2', '222', '', 'INGRESO', NULL, '2021-08-04', '2021-08-04 20:23:24', '2023-07-13 15:16:30'),
 (3, 'HERRAMIENTA #3', '3333', 'DESC', 'INGRESO', '31689114466.png', '2023-07-11', '2023-07-11 22:27:38', '2023-07-11 22:27:46');
 
 -- --------------------------------------------------------
@@ -229,7 +229,8 @@ INSERT INTO `monitoreo_herramientas` (`id`, `herramienta_id`, `accion`, `fecha_r
 (5, 1, 'INGRESO', '2021-08-04', '18:00:00', '2021-08-04 20:24:22', '2021-08-04 20:24:22'),
 (6, 2, 'INGRESO', '2021-08-17', '16:00:00', '2021-08-17 19:51:32', '2021-08-17 19:51:32'),
 (7, 3, 'INGRESO', '2023-07-11', '13:00:00', '2023-07-11 22:27:38', '2023-07-11 22:27:38'),
-(8, 2, 'SALIDA', '2023-07-12', '21:15:00', '2023-07-13 01:15:36', '2023-07-13 01:15:36');
+(8, 2, 'SALIDA', '2023-07-12', '21:15:00', '2023-07-13 01:15:36', '2023-07-13 01:15:36'),
+(10, 2, 'INGRESO', '2023-07-13', '11:16:00', '2023-07-13 15:16:30', '2023-07-13 15:16:30');
 
 -- --------------------------------------------------------
 
@@ -292,7 +293,9 @@ INSERT INTO `notificacions` (`id`, `registro_id`, `tipo`, `accion`, `mensaje`, `
 (49, 2, 'HERRAMIENTA OBRA', 'SALIDA', 'SE REGISTRO LA SALIDA DE LA HERRAMIENTA  EN LA OBRA OBRA 1', '2023-07-12', '17:56:33', '2023-07-12 21:56:33', '2023-07-12 21:56:33'),
 (50, 2, 'HERRAMIENTA OBRA', 'INGRESO', 'SE REGISTRO EL INGRESO DE LA HERRAMIENTA  EN LA OBRA OBRA 1', '2023-07-12', '18:06:20', '2023-07-12 22:06:20', '2023-07-12 22:06:20'),
 (51, 8, 'HERRAMIENTA', 'SALIDA', 'SALIDA DE LA HERRAMIENTA HERRAMIENTA 2', '2023-07-12', '21:15:36', '2023-07-13 01:15:36', '2023-07-13 01:15:36'),
-(52, 19, 'MATERIAL', 'SALIDA', 'SALIDA DE 10 MATERIAL 1 EN LA OBRA OBRA 1', '2023-07-12', '23:50:16', '2023-07-13 03:50:16', '2023-07-13 03:50:16');
+(52, 19, 'MATERIAL', 'SALIDA', 'SALIDA DE 10 MATERIAL 1 EN LA OBRA OBRA 1', '2023-07-12', '23:50:16', '2023-07-13 03:50:16', '2023-07-13 03:50:16'),
+(53, 3, 'SOLICITUD', 'NUEVO', 'SE REALZÓ UNA SOLICITUD PARA LA OBRA: COPIAR OBRA 1', '2023-07-13', '11:00:02', '2023-07-13 15:00:02', '2023-07-13 15:00:02'),
+(55, 10, 'HERRAMIENTA', 'INGRESO', 'INGRESO DE LA HERRAMIENTA HERRAMIENTA 2', '2023-07-13', '11:16:30', '2023-07-13 15:16:30', '2023-07-13 15:16:30');
 
 -- --------------------------------------------------------
 
@@ -367,7 +370,15 @@ INSERT INTO `notificacion_users` (`id`, `notificacion_id`, `user_id`, `visto`, `
 (99, 52, 1, 0, '2023-07-13 03:50:16', '2023-07-13 03:50:16'),
 (100, 52, 2, 0, '2023-07-13 03:50:16', '2023-07-13 03:50:16'),
 (101, 52, 4, 0, '2023-07-13 03:50:16', '2023-07-13 03:50:16'),
-(102, 52, 7, 0, '2023-07-13 03:50:16', '2023-07-13 03:50:16');
+(102, 52, 7, 0, '2023-07-13 03:50:16', '2023-07-13 03:50:16'),
+(103, 53, 1, 1, '2023-07-13 15:00:02', '2023-07-13 15:01:54'),
+(104, 53, 2, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02'),
+(105, 53, 4, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02'),
+(106, 53, 7, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02'),
+(111, 55, 1, 0, '2023-07-13 15:16:30', '2023-07-13 15:16:30'),
+(112, 55, 2, 0, '2023-07-13 15:16:30', '2023-07-13 15:16:30'),
+(113, 55, 4, 0, '2023-07-13 15:16:30', '2023-07-13 15:16:30'),
+(114, 55, 7, 0, '2023-07-13 15:16:30', '2023-07-13 15:16:30');
 
 -- --------------------------------------------------------
 
@@ -394,10 +405,11 @@ CREATE TABLE `obras` (
 --
 
 INSERT INTO `obras` (`id`, `nombre`, `jefe_id`, `auxiliar_id`, `fecha_obra`, `descripcion`, `check_jefe`, `check_aux`, `estado`, `created_at`, `updated_at`) VALUES
-(1, 'OBRA 1', 3, 2, '2023-07-10', 'PRUEBA ASIGNACION FECHA, JEFE DE OBRA Y AUXILIAR', 1, 0, 'EN PROCESO', '2021-08-04 20:16:28', '2023-07-11 22:16:21'),
+(1, 'OBRA 1', 3, 2, '2023-07-10', 'PRUEBA ASIGNACION FECHA, JEFE DE OBRA Y AUXILIAR', 1, 0, 'EN PROCONCESO', '2021-08-04 20:16:28', '2023-07-11 22:16:21'),
 (2, 'OBRA 2', 3, 2, '2023-07-21', 'PRUEBA #2 ASIGNACION POR MODIFICACION', 0, 0, 'POR INICIAR', '2021-08-04 20:16:31', '2023-07-11 22:54:49'),
 (3, 'OBRA 3', 3, 2, '2023-07-31', '', 0, 0, 'POR INICIAR', '2021-08-04 20:16:31', '2023-07-10 19:30:10'),
-(4, 'OBRA #4', 6, 2, '2023-07-15', 'NUEVA OBRA', 0, 0, 'POR INICIAR', '2023-07-10 19:30:31', '2023-07-10 19:31:38');
+(4, 'OBRA #4', 6, 2, '2023-07-15', 'NUEVA OBRA', 0, 0, 'POR INICIAR', '2023-07-10 19:30:31', '2023-07-10 19:31:38'),
+(5, 'COPIA OBRA 1', 3, 2, '2023-07-10', 'PRUEBA ASIGNACION FECHA, JEFE DE OBRA Y AUXILIAR', 0, 0, 'POR INICIAR', '2023-07-13 15:00:02', '2023-07-13 15:00:51');
 
 -- --------------------------------------------------------
 
@@ -446,7 +458,7 @@ CREATE TABLE `obra_herramienta_usos` (
 --
 
 INSERT INTO `obra_herramienta_usos` (`id`, `obra_id`, `obra_herramienta_id`, `herramienta_id`, `total_almacen`, `total_uso`, `created_at`, `updated_at`) VALUES
-(1, 1, 8, 2, 0, 0, '2023-07-13 01:15:36', '2023-07-13 01:15:36');
+(1, 1, 8, 2, 0, 14, '2023-07-13 01:15:36', '2023-07-13 15:16:30');
 
 -- --------------------------------------------------------
 
@@ -589,7 +601,9 @@ CREATE TABLE `solicitud_materials` (
 
 INSERT INTO `solicitud_materials` (`id`, `solicitud_obra_id`, `material_id`, `cantidad`, `cantidad_usada`, `aprobado`, `created_at`, `updated_at`) VALUES
 (5, 2, 1, 10.00, 10.00, 1, '2023-07-11 22:06:42', '2023-07-12 21:48:07'),
-(6, 2, 2, 20.00, 20.00, 1, '2023-07-12 15:45:56', '2023-07-12 21:48:19');
+(6, 2, 2, 20.00, 20.00, 1, '2023-07-12 15:45:56', '2023-07-12 21:48:19'),
+(7, 3, 1, 10.00, 0.00, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02'),
+(8, 3, 2, 20.00, 0.00, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02');
 
 -- --------------------------------------------------------
 
@@ -625,7 +639,8 @@ CREATE TABLE `solicitud_obras` (
 --
 
 INSERT INTO `solicitud_obras` (`id`, `obra_id`, `aprobado`, `fecha_registro`, `created_at`, `updated_at`) VALUES
-(2, 1, 1, '2023-07-11', '2023-07-11 22:06:42', '2023-07-12 21:42:33');
+(2, 1, 1, '2023-07-11', '2023-07-11 22:06:42', '2023-07-12 21:42:33'),
+(3, 5, 0, '2023-07-13', '2023-07-13 15:00:02', '2023-07-13 15:00:02');
 
 -- --------------------------------------------------------
 
@@ -648,7 +663,8 @@ CREATE TABLE `solicitud_personals` (
 --
 
 INSERT INTO `solicitud_personals` (`id`, `solicitud_obra_id`, `personal_id`, `ingreso`, `aprobado`, `created_at`, `updated_at`) VALUES
-(5, 2, 1, 0, 1, '2023-07-11 22:06:42', '2023-07-12 21:42:33');
+(5, 2, 1, 0, 1, '2023-07-11 22:06:42', '2023-07-12 21:42:33'),
+(6, 3, 1, 0, 0, '2023-07-13 15:00:02', '2023-07-13 15:00:02');
 
 -- --------------------------------------------------------
 
@@ -878,7 +894,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT de la tabla `monitoreo_herramientas`
 --
 ALTER TABLE `monitoreo_herramientas`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `nota_obras`
@@ -890,19 +906,19 @@ ALTER TABLE `nota_obras`
 -- AUTO_INCREMENT de la tabla `notificacions`
 --
 ALTER TABLE `notificacions`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT de la tabla `notificacion_users`
 --
 ALTER TABLE `notificacion_users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT de la tabla `obras`
 --
 ALTER TABLE `obras`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `obra_herramientas`
@@ -944,7 +960,7 @@ ALTER TABLE `solicitud_herramientas`
 -- AUTO_INCREMENT de la tabla `solicitud_materials`
 --
 ALTER TABLE `solicitud_materials`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_notas`
@@ -956,13 +972,13 @@ ALTER TABLE `solicitud_notas`
 -- AUTO_INCREMENT de la tabla `solicitud_obras`
 --
 ALTER TABLE `solicitud_obras`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud_personals`
 --
 ALTER TABLE `solicitud_personals`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
