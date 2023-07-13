@@ -38,13 +38,24 @@
                                     <p><b>Registro:</b> {{ $notificacion->notificacion->monitoreo->herramienta->nombre }}
                                     </p>
                                 @endif
+                                @if ($notificacion->notificacion->tipo == 'HERRAMIENTA OBRA')
+                                    <p><b>Registro:</b>
+                                        {{ $notificacion->notificacion->herramienta->nombre }}
+                                    </p>
+                                @endif
+                                @if ($notificacion->notificacion->tipo == 'PERSONAL')
+                                    <p><b>Registro:</b>
+                                        {{ $notificacion->notificacion->personal->full_name }}
+                                    </p>
+                                @endif
                             <p><b>Acción:</b> {{ $notificacion->notificacion->accion }}</p>
                             <p><b>Mensaje:</b> {{ $notificacion->notificacion->mensaje }}</p>
                             <p><b>Fecha Hora:</b>
                                 {{ date('d/m/Y H:i a', strtotime($notificacion->notificacion->fecha . ' ' . $notificacion->notificacion->hora)) }}
                             </p>
                             @if ($notificacion->notificacion->tipo == 'SOLICITUD')
-                                <p><a href="{{ route('solicitud_obras.show', $notificacion->notificacion->registro_id) }}" class="btn btn-primary">Ver
+                                <p><a href="{{ route('solicitud_obras.show', $notificacion->notificacion->registro_id) }}"
+                                        class="btn btn-primary">Ver
                                         solicitud</a></p>
                             @endif
                         </div>

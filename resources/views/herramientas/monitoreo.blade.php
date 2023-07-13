@@ -29,12 +29,17 @@
                         <div class="card-body">
                             <div class="row">
 
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <h4>ESTADO DE HERRAMIENTAS</h4>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr class="bg-teal">
+                                                <th style="width:20px;">Foto</th>
                                                 <th>Herramienta</th>
+                                                <th>Ingreso Horas</th>
+                                                <th>Salida Horas</th>
+                                                <th>Obra</th>
+                                                <th>Fecha Asignación</th>
                                                 <th>Rfid</th>
                                                 <th>Estado</th>
                                             </tr>
@@ -48,7 +53,15 @@
                                                     }
                                                 @endphp
                                                 <tr class="{{ $color_estado }}" id="herramienta{{ $herramienta->id }}">
+                                                    <td><img src="{{ $herramienta->url_foto }}" alt="Foto"
+                                                            width="60px"></td>
                                                     <td>{{ $herramienta->nombre }}</td>
+                                                    <td>{{ $herramienta->tiempo_ingreso }}</td>
+                                                    <td>{{ $herramienta->tiempo_salida }}</td>
+                                                    <td>{{ $herramienta->asignacion_herramienta ? $herramienta->asignacion_herramienta->obra->nombre : '-' }}
+                                                    </td>
+                                                    <td>{{ $herramienta->asignacion_herramienta ? $herramienta->asignacion_herramienta->fecha_registro : '-' }}
+                                                    </td>
                                                     <td>{{ $herramienta->rfid }}</td>
                                                     <td>{{ $herramienta->estado }}</td>
                                                 </tr>
@@ -57,14 +70,14 @@
                                     </table>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <h4>INGRESOS Y SALIDAS</h4>
                                     <table id="example2" class="table table-bordered">
                                         <thead>
                                             <tr class="bg-gray">
-                                                <th>Fecha Registro</th>
+                                                <th width="90px">Fecha Registro</th>
                                                 <th>Herramienta</th>
-                                                <th>Acción</th>
+                                                <th width="90px">Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody id="contenedorLista">

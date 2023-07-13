@@ -37,14 +37,7 @@
                                     <a href="{{ route('material_obras.create', $obra->id) }}"
                                         class="btn btn-info btn-block"><i class="fa fa-sync"></i>
                                         Nuevo Movimiento</a>
-                                </div>
-                                @if (Auth::user()->tipo == 'JEFE DE OBRA' && $obra->estado != 'CONCLUIDA')
-                                    <div class="col-md-3">
-                                        <a href="{{ route('solicitud_obras.create', $obra->id) }}"
-                                            class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Nueva Solicitud
-                                            {{ $obra->nombre }}</a>
-                                    </div>
-                                @endif
+                          
                             </div>
 
                         </div>

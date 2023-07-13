@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="boton_reporte">
-            <a href="#" data-toggle="modal" data-target="#m_usuarios" class="btn btn-info">Lista de Usuarios</a>
+            <a href="#" data-toggle="modal" data-target="#m_usuarios" class="btn btn-info">Historial de Usuarios</a>
         </div>
     </div>
     <div class="col-md-4">
@@ -25,6 +25,11 @@
     <div class="col-md-4">
         <div class="boton_reporte">
             <a href="#" data-toggle="modal" data-target="#m_monitoreo" class="btn btn-info">Monitoreo de Herramienas de Trabajo</a>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="boton_reporte">
+            <a href="#" data-toggle="modal" data-target="#m_obras" class="btn btn-info">Obras</a>
         </div>
     </div>
 </div>

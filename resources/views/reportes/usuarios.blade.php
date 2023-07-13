@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios</title>
+    <title>HistorialUsuario</title>
     <style type="text/css">
         * {
             font-family: sans-serif;
@@ -26,7 +26,16 @@
 
         table thead tr th,
         tbody tr td {
-            font-size: 0.63em;
+            padding: 3px;
+            word-wrap: break-word;
+        }
+
+        table thead tr th {
+            font-size: 9pt;
+        }
+
+        tbody tr td {
+            font-size: 8pt;
         }
 
         .encabezado {
@@ -82,21 +91,6 @@
             background: rgb(236, 236, 236)
         }
 
-        table thead tr th {
-            padding: 3px;
-            font-size: 0.7em;
-        }
-
-        table tbody tr td {
-            padding: 3px;
-            font-size: 0.55em;
-        }
-
-        table tbody tr td.franco {
-            background: red;
-            color: white;
-        }
-
         .centreado {
             padding-left: 0px;
             text-align: center;
@@ -142,58 +136,118 @@
 
         .txt_rojo {}
 
+        .img_celda {
+            padding: 0px;
+            text-align: center;
+        }
+
         .img_celda img {
-            width: 45px;
+            width: 90px;
+        }
+
+        .break_page {
+            page-break-after: always;
+        }
+
+        .bold {
+            font-weight: bold;
         }
     </style>
 </head>
 
 <body>
-    <div class="encabezado">
-        <div class="logo">
-            <img src="{{ asset('imgs/' . app\RazonSocial::first()->logo) }}">
+    @php
+        $cont = 0;
+    @endphp
+    @foreach ($usuarios as $user)
+        <div class="encabezado">
+            <div class="logo">
+                <img src="{{ asset('imgs/' . app\RazonSocial::first()->logo) }}">
+            </div>
+            <h2 class="titulo">
+                {{ app\RazonSocial::first()->nombre }}
+            </h2>
+            <h4 class="texto">HISTORIAL DE USUARIO</h4>
+            <h4 class="fecha">Expedido: {{ date('Y-m-d') }}</h4>
         </div>
-        <h2 class="titulo">
-            {{ app\RazonSocial::first()->nombre }}
-        </h2>
-        <h4 class="texto">LISTA DE USUARIOS</h4>
-        <h4 class="fecha">Expedido: {{ date('Y-m-d') }}</h4>
-    </div>
-    <table border="1">
-        <thead>
-            <tr>
-                <th width="3%">Nº</th>
-                <th width="7%">Foto</th>
-                <th width="8%">Usuario</th>
-                <th>Nombre(s) y apellidos</th>
-                <th width="10%">C.I.</th>
-                <th width="10%">Celular</th>
-                <th>E-mail</th>
-                <th>Dirección</th>
-                <th>Fecha Registro</th>
-                <th width="12%">Tipo</th>
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $cont = 1;
-            @endphp
-            @foreach ($usuarios as $user)
+        <table border="1">
+            <tbody>
                 <tr>
-                    <td>{{ $cont++ }}</td>
-                    <td class="img_celda"><img src="{{ asset('imgs/users/' . $user->foto) }}" alt="Foto"></td>
+                    <td class="bold" width="14%">Usuario:</td>
                     <td>{{ $user->usuario }}</td>
+                    <td class="img_celda" colspan="2" rowspan="4"><img
+                            src="{{ asset('imgs/users/' . $user->foto) }}" alt="Foto"></td>
+                </tr>
+                <tr>
+                    <td class="bold">Nombre: </td>
                     <td>{{ $user->nombre }} {{ $user->paterno }} {{ $user->materno }}</td>
+                </tr>
+                <tr>
+                    <td class="bold">C.I.: </td>
                     <td>{{ $user->ci }} {{ $user->ci_exp }}</td>
+                </tr>
+                <tr>
+                    <td class="bold">Celular:</td>
                     <td>{{ $user->cel }}</td>
+                </tr>
+                <tr>
+                    <td class="bold">Correo:</td>
                     <td>{{ $user->email }}</td>
+                    <td class="bold" width="14%">Dirección:</td>
                     <td>{{ $user->dir }}</td>
+                </tr>
+                <tr>
+                    <td class="bold">Fecha de registro:</td>
                     <td>{{ $user->fecha_registro }}</td>
+                    <td class="bold">TIpo:</td>
                     <td>{{ $user->tipo }}</td>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+                <tr>
+                    <td class="bold">Habilitado:</td>
+                    <td colspan="3">{{ $user->habilitado_txt }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        @if ($user->tipo == 'AUXILIAR' || $user->tipo == 'JEFE DE OBRA')
+            <h4>OBRAS ASIGNADAS</h4>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th width="7%">#</th>
+                        <th>Obra</th>
+                        <th width="13%">Fecha</th>
+                        <th width="10%">Material</th>
+                        <th width="10%">Herramientas</th>
+                        <th width="10%">Personal</th>
+                        <th width="10%">Notas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $numero = 1;
+                    @endphp
+                    @foreach ($user->obras_asignadas as $oa)
+                        <tr>
+                            <td class="centreado">{{ $numero++ }}</td>
+                            <td>{{ $oa->nombre }}</td>
+                            <td>{{ $oa->fecha_obra }}</td>
+                            <td class="centreado">{{ $oa->c_material }}</td>
+                            <td class="centreado">{{ $oa->c_herramientas }}</td>
+                            <td class="centreado">{{ $oa->c_personal }}</td>
+                            <td class="centreado">{{ count($oa->nota_obras) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+        @php
+            $cont++;
+        @endphp
+        @if ($cont < count($usuarios))
+            <div class="break_page"></div>
+        @endif
+    @endforeach
 </body>
 
 </html>

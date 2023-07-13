@@ -8,17 +8,17 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Solicitud de Obras - Modificar</h1>
+                    <h1 class="m-0">Solicitud de Obras - Reenviar Solicitud</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right bg-white">
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('obras.index') }}">Obras</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('solicitud_obras.index') }}">Solicitud de Obras</a>
-                        <li class="breadcrumb-item"><a
-                                href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}">{{ $obra->nombre }}</a>
-                        </li>
-                        <li class="breadcrumb-item active">Modificar</li>
+                        @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                            <li class="breadcrumb-item"><a href="{{ route('solicitud_obras.index') }}">Solicitud de
+                                    Obras</a>
+                        @endif
+                        <li class="breadcrumb-item active">Reenviar Solicitud</li>
                     </ol>
                 </div>
             </div>
@@ -33,12 +33,11 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
-                                        class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i> Volver a
-                                        {{ $obra->nombre }}</a>
+                                    <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
+                                            class="fa fa-arrow-left"></i> Volver a Obras</a>
                                 </div>
                                 <div class="col-md-12">
-                                    <h3 class="card-title text-center w-100">Modificar Solicitud</h3>
+                                    <h3 class="card-title text-center w-100">Reenviar Solicitud</h3>
                                 </div>
                             </div>
                         </div>
@@ -46,8 +45,10 @@
                         {{ Form::model($solicitud_obra, ['route' => ['solicitud_obras.update', $solicitud_obra->id], 'method' => 'put', 'files' => true, 'id' => 'formSolicitud']) }}
                         <div class="card-body">
                             @include('solicitud_obras.form.form')
-                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> ACTUALIZAR
-                                SOLICITUD</button>
+                            @if ($obra->estado != 'CONCLUIDA')
+                                <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-paper-plane"></i> REENVIAR
+                                    SOLICITUD</button>
+                            @endif
                         </div>
                         {{ Form::close() }}
                         <!-- /.card-body -->

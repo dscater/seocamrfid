@@ -60,6 +60,7 @@
     @include('reportes.modal.m_materiales_obras')
     @include('reportes.modal.m_ingresos_salidas')
     @include('reportes.modal.m_monitoreo')
+    @include('reportes.modal.m_obras')
 @endsection
 
 @section('scripts')

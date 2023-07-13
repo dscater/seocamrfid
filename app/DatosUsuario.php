@@ -11,9 +11,20 @@ class DatosUsuario extends Model
         'nombre', 'paterno', 'materno', 'ci', 'ci_exp', 'dir', 'email', 'fono', 'cel', 'user_id', 'habilitado', 'fecha_registro'
     ];
 
-    protected $appends = ["habilitado_txt", "full_name"];
+    protected $appends = ["habilitado_txt", "full_name", "obras_asignadas"];
 
+    public function getObrasAsignadasAttribute()
+    {
+        $obras = [];
+        if ($this->user->tipo == 'AUXILIAR') {
+            $obras = Obra::where("auxiliar_id", $this->user_id)->get();
+        }
+        if ($this->user->tipo == 'JEFE DE OBRA') {
+            $obras = Obra::where("jefe_id", $this->user_id)->get();
+        }
 
+        return $obras;
+    }
     public function getFullNameAttribute()
     {
         return $this->nombre . ' ' . $this->paterno . ' ' . $this->materno;

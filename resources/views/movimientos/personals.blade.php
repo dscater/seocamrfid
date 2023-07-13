@@ -40,22 +40,84 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4>Personal asignado: {{ count($obra->obra_personals) }}</h4>
+                                    <h4>Personal asignado en la Obra: {{ count($obra->obra_personals) }}</h4>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="row contenedor_notas">
                                 @foreach ($obra->obra_personals as $value)
                                     <div class="card col-md-12">
                                         <div class="card-body">
-                                            <p><strong>Personal: </strong>{{ $value->personal->nombre }}</p>
+                                            <p><strong>Personal: </strong>{{ $value->personal->full_name }}</p>
                                             <p><strong>Fecha de asignación:
                                                 </strong>{{ $value->personal->fecha_registro }}</p>
                                         </div>
+                                        <div class="card-footer">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button type="button" onclick="quitarRegistro({{ $value->id }})"
+                                                        class="btn btn-sm btn-danger btn-block">QUITAR DE
+                                                        LA
+                                                        OBRA</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Personal solicitado: {{ $obra->total_personal_solicitado }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row contenedor_notas">
+                                @if ($obra->solicitud_obra)
+                                    @foreach ($obra->solicitud_obra->solicitud_personals as $sp)
+                                        <div class="card col-md-12">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <p><strong>Personal: </strong>{{ $sp->personal->full_name }}</p>
+                                                        <p><strong>Asignado: </strong><span
+                                                                class="text-sm badge badge-{{ $sp->asignado ? 'success' : 'danger' }}">{{ $sp->asignado ? 'SI' : 'NO' }}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if (!$sp->asignado)
+                                                <div class="card-footer">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <button type="button"
+                                                                onclick="asignarRegistro({{ $sp->id }})"
+                                                                class="btn btn-sm btn-primary btn-block">ASIGNAR A LA
+                                                                OBRA</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -68,9 +130,87 @@
         </div>
     </section>
 
-    @include('modal.eliminar')
-
-@section('scripts')
-    <script></script>
+    <input type="hidden" value="{{ route('obra_personals.destroy') }}" id="urlQuitar">
+    <input type="hidden" value="{{ route('obra_personals.asignar') }}" id="urlAsignar">
 @endsection
+@section('scripts')
+    <script>
+        function asignarRegistro(id) {
+            Swal.fire({
+                title: "Confirmación",
+                text: "¿Estás seguro(a) de asignar el registro a la obra?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Si, asignar",
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#dc3545",
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('#token').val()
+                        },
+                        type: "POST",
+                        url: $("#urlAsignar").val(),
+                        data: {
+                            id
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            swal.fire({
+                                title: "Correcto",
+                                icon: "success",
+                                text: "Operación éxitosa",
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    });
+                }
+            });
+        }
+
+        function quitarRegistro(id) {
+            Swal.fire({
+                title: "Confirmación",
+                text: "¿Estás seguro(a) de eliminar el registro de la obra?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#dc3545",
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('#token').val()
+                        },
+                        type: "DELETE",
+                        url: $("#urlQuitar").val(),
+                        data: {
+                            id
+                        },
+                        dataType: "json",
+                        success: function(response) {
+                            swal.fire({
+                                title: "Correcto",
+                                icon: "success",
+                                text: "Operación éxitosa",
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
 @endsection

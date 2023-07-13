@@ -11,7 +11,19 @@ class MaterialObra extends Model
         'obra_id', 'fecha_registro', 'estado'
     ];
 
-    protected $appends = ["existe_salida_material"];
+    protected $appends = ["existe_salida_material", "total_ingresos", "total_salidas"];
+
+    public function getTotalIngresosAttribute()
+    {
+        $total = IngresoSalida::where("mo_id", $this->id)->where("tipo", "INGRESO")->sum("cantidad");
+        return $total;
+    }
+
+    public function getTotalSalidasAttribute()
+    {
+        $total = IngresoSalida::where("mo_id", $this->id)->where("tipo", "SALIDA")->sum("cantidad");
+        return $total;
+    }
 
     public function getExisteSalidaMaterialAttribute()
     {

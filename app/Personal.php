@@ -12,7 +12,14 @@ class Personal extends Model
         'cel_familiar', 'foto', 'cargo', 'habilitado', 'fecha_registro', 'estado',
     ];
 
-    protected $appends = ["habilitado_txt", "full_name"];
+    protected $appends = ["habilitado_txt", "full_name", "ultima_obra"];
+
+    public function getUltimaObraAttribute()
+    {
+        $ultima_obra = ObraPersonal::where("personal_id", $this->id)->get()->last();
+        return $ultima_obra;
+    }
+
     public function getHabilitadoTxtAttribute()
     {
         return $this->habilitado ? "SI" : "NO";

@@ -32,15 +32,6 @@
                                 @foreach ($solicitud_obra->solicitud_materials as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-header">
-                                                @if ($value->aprobado == 1)
-                                                    <span class="rounded bg-success p-1 text-xs">Aprobado <i
-                                                            class="fa fa-check"></i></span>
-                                                @else
-                                                    <span class="rounded bg-gray p-1 text-xs">En espera <i
-                                                            class="fa fa-eye"></i></span>
-                                                @endif
-                                            </div>
                                             <div class="card-body pb-1">
                                                 <input type="hidden" name="materials[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->material_id }}|{{ $value->cantidad }}">
@@ -56,7 +47,7 @@
                                                         class="input_form oculto">
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($obra->estado != 'CONCLUIDA')
                                                 <div class="card-footer">
                                                     <button type="button" class="btn btn-xs btn-danger eliminar"><i
                                                             class="fa fa-trash"></i></button>
@@ -121,15 +112,6 @@
                                 @foreach ($solicitud_obra->solicitud_herramientas as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-header">
-                                                @if ($value->aprobado == 1)
-                                                    <span class="rounded bg-success p-1 text-xs">Aprobado <i
-                                                            class="fa fa-check"></i></span>
-                                                @else
-                                                    <span class="rounded bg-gray p-1 text-xs">En espera <i
-                                                            class="fa fa-check"></i></span>
-                                                @endif
-                                            </div>
                                             <div class="card-body pb-1">
                                                 <input type="hidden" name="herramientas[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->herramienta_id }}|{{ $value->dias_uso }}|{{ $value->fecha_asignacion }}|{{ $value->fecha_finalizacion }}">
@@ -160,18 +142,24 @@
                                                         class="input_form oculto">
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($obra->estado != 'CONCLUIDA')
                                                 <div class="card-footer">
-                                                    <button type="button" class="btn btn-xs btn-danger eliminar"><i
-                                                            class="fa fa-trash"></i></button>
-                                                    <button type="button" class="btn btn-xs btn-warning editar"><i
-                                                            class="fa fa-edit"></i></button>
-                                                    <button type="button"
-                                                        class="btn btn-xs btn-success actualizar oculto"><i
-                                                            class="fa fa-check"></i></button>
-                                                    <button type="button"
-                                                        class="btn btn-xs btn-info cancelar oculto"><i
-                                                            class="fa fa-times"></i></button>
+                                                    @if (!$value->asignado)
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-danger eliminar"><i
+                                                                class="fa fa-trash"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-warning editar"><i
+                                                                class="fa fa-edit"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-success actualizar oculto"><i
+                                                                class="fa fa-check"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-info cancelar oculto"><i
+                                                                class="fa fa-times"></i></button>
+                                                    @else
+                                                        <span class="text-md badge badge-info">Asignado</span>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -213,15 +201,6 @@
                                 @foreach ($solicitud_obra->solicitud_personals as $value)
                                     <div class="col-md-12 elem">
                                         <div class="card contenedor_datos">
-                                            <div class="card-header">
-                                                @if ($value->aprobado == 1)
-                                                    <span class="rounded bg-success p-1 text-xs">Aprobado <i
-                                                            class="fa fa-check"></i></span>
-                                                @else
-                                                    <span class="rounded bg-gray p-1 text-xs">En espera <i
-                                                            class="fa fa-check"></i></span>
-                                                @endif
-                                            </div>
                                             <div class="card-body pb-1">
                                                 <input type="hidden" name="personals[]" class="valores"
                                                     value="{{ $value->id }}|{{ $value->personal_id }}">
@@ -234,18 +213,24 @@
                                                     </select>
                                                 </p>
                                             </div>
-                                            @if ($value->aprobado == 0)
+                                            @if ($obra->estado != 'CONCLUIDA')
                                                 <div class="card-footer">
-                                                    <button type="button" class="btn btn-xs btn-danger eliminar"><i
-                                                            class="fa fa-trash"></i></button>
-                                                    <button type="button" class="btn btn-xs btn-warning editar"><i
-                                                            class="fa fa-edit"></i></button>
-                                                    <button type="button"
-                                                        class="btn btn-xs btn-success actualizar oculto"><i
-                                                            class="fa fa-check"></i></button>
-                                                    <button type="button"
-                                                        class="btn btn-xs btn-info cancelar oculto"><i
-                                                            class="fa fa-times"></i></button>
+                                                    @if (!$value->asignado)
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-danger eliminar"><i
+                                                                class="fa fa-trash"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-warning editar"><i
+                                                                class="fa fa-edit"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-success actualizar oculto"><i
+                                                                class="fa fa-check"></i></button>
+                                                        <button type="button"
+                                                            class="btn btn-xs btn-info cancelar oculto"><i
+                                                                class="fa fa-times"></i></button>
+                                                    @else
+                                                        <span class="text-md badge badge-info">Asignado</span>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>

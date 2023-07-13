@@ -55,8 +55,20 @@ class SolicitudObraController extends Controller
 
     public function create(Obra $obra)
     {
+        if ($obra->solicitud_obra) {
+            return redirect()->route("solicitud_obras.edit", $obra->solicitud_obra->id);
+        }
         $materiales = Material::all();
-        $herramientas = Herramienta::all();
+        $reg_herramientas = Herramienta::all();
+        $herramientas = [];
+        foreach ($reg_herramientas as $h) {
+            $existe = ObraHerramienta::where("estado", 1)
+                ->where("herramienta_id", $h->id)
+                ->get()->first();
+            if ($h->estado == 'INGRESO' && !$existe) {
+                $herramientas[] = $h;
+            }
+        }
         $personals = Personal::where("estado", 1)->where("habilitado", 1)->get();
         return view("solicitud_obras.create", compact("obra", "materiales", "herramientas", "personals"));
     }
@@ -138,8 +150,21 @@ class SolicitudObraController extends Controller
     public function edit(SolicitudObra $solicitud_obra)
     {
         $materiales = Material::all();
-        $herramientas = Herramienta::all();
         $personals = Personal::where("estado", 1)->get();
+        $reg_herramientas = Herramienta::all();
+        $herramientas = [];
+        foreach ($reg_herramientas as $h) {
+            if ($h->estado == 'INGRESO') {
+                $existe = ObraHerramienta::where("estado", 1)
+                    ->where("herramienta_id", $h->id)
+                    ->get()->first();
+                $pertenece = SolicitudHerramienta::where("solicitud_obra_id", $solicitud_obra->id)
+                    ->where("herramienta_id", $h->id)->get()->first();
+                if (!$existe || $pertenece) {
+                    $herramientas[] = $h;
+                }
+            }
+        }
         $obra = $solicitud_obra->obra;
         return view("solicitud_obras.edit", compact("solicitud_obra", "obra", "materiales", "herramientas", "personals"));
     }
@@ -155,6 +180,12 @@ class SolicitudObraController extends Controller
             "herramientas.required" => "Debes ingresar al menos una herramienta",
             "personals.required" => "Debes ingresar al menos un personal",
         ]);
+
+        $solicitud_obra->update([
+            "aprobado" => 0,
+            "fecha_registro" => date("Y-m-d")
+        ]);
+
         $obra = $solicitud_obra->obra;
 
         $materials = $request->materials;
@@ -176,6 +207,8 @@ class SolicitudObraController extends Controller
                 $solicitud_material->update([
                     "material_id" => $array_material[1],
                     "cantidad" => $array_material[2],
+                    'cantidad_usada' => 0,
+                    "aprobado" => 0,
                 ]);
                 if ($solicitud_material->aprobado == 0) {
                     $solicitud_obra->aprobado = 0;
@@ -197,12 +230,16 @@ class SolicitudObraController extends Controller
                 ]);
             } else {
                 $solicitud_herramienta = SolicitudHerramienta::find($array_herramienta[0]);
-                $solicitud_herramienta->update([
-                    "herramienta_id" => $array_herramienta[1],
-                    "dias_uso" => $array_herramienta[2],
-                    "fecha_asignacion" => $array_herramienta[3],
-                    "fecha_finalizacion" => $array_herramienta[4],
-                ]);
+                if (!$solicitud_herramienta->asignado) {
+                    $solicitud_herramienta->update([
+                        "herramienta_id" => $array_herramienta[1],
+                        "dias_uso" => $array_herramienta[2],
+                        "fecha_asignacion" => $array_herramienta[3],
+                        "fecha_finalizacion" => $array_herramienta[4],
+                        "ingreso" => 0,
+                        "aprobado" => 0,
+                    ]);
+                }
                 if ($solicitud_herramienta->aprobado == 0) {
                     $solicitud_obra->aprobado = 0;
                 }
@@ -220,9 +257,13 @@ class SolicitudObraController extends Controller
                 ]);
             } else {
                 $solicitud_personal = SolicitudPersonal::find($array_personal[0]);
-                $solicitud_personal->update([
-                    "personal_id" => $array_personal[1],
-                ]);
+                if (!$solicitud_personal->asignado) {
+                    $solicitud_personal->update([
+                        "personal_id" => $array_personal[1],
+                        "ingreso" => 0,
+                        "aprobado" => 0,
+                    ]);
+                }
                 if ($solicitud_personal->aprobado == 0) {
                     $solicitud_obra->aprobado = 0;
                 }
@@ -264,7 +305,7 @@ class SolicitudObraController extends Controller
             'registro_id' => $solicitud_obra->id,
             'tipo'  => 'SOLICITUD',
             'accion' => "MODIFICACIÓN",
-            'mensaje' => "SE RENOVÓ LA SOLICITUD DE LA OBRA: " . $solicitud_obra->obra->nombre,
+            'mensaje' => "SE REALIZÓ UNA NUEVA SOLICITUD PARA LA OBRA: " . $solicitud_obra->obra->nombre,
             'fecha' => date('Y-m-d'),
             'hora' => date('H:i:s'),
         ]);
@@ -297,74 +338,16 @@ class SolicitudObraController extends Controller
             $solicitud_obra->solicitud_personals()->update([
                 "aprobado" => 1,
             ]);
-
-            $obra = $solicitud_obra->obra;
-            $fecha = date("Y-m-d");
-            // registrar ingreso de herramientas a la obra una vez aprobada
-            foreach ($solicitud_obra->solicitud_herramientas as $sh) {
-                $existe = ObraHerramienta::where("obra_id", $obra->id)->where("herramienta_id", $sh->herramienta_id)->get()->first();
-                if (!$existe) {
-                    $obra_herramienta = $obra->obra_herramientas()->create([
-                        "herramienta_id" => $sh->herramienta_id,
-                        "fecha_registro" => $fecha
-                    ]);
-                    $mensaje = 'SE APROBÓ EL INGRESO DE LA HERRAMIENTA ' . $sh->herramienta->herramienta . ' EN LA OBRA ' . $sh->solicitud_obra->obra->nombre;
-                    $nueva_notificacion = Notificacion::create([
-                        'registro_id' => $obra_herramienta->id,
-                        'tipo'  => 'HERRAMIENTA',
-                        'accion' => "INGRESO",
-                        'mensaje' => $mensaje,
-                        'fecha' => $fecha,
-                        'hora' => date('H:i:s'),
-                    ]);
-
-                    $users = User::where('estado', 1)->whereIn('tipo', ['ADMINISTRADOR', 'AUXILIAR'])->get();
-                    foreach ($users as $u) {
-                        NotificacionUser::create([
-                            'notificacion_id' => $nueva_notificacion->id,
-                            'user_id' => $u->id,
-                            'visto' => 0
-                        ]);
-                    }
-                }
-            }
-
-            // registrar ingreso del personal a la obra una vez aprobada
-            foreach ($solicitud_obra->solicitud_personals as $sp) {
-                $existe = ObraPersonal::where("obra_id", $obra->id)->where("personal_id", $sp->personal_id)->get()->first();
-                if (!$existe) {
-                    $obra_personal = $obra->obra_personals()->create([
-                        "personal_id" => $sp->personal_id,
-                        "fecha_registro" => $fecha
-                    ]);
-                    $mensaje = 'SE APROBÓ EL INGRESO DEL PERSONAL ' . $sp->personal->full_name . ' EN LA OBRA ' . $sp->solicitud_obra->obra->nombre;
-                    $nueva_notificacion = Notificacion::create([
-                        'registro_id' => $obra_personal->id,
-                        'tipo'  => 'PERSONAL',
-                        'accion' => "INGRESO",
-                        'mensaje' => $mensaje,
-                        'fecha' => $fecha,
-                        'hora' => date('H:i:s'),
-                    ]);
-
-                    $users = User::where('estado', 1)->whereIn('tipo', ['ADMINISTRADOR', 'AUXILIAR'])->get();
-                    foreach ($users as $u) {
-                        NotificacionUser::create([
-                            'notificacion_id' => $nueva_notificacion->id,
-                            'user_id' => $u->id,
-                            'visto' => 0
-                        ]);
-                    }
-                }
-            }
         } else {
             $solicitud_obra->solicitud_materials()->update([
                 "aprobado" => 0,
             ]);
             $solicitud_obra->solicitud_herramientas()->update([
+                "ingreso" => 0,
                 "aprobado" => 0,
             ]);
             $solicitud_obra->solicitud_personals()->update([
+                "ingreso" => 0,
                 "aprobado" => 0,
             ]);
         }

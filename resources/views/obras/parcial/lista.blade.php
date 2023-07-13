@@ -12,6 +12,11 @@
                                         <i class="fa fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenu1">
+                                        <a href="#" data-url="{{ route('obras.copiar', $obra->id) }}"
+                                            data-info="{{ $obra->nombre }}" data-toggle="modal"
+                                            data-target="#modal-copiar" class="copiar dropdown-item"><i
+                                                class="fa fa-copy"></i>
+                                            Copiar Obra</a>
                                         <a href="{{ route('obras.edit', $obra->id) }}" class="dropdown-item"><i
                                                 class="fa fa-edit"></i>
                                             Editar</a>
@@ -62,12 +67,21 @@
                                     class="btn bg-teal btn-flat btn-block">Administrar Movmientos</a>
                             </div>
                         @endif
-                        <div class="info_adicional mt-1">
-                            <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
-                                class="btn btn-primary text-white btn-flat btn-block">Solicitudes
-                                ({{ $obra->c_solicitudes }})
-                            </a>
-                        </div>
+                        @if (Auth::user()->tipo == 'JEFE DE OBRA' && $obra->estado != 'CONCLUIDA')
+                            <div class="info_adicional mt-1">
+                                <a href="{{ route('solicitud_obras.create', $obra->id) }}"
+                                    class="btn btn-primary text-white btn-flat btn-block">Solicitud
+                                </a>
+                            </div>
+                        @elseif(Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                            @if ($obra->solicitud_obra)
+                                <div class="info_adicional mt-1">
+                                    <a href="{{ route('solicitud_obras.show', $obra->solicitud_obra->id) }}"
+                                        class="btn btn-primary text-white btn-flat btn-block">Solicitud
+                                    </a>
+                                </div>
+                            @endif
+                        @endif
                         <div class="info_adicional mt-1">
                             <a href="{{ route('nota_obras.index', $obra->id) }}"
                                 class="btn bg-lime text-white btn-flat btn-block">Notas

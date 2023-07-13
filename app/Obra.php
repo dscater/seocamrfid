@@ -8,7 +8,28 @@ class Obra extends Model
 {
     protected $fillable = ['nombre', 'jefe_id', "auxiliar_id", 'fecha_obra', 'descripcion', "check_jefe", "check_aux", "estado"];
 
-    protected $appends = ["stock_bajo", "c_material", "c_herramientas", "c_personal", "c_solicitudes"];
+    protected $appends = [
+        "stock_bajo", "c_material", "c_herramientas", "c_personal",
+        "total_herramientas_solicitadas", "total_personal_solicitado"
+    ];
+
+    public function getTotalHerramientasSolicitadasAttribute()
+    {
+        $total = 0;
+        if ($this->solicitud_obra) {
+            $total = count($this->solicitud_obra->solicitud_herramientas);
+        }
+        return $total;
+    }
+
+    public function getTotalPersonalSolicitadoAttribute()
+    {
+        $total = 0;
+        if ($this->solicitud_obra) {
+            $total = count($this->solicitud_obra->solicitud_personals);
+        }
+        return $total;
+    }
 
     public function getStockBajoAttribute()
     {
@@ -16,7 +37,6 @@ class Obra extends Model
     }
     public function getCMaterialAttribute()
     {
-
         return count(MaterialObra::where('obra_id', $this->id)->where('estado', 1)->get());
     }
     public function getCHerramientasAttribute()
@@ -26,11 +46,6 @@ class Obra extends Model
     public function getCPersonalAttribute()
     {
         return count(ObraPersonal::where('obra_id', $this->id)->get());
-    }
-
-    public function getCSolicitudesAttribute()
-    {
-        return count($this->solicitud_obras);
     }
 
     public function jefe_obra()
@@ -62,9 +77,9 @@ class Obra extends Model
         return $this->hasMany(IngresoSalida::class, 'obra_id');
     }
 
-    public function solicitud_obras()
+    public function solicitud_obra()
     {
-        return $this->hasMany(SolicitudObra::class, 'obra_id');
+        return $this->hasOne(SolicitudObra::class, 'obra_id');
     }
 
     public function nota_obras()

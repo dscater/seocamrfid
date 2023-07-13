@@ -47,10 +47,21 @@ class ReporteController extends Controller
                             ->get();
                     }
                     break;
+                case 'usuario':
+                    $usuario = $request->usuario;
+                    if ($usuario != 'todos') {
+                        $usuarios = DatosUsuario::select('datos_usuarios.*', 'users.id as user_id', 'users.name as usuario', 'users.tipo', 'users.foto')
+                            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+                            ->where('users.estado', 1)
+                            ->where('users.id', $usuario)
+                            ->orderBy('datos_usuarios.nombre', 'ASC')
+                            ->get();
+                    }
+                    break;
             }
         }
 
-        $pdf = PDF::loadView('reportes.usuarios', compact('usuarios'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('reportes.usuarios', compact('usuarios'))->setPaper('letter', 'portrait');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
@@ -59,7 +70,7 @@ class ReporteController extends Controller
         $ancho = $canvas->get_width();
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
 
-        return $pdf->stream('Usuarios.pdf');
+        return $pdf->stream('HistorialUsuario.pdf');
     }
 
     public function personal(Request $request)
@@ -90,11 +101,10 @@ class ReporteController extends Controller
     {
         $obra = $request->obra;
 
-        $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('estado', 1)->orderBy('obras.nombre', 'asc')->get();
+        $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('material_obras.estado', 1)->orderBy('obras.nombre', 'asc')->get();
         if ($obra != 'todos') {
-            $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('estado', 1)->where('obra_id', $obra)->orderBy('obras.nombre', 'asc')->get();
+            $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('material_obras.estado', 1)->where('obra_id', $obra)->orderBy('obras.nombre', 'asc')->get();
         }
-
         $pdf = PDF::loadView('reportes.materiales_obras', compact('materiales'))->setPaper('letter', 'portrait');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
@@ -107,6 +117,65 @@ class ReporteController extends Controller
         return $pdf->stream('MaterialObras.pdf');
     }
 
+    public function g_materiales_obras()
+    {
+        $_obras = Obra::all();
+        return view("reportes.g_materiales_obras", compact("_obras"));
+    }
+    public function obrasMateriales(Request $request)
+    {
+        $obra = $request->obra;
+        $obras = Obra::all();
+        if ($obra != 'todos') {
+            $obras = Obra::where('id', $obra)->get();
+        }
+        $materials = Material::all();
+        $categorias = [];
+        foreach ($obras as $o) {
+            $categorias[] = $o->nombre;
+        }
+
+        foreach ($materials as $m) {
+            $contenedor_series[$m->id] = [
+                'name' => $m->nombre,
+                'data' => [],
+                'dataLabels' => [
+                    'enabled' => true,
+                    'rotation' => -90,
+                    'color' => '#FFFFFF',
+                    'align' => 'right',
+                    'format' => '{point.y:.0f}', // one decimal
+                    'y' => 10, // 10 pixels down from the top
+                    'style' => [
+                        'fontSize' => '13px',
+                        'fontFamily' => 'Verdana, sans-serif'
+                    ]
+                ],
+            ];
+            foreach ($obras as $o) {
+                $material_obra = MaterialObra::where('obra_id', $o->id)->where('material_id', $m->id)->get()->first();
+                if ($material_obra) {
+                    $contenedor_series[$m->id]['data'][] = (float)$material_obra->stock_actual;
+                } else {
+                    $contenedor_series[$m->id]['data'][] = 0;
+                }
+            }
+        }
+
+        $series = [];
+        foreach ($contenedor_series as $val) {
+            $series[] = $val;
+        }
+
+
+        $fecha = date('d/m/Y');
+        return response()->JSON([
+            'sw' => true,
+            'categorias' => $categorias,
+            'series' => $series,
+            'fecha' => $fecha
+        ]);
+    }
     public function infoMateriales(Request $request)
     {
         $obra = $request->obra;
@@ -232,5 +301,116 @@ class ReporteController extends Controller
         $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
 
         return $pdf->stream('MonitoreoHerramientas.pdf');
+    }
+
+    public function g_monitoreo(Request $request)
+    {
+        $herramientas = Herramienta::all();
+        return view("reportes.g_monitoreo", compact("herramientas"));
+    }
+
+    public function monitoreoInfo(Request $request)
+    {
+        $herramienta = $request->herramienta;
+        $fecha = date('d/m/Y');
+
+        $herramientas = Herramienta::all();
+        if ($herramienta != "todos") {
+            $herramientas = Herramienta::where("id", $herramienta)->get();
+        }
+        $series = [
+            "name" => "DÍAS DE USO",
+            "data" => [],
+        ];
+        foreach ($herramientas as $h) {
+            $series["data"][] = [
+                "name" => $h->nombre,
+                "y" => (int)($h->tiempo_uso / 24),
+            ];
+        }
+        return response()->JSON([
+            'sw' => true,
+            'series' => $series,
+            'fecha' => $fecha
+        ]);
+    }
+
+    public function obras(Request $request)
+    {
+        $filtro = $request->filtro;
+        $obra = $request->obra;
+        $fecha_ini = $request->fecha_ini;
+        $fecha_fin = $request->fecha_fin;
+
+        $obras = Obra::all();
+
+        if ($filtro != "todos") {
+            if ($filtro == "obra" && $obra != "todos") {
+                $obras = Obra::where("id", $obra)->get();
+            }
+            if ($filtro == "fecha" && $fecha_ini && $fecha_fin) {
+                $obras = Obra::whereBetween("fecha_obra", [$fecha_ini, $fecha_fin])->get();
+            }
+        }
+
+        $pdf = PDF::loadView('reportes.obras', compact('obras'))->setPaper('letter', 'portrait');
+        // ENUMERAR LAS PÁGINAS USANDO CANVAS
+        $pdf->output();
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->get_canvas();
+        $alto = $canvas->get_height();
+        $ancho = $canvas->get_width();
+        $canvas->page_text($ancho - 90, $alto - 25, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
+
+        return $pdf->stream('Obras.pdf');
+    }
+
+    public function g_obras(Request $request)
+    {
+        $obras = Obra::all();
+        return view("reportes.g_obras", compact("obras"));
+    }
+
+    public function obrasInfo(Request $request)
+    {
+        $obra = $request->obra;
+        $obras = Obra::all();
+        if ($obra != 'todos') {
+            $obras = Obra::where('id', $obra)->get();
+        }
+        $categorias = [];
+        foreach ($obras as $o) {
+            $categorias[] = $o->nombre;
+        }
+        $serie = ["MATERIALES", "HERRAMIENTAS", "PERSONAL", "NOTAS"];
+        foreach ($serie as $m) {
+            $nueva_serie = [
+                'name' => $m,
+                'data' => [],
+            ];
+            foreach ($obras as $o) {
+                switch ($m) {
+                    case "MATERIALES":
+                        $material_obra = count(MaterialObra::where('obra_id', $o->id)->get());
+                        $nueva_serie['data'][] = (float)$material_obra;
+                        break;
+                    case "HERRAMIENTAS":
+                        break;
+                    case "PERSONAL":
+                        break;
+                    case "NOTAS":
+                        break;
+                }
+            }
+            $series[] = $nueva_serie;
+        }
+
+        $fecha = date('d/m/Y');
+        return response()->JSON([
+            'sw' => true,
+            'categorias' => $categorias,
+            'series' => $series,
+            'fecha' => $fecha
+        ]);
     }
 }

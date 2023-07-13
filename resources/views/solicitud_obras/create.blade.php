@@ -33,9 +33,8 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <a href="{{ route('solicitud_obras.solicitudes_obra', $obra->id) }}"
-                                        class="btn btn-default btn-block"><i class="fa fa-arrow-left"></i> Volver a
-                                        {{ $obra->nombre }}</a>
+                                    <a href="{{ route('obras.index') }}" class="btn btn-default btn-block"><i
+                                            class="fa fa-arrow-left"></i> Volver a Obras</a>
                                 </div>
                                 <div class="col-md-12">
                                     <h3 class="card-title text-center w-100">Nueva Solicitud</h3>
@@ -46,7 +45,10 @@
                         {{ Form::open(['route' => ['solicitud_obras.store', $obra->id], 'method' => 'post', 'files' => true, 'id' => 'formSolicitud']) }}
                         <div class="card-body">
                             @include('solicitud_obras.form.form')
-                            <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-save"></i> REGISTRAR SOLICITUD</button>
+                            @if ($obra->estado != 'CONCLUIDA')
+                                <button class="btn btn-info" id="btnEnviaForm"><i class="fa fa-paper-plane"></i> ENVIAR
+                                    SOLICITUD</button>
+                            @endif
                         </div>
                         {{ Form::close() }}
                         <!-- /.card-body -->

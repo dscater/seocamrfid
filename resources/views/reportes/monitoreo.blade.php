@@ -146,6 +146,10 @@
             width: 45px;
         }
 
+
+        .izquierda {
+            text-align: left;
+        }
     </style>
 </head>
 
@@ -164,7 +168,47 @@
         <table border="1">
             <thead>
                 <tr>
-                    <th colspan="2">Herramienta: {{ $h->nombre }}</th>
+                    <th colspan="2" class="izquierda">
+                        <div style="width:100%;text-align:center;">{{ $h->nombre }}</div>
+                    </th>
+                </tr>
+                @if ($h->asignacion_herramienta)
+                    <tr>
+                        <th>OBRA</th>
+                        <th>SOLICITUD</th>
+                    </tr>
+                    <tr>
+                        <th class="izquierda">
+                            OBRA ASIGNADA: {{ $h->asignacion_herramienta->obra->nombre }}
+                            <br>
+                            FECHA DE ASIGNACIÓN: {{ $h->asignacion_herramienta->fecha_registro }}
+                            <br>
+                            FECHA DE FINALIZACIÓN: {{ $h->asignacion_herramienta->fecha_fin }}
+                            <br>
+                            DÍAS DE USO: {{ (int) ($h->tiempo_uso / 24) }}
+                            <br>
+                            INGRESO HORAS: {{ $h->tiempo_almacen ? $h->tiempo_almacen : $h->tiempo_ingreso }}<br>
+                            SALIDA HORAS: {{ $h->tiempo_uso ? $h->tiempo_uso : $h->tiempo_salida }}
+                        </th>
+                        <th class="izquierda">
+                            FECHA DE ASIGNACIÓN:
+                            {{ $h->asignacion_herramienta->solicitud_herramienta->fecha_asignacion }}
+                            <br>
+                            FECHA DE FINALIZACIÓN:
+                            {{ $h->asignacion_herramienta->solicitud_herramienta->fecha_finalizacion }}
+                            <br>
+                            DÍAS DE USO: {{ $h->asignacion_herramienta->solicitud_herramienta->dias_uso }}
+                        </th>
+                    </tr>
+                @else
+                    <tr>
+                        <th colspan="2" class="izquierda">
+                            INGRESO HORAS: {{ $h->tiempo_almacen ? $h->tiempo_almacen : $h->tiempo_ingreso }}<br>
+                            SALIDA HORAS: {{ $h->tiempo_uso ? $h->tiempo_uso : $h->tiempo_salida }}</th>
+                    </tr>
+                @endif
+                <tr>
+                    <th colspan="2">INGRESOS Y SALIDAS</th>
                 </tr>
                 <tr>
                     <th>Fecha Hora de Registro</th>

@@ -104,11 +104,18 @@ Route::middleware(['auth'])->group(function () {
 
     Route::delete('obras/destroy/{obra}', 'ObraController@destroy')->name('obras.destroy');
 
+    Route::post('obras/copiar/{obra}', 'ObraController@copiar')->name('obras.copiar');
+
     // OBRAS HERRAMIENTAS
+    Route::post('obras/herramientas/finalizar', 'ObraHerramientaController@finalizar')->name('obra_herramientas.finalizar');
     Route::get('obras/herramientas/{obra}', 'ObraHerramientaController@index')->name('obra_herramientas.index');
+    Route::post('obras/herramientas/asignar', 'ObraHerramientaController@asignar')->name('obra_herramientas.asignar');
+    Route::delete('obras/herramientas/destroy', 'ObraHerramientaController@destroy')->name('obra_herramientas.destroy');
 
     // OBRAS PERSONAL
     Route::get('obras/personals/{obra}', 'ObraPersonalController@index')->name('obra_personals.index');
+    Route::post('obras/personals/asignar', 'ObraPersonalController@asignar')->name('obra_personals.asignar');
+    Route::delete('obras/personals/destroy', 'ObraPersonalController@destroy')->name('obra_personals.destroy');
 
     // NOTAS OBRAS
     Route::get('obras/notas/{obra}', 'NotaObrasController@index')->name('nota_obras.index');
@@ -215,10 +222,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('reportes/personal', 'ReporteController@personal')->name('reportes.personal');
 
     Route::get('reportes/materiales_obras', 'ReporteController@materiales_obras')->name('reportes.materiales_obras');
+    Route::get('reportes/g_materiales_obras', 'ReporteController@g_materiales_obras')->name('reportes.g_materiales_obras');
+    Route::get('reportes/obrasMateriales', 'ReporteController@obrasMateriales')->name('reportes.obrasMateriales');
 
     Route::get('reportes/infoMateriales', 'ReporteController@infoMateriales')->name('reportes.infoMateriales');
 
     Route::get('reportes/ingresos_salidas', 'ReporteController@ingresos_salidas')->name('reportes.ingresos_salidas');
 
     Route::get('reportes/monitoreo', 'ReporteController@monitoreo')->name('reportes.monitoreo');
+    Route::get('reportes/g_monitoreo', 'ReporteController@g_monitoreo')->name('reportes.g_monitoreo');
+    Route::get('reportes/monitoreoInfo', 'ReporteController@monitoreoInfo')->name('reportes.monitoreoInfo');
+
+    Route::get('reportes/obras', 'ReporteController@obras')->name('reportes.obras');
+    Route::get('reportes/g_obras', 'ReporteController@g_obras')->name('reportes.g_obras');
+    Route::get('reportes/obrasInfo', 'ReporteController@obrasInfo')->name('reportes.obrasInfo');
 });

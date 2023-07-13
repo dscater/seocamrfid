@@ -16,6 +16,17 @@ class SolicitudHerramienta extends Model
         "aprobado",
     ];
 
+    protected $appends = ["asignado"];
+
+    public function getAsignadoAttribute()
+    {
+        $existe = ObraHerramienta::where("solicitud_herramienta_id", $this->id)->get()->first();
+        if ($existe) {
+            return true;
+        }
+        return false;
+    }
+
     public function solicitud_obra()
     {
         return $this->belongsTo(SolicitudObra::class, 'solicitud_obra_id');

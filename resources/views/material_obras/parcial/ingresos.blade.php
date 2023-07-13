@@ -7,7 +7,6 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Nro. Solicitud</th>
                     <th>Material</th>
                     <th>Cantidad Solicitada</th>
                     <th>Disponible</th>
@@ -17,35 +16,35 @@
                 </tr>
             </thead>
             <tbody id="listaSolicitudIngresos">
-                @if (count($obra->solicitud_obras) > 0)
+                @if ($obra->solicitud_obra)
                     @php
                         $cont = 1;
                     @endphp
-                    @foreach ($obra->solicitud_obras as $key => $solicitud)
-                        @foreach ($solicitud->solicitud_materials as $sm)
-                            <tr data-id="{{ $sm->id }}" data-material="{{ $sm->material->id }}"
-                                data-disponible="{{ $sm->disponible }}" class="fila">
-                                <td>{{ $cont++ }}</td>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $sm->material->nombre }}</td>
-                                <td>{{ $sm->cantidad }}</td>
-                                <td>{{ $sm->disponible }}</td>
-                                <td>{{ $sm->cantidad_usada }}</td>
-                                <td>
-                                    <span
-                                        class="text-xs badge badge-{{ $sm->aprobado ? 'success' : 'danger' }}">{{ $sm->aprobado ? 'SI' : 'NO' }}</span>
-                                </td>
-                                <td class="text-center accion">
-                                    @if ($sm->aprobado)
-                                        <button type="button" class="btn btn-primary btn-xs btn_ingresa"
-                                            {{ $sm->disponible <= 0 ? 'disabled' : '' }}>Ingresar a la
+                    @foreach ($obra->solicitud_obra->solicitud_materials as $sm)
+                        <tr data-id="{{ $sm->id }}" data-material="{{ $sm->material->id }}"
+                            data-disponible="{{ $sm->disponible }}" class="fila">
+                            <td>{{ $cont++ }}</td>
+                            <td>{{ $sm->material->nombre }}</td>
+                            <td>{{ $sm->cantidad }}</td>
+                            <td>{{ $sm->disponible }}</td>
+                            <td>{{ $sm->cantidad_usada }}</td>
+                            <td>
+                                <span
+                                    class="text-xs badge badge-{{ $sm->aprobado ? 'success' : 'danger' }}">{{ $sm->aprobado ? 'SI' : 'NO' }}</span>
+                            </td>
+                            <td class="text-center accion">
+                                @if ($sm->aprobado)
+                                    @if ($sm->disponible > 0)
+                                        <button type="button" class="btn btn-primary btn-xs btn_ingresa">Ingresar a la
                                             obra</button>
                                     @else
-                                        Esperando aprobación
+                                        No disponible
                                     @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                                @else
+                                    Esperando aprobación
+                                @endif
+                            </td>
+                        </tr>
                     @endforeach
                 @else
                     <tr>

@@ -13,6 +13,17 @@ class SolicitudPersonal extends Model
         "aprobado",
     ];
 
+    protected $appends = ["asignado"];
+
+    public function getAsignadoAttribute()
+    {
+        $existe = ObraPersonal::where("solicitud_personal_id", $this->id)->get()->first();
+        if ($existe) {
+            return true;
+        }
+        return false;
+    }
+
     public function solicitud_obra()
     {
         return $this->belongsTo(SolicitudObra::class, 'solicitud_obra_id');

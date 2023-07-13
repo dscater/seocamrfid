@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MonitoreoHerramienta extends Model
 {
     protected $fillable = [
-        'herramienta_id', 'accion', 'fecha_registro',
+        'herramienta_id', 'accion', 'fecha_registro', 'hora',
     ];
 
     public function herramienta()

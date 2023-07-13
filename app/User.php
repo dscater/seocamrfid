@@ -22,8 +22,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ["full_name"];
-
     public function getFullNameAttribute()
     {
         if ($this->datosUsuario) {

@@ -70,6 +70,7 @@
     </section>
 
     @include('modal.eliminar')
+    @include('modal.copiar')
     <input type="hidden" value="{{ route('obras.index') }}" id="urlLista">
 
 @section('scripts')
@@ -85,6 +86,30 @@
         @if (session('error'))
             mensajeNotificacion('{{ session('error') }}', 'error');
         @endif
+
+        // COPIAR
+        $(document).on('click', '.opciones .dropdown a.copiar', function(e) {
+            e.preventDefault();
+            $("#txtNombre").val("");
+            let registro = $(this).attr('data-info');
+            $('#mensajeCopiar').html(`¿Está seguro(a) de copiar al registro <b>${registro}</b>?`);
+            let url = $(this).attr('data-url');
+            $('#formCopiar').prop('action', url);
+        });
+
+        $('#btnCopiar').click(function() {
+            if ($("#txtNombre").val().trim() != "") {
+                $('#formCopiar').submit();
+            } else {
+                swal.fire({
+                    title: "Error",
+                    icon: "error",
+                    text: "Debes llenar todos los campos",
+                    confirmButtonText: "Aceptar",
+                    confirmButtonColor: "#28a745",
+                });
+            }
+        });
 
         // ELIMINAR-NUEVO
         $(document).on('click', '.opciones .dropdown a.eliminar', function(e) {

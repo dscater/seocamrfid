@@ -49,8 +49,9 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <div class="modal-footer d-flex">
+                <button type="button" class="btn btn-default mr-auto" data-dismiss="modal">Cerrar</button>
+                <a href="{{route("reportes.g_monitoreo")}}" class="btn btn-info">Ver Gráfico</a>
                 <button type="submit" class="btn btn-info" id="btnUsuarios">Generar reporte</button>
                 {!! Form::close() !!}
             </div>

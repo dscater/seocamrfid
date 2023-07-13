@@ -137,4 +137,10 @@ class ObraController extends Controller
         $obra->save();
         return response()->JSON(true);
     }
+
+    public function copiar(Obra $obra, Request $request)
+    {
+        return $request;
+        return $obra;
+    }
 }
