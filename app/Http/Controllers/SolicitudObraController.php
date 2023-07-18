@@ -85,7 +85,7 @@ class SolicitudObraController extends Controller
             "personals.required" => "Debes ingresar al menos un personal",
         ]);
 
-        $solicitud_obra = $obra->solicitud_obras()->create([
+        $solicitud_obra = $obra->solicitud_obra()->create([
             "aprobado" => 0,
             "fecha_registro" => date("Y-m-d")
         ]);

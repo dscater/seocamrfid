@@ -70,7 +70,7 @@
                                             <td>{{ $usuario->user->tipo }}</td>
                                             <td class="btns-opciones">
                                                 <a href="{{ route('reportes.usuarios') }}?filtro=usuario&usuario={{ $usuario->user_id }}"
-                                                    class="evaluar"><i class="fa fa-file-pdf" data-toggle="tooltip"
+                                                    class="evaluar" target="_blank"><i class="fa fa-file-pdf" data-toggle="tooltip"
                                                         data-placement="left" title="Historial"></i></a>
                                                 <a href="{{ route('users.edit', $usuario->id) }}" class="modificar"><i
                                                         class="fa fa-edit" data-toggle="tooltip" data-placement="left"

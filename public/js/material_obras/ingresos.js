@@ -1,6 +1,7 @@
 let listaSolicitudIngresos = $("#listaSolicitudIngresos");
 let contenedor_ingresos = $("#contenedor_ingresos");
 $(document).ready(function () {
+    contarIngresos();
     listaSolicitudIngresos.on("click", "tr td.accion button", function () {
         let nuevo_elemento = $(elemento_ingreso).clone();
         let fila = $(this).parents("tr.fila");
@@ -19,6 +20,7 @@ $(document).ready(function () {
             nuevo_elemento.find("input.i_ingreso_cantidad").val(cantidad_disp);
             contenedor_ingresos.append(nuevo_elemento);
             toastr.success("Registro agregado");
+            contarIngresos();
         } else {
             swal.fire({
                 title: "Error",
@@ -59,6 +61,7 @@ $(document).ready(function () {
         e.preventDefault();
         let elemento = $(this).parents(".elemento");
         elemento.remove();
+        contarIngresos();
     });
 });
 
@@ -68,4 +71,13 @@ function existeElementoIngreso(id) {
         return true;
     }
     return false;
+}
+
+function contarIngresos() {
+    let elementos = $("#contenedor_ingresos").children(".elemento");
+    if (elementos.length > 0) {
+        $(".principal_ingresos").removeClass("oculto");
+    } else {
+        $(".principal_ingresos").addClass("oculto");
+    }
 }

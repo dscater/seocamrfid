@@ -40,7 +40,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12 principal_salidas">
         {{ Form::open(['route' => 'material_obras.store', 'method' => 'post', 'files' => true]) }}
         <div class="row">
             <div class="col-md-12">

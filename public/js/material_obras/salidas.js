@@ -1,6 +1,7 @@
 let listaSolicitudSalidas = $("#listaSolicitudSalidas");
 let contenedor_salidas = $("#contenedor_salidas");
 $(document).ready(function () {
+    contarSalidas();
     listaSolicitudSalidas.on("click", "tr td.accion button", function () {
         let nuevo_elemento = $(elemento_salida).clone();
         let fila = $(this).parents("tr.fila");
@@ -21,6 +22,7 @@ $(document).ready(function () {
             nuevo_elemento.find("input.i_salida_cantidad").val(cantidad_disp);
             contenedor_salidas.append(nuevo_elemento);
             toastr.success("Registro agregado");
+            contarSalidas();
         } else {
             swal.fire({
                 title: "Error",
@@ -54,15 +56,12 @@ $(document).ready(function () {
     );
 
     // quitar
-    contenedor_salidas.on(
-        "click",
-        ".elemento button.quitar",
-        function (e) {
-            e.preventDefault();
-            let elemento = $(this).parents(".elemento");
-            elemento.remove();
-        }
-    );
+    contenedor_salidas.on("click", ".elemento button.quitar", function (e) {
+        e.preventDefault();
+        let elemento = $(this).parents(".elemento");
+        elemento.remove();
+        contarSalidas();
+    });
 });
 
 function existeElementoSalida(id) {
@@ -71,4 +70,13 @@ function existeElementoSalida(id) {
         return true;
     }
     return false;
+}
+
+function contarSalidas() {
+    let elementos = $("#contenedor_salidas").children(".elemento");
+    if (elementos.length > 0) {
+        $(".principal_salidas").removeClass("oculto");
+    } else {
+        $(".principal_salidas").addClass("oculto");
+    }
 }
