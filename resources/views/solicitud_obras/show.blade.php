@@ -192,7 +192,7 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-md-12 text-center">
-                                    <h4 class="card-title text-center w-100">ESTADO DE SOLCIITUD</h4>
+                                    <h4 class="card-title text-center w-100">ESTADO DE SOLICITUD</h4>
                                 </div>
                                 <div class="col-md-12 text-center">
                                     <p><strong>Aprobado: </strong> <span
@@ -200,7 +200,7 @@
                                     </p>
                                     <input type="hidden" id="estado" value="{{ $solicitud_obra->aprobado }}">
                                 </div>
-                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'ADMINISTRADOR')
+                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
                                     <div class="col-md-12 text-center">
                                         @if ($solicitud_obra->aprobado == 1)
                                             {{-- <button type="button" id="btnCambiarEstado"

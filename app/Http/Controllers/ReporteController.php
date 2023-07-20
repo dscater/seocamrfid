@@ -10,7 +10,10 @@ use app\IngresoSalida;
 use app\Material;
 use app\MaterialObra;
 use app\MonitoreoHerramienta;
+use app\NotaObras;
 use app\Obra;
+use app\ObraHerramienta;
+use app\ObraPersonal;
 use app\Personal;
 
 class ReporteController extends Controller
@@ -37,12 +40,13 @@ class ReporteController extends Controller
             switch ($filtro) {
                 case 'tipo':
                     $tipo = $request->tipo;
+                    $usuario = $request->usuario;
                     if ($tipo != 'todos') {
-
                         $usuarios = DatosUsuario::select('datos_usuarios.*', 'users.id as user_id', 'users.name as usuario', 'users.tipo', 'users.foto')
                             ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
                             ->where('users.estado', 1)
                             ->where('users.tipo', $tipo)
+                            ->where('users.id', $usuario)
                             ->orderBy('datos_usuarios.nombre', 'ASC')
                             ->get();
                     }
@@ -399,10 +403,16 @@ class ReporteController extends Controller
                         $nueva_serie['data'][] = (float)$material_obra;
                         break;
                     case "HERRAMIENTAS":
+                        $material_obra = count(ObraHerramienta::where('obra_id', $o->id)->get());
+                        $nueva_serie['data'][] = (float)$material_obra;
                         break;
                     case "PERSONAL":
+                        $material_obra = count(ObraPersonal::where('obra_id', $o->id)->get());
+                        $nueva_serie['data'][] = (float)$material_obra;
                         break;
                     case "NOTAS":
+                        $material_obra = count(NotaObras::where('obra_id', $o->id)->get());
+                        $nueva_serie['data'][] = (float)$material_obra;
                         break;
                 }
             }

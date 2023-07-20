@@ -27,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     // USUARIOS
     Route::get('users', 'UserController@index')->name('users.index');
 
+    Route::get('users/getByTipo', 'UserController@getByTipo')->name('users.getByTipo');
+
     Route::get('users/create', 'UserController@create')->name('users.create');
 
     Route::post('users/store', 'UserController@store')->name('users.store');

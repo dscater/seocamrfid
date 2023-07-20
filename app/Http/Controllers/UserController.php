@@ -20,6 +20,22 @@ class UserController extends Controller
         return view('users.index', compact('usuarios'));
     }
 
+    public function getByTipo(Request $request)
+    {
+        $tipo = $request->tipo;
+        $usuarios = DatosUsuario::select('datos_usuarios.*')
+            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+            ->where('users.estado', 1)
+            ->where('users.tipo', $tipo)
+            ->get();
+
+        $html = "";
+        foreach ($usuarios as $value) {
+            $html .= '<option value="' . $value->user_id . '">' . $value->full_name . '</option>';
+        }
+        return response()->JSON($html);
+    }
+
     public function control()
     {
         $usuarios = User::where('estado', 1)

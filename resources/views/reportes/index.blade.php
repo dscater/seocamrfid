@@ -12,12 +12,10 @@
         .boton_reporte a {
             width: 100%;
         }
-
     </style>
 @endsection
 
 @section('content')
-
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -54,7 +52,7 @@
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="urlUsuariosTipo" value="{{ route('users.getByTipo') }}">
     @include('reportes.modal.m_usuarios')
     @include('reportes.modal.m_personal')
     @include('reportes.modal.m_materiales_obras')

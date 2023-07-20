@@ -10,10 +10,12 @@ function usuarios() {
     var tipo = $("#m_usuarios #tipo").parents(".form-group");
     var fecha_ini = $("#m_usuarios #fecha_ini").parents(".form-group");
     var fecha_fin = $("#m_usuarios #fecha_fin").parents(".form-group");
+    var usuario = $("#m_usuarios #usuario").parents(".form-group");
 
     fecha_ini.hide();
     fecha_fin.hide();
     tipo.hide();
+    usuario.hide();
     $("#m_usuarios select#filtro").change(function () {
         let filtro = $(this).val();
         switch (filtro) {
@@ -32,6 +34,25 @@ function usuarios() {
                 fecha_ini.show();
                 fecha_fin.show();
                 break;
+        }
+    });
+
+    $("#m_usuarios").on("change", "#tipo", function () {
+        if ($(this).val() != "todos") {
+            $.ajax({
+                type: "GET",
+                url: $("#urlUsuariosTipo").val(),
+                data: {
+                    tipo: $("#m_usuarios #tipo").val(),
+                },
+                dataType: "json",
+                success: function (response) {
+                    $("#m_usuarios #usuario").html(response);
+                },
+            });
+            usuario.show();
+        } else {
+            usuario.hide();
         }
     });
 }
