@@ -81,7 +81,7 @@
                                         </table>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 overflow-auto">
                                         <h4>MATERIALES ASIGNADOS</h4>
                                         <small class="text-gray d-flex w-100 justify-content-end">Para una busqueda mas especifica use comillas("Texto")</small>
                                         <table class="datatable1 table table-bordered">
@@ -128,7 +128,7 @@
                                         </table>
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 overflow-auto">
                                         <h4>INGRESOS Y SALIDAS</h4>
                                         <table id="example2" class="datatable2 table table-bordered">
                                             <thead>
