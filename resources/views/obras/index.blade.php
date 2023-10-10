@@ -77,7 +77,7 @@
     <script>
         @if (session('bien'))
             mensajeNotificacion('{{ session('bien') }}', 'success');
-            let mensaje = `Copia realizada con éxito`;
+            let mensaje = `{{ session('bien') }}`;
             @if (session('no_asignadas') == 'si')
                 mensaje += "<br>Herramientas no asignadas:<br>{!! session('herramientas_no_asignadas') !!}";
             @endif

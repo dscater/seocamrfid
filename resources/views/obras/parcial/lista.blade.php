@@ -93,6 +93,12 @@
                                 class="btn btn-info text-white btn-flat btn-block">Ver
                                 Obra</a>
                         </div>
+                        @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                            <div class="info_adicional mt-1">
+                                <a href="{{ route('asignacion_directa.create', $obra->id) }}"
+                                    class="btn btn-success text-white btn-flat btn-block">Asignación directa</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

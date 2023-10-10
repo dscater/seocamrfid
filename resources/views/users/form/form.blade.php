@@ -94,17 +94,28 @@
     <div class="col-md-4">
         <div class="form-group">
             <label>Tipo Usuario*</label>
-            {{ Form::select(
-                'tipo',
-                [
-                    '' => 'Seleccione...',
-                    'ADMINISTRADOR' => 'ADMINISTRADOR',
-                    'AUXILIAR' => 'AUXILIAR',
-                    'JEFE DE OBRA' => 'JEFE DE OBRA',
-                ],
-                isset($usuario) ? $usuario->user->tipo : null,
-                ['class' => 'form-control', 'required', 'id' => 'tipo'],
-            ) }}
+            @if (Auth::user()->tipo == 'ADMINISTRADOR')
+                {{ Form::select(
+                    'tipo',
+                    [
+                        '' => 'Seleccione...',
+                        'ADMINISTRADOR' => 'ADMINISTRADOR',
+                        'AUXILIAR' => 'AUXILIAR',
+                        'JEFE DE OBRA' => 'JEFE DE OBRA',
+                    ],
+                    isset($usuario) ? $usuario->user->tipo : null,
+                    ['class' => 'form-control', 'required', 'id' => 'tipo'],
+                ) }}
+            @else
+                {{ Form::select(
+                    'tipo',
+                    [
+                        'JEFE DE OBRA' => 'JEFE DE OBRA',
+                    ],
+                    isset($usuario) ? $usuario->user->tipo : null,
+                    ['class' => 'form-control', 'required', 'id' => 'tipo'],
+                ) }}
+            @endif
         </div>
     </div>
     <div class="col-md-4">

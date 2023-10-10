@@ -108,6 +108,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('obras/copiar/{obra}', 'ObraController@copiar')->name('obras.copiar');
 
+    // ASIGNACION DIRECTA
+    Route::get('asignacion_directa/{obra}', 'AsignacionDirectaController@create')->name('asignacion_directa.create');
+    Route::post('asignacion_directa/{obra}', 'AsignacionDirectaController@store')->name('asignacion_directa.store');
+
     // OBRAS HERRAMIENTAS
     Route::post('obras/herramientas/finalizar', 'ObraHerramientaController@finalizar')->name('obra_herramientas.finalizar');
     Route::get('obras/herramientas/{obra}', 'ObraHerramientaController@index')->name('obra_herramientas.index');

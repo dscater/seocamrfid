@@ -32,13 +32,62 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <p><strong>Nombre: </strong> {{ $obra->nombre }}</p>
                                     <p><strong>Jefe de Obra: </strong> {{ $obra->jefe_obra->full_name }}</p>
                                     <p><strong>Auxiliar: </strong> {{ $obra->auxiliar->full_name }}</p>
                                     <p><strong>Fecha de Obra: </strong> {{ $obra->fecha_obra }}</p>
                                     <p><strong>Descripción: </strong> {{ $obra->descripcion }}</p>
                                     <p><strong>Estado: </strong> {{ $obra->estado }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>Material en la obra</h4>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Material</th>
+                                                <th>Cantidad Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($obra->materials as $mo)
+                                                <tr class={{ $mo->stock_actual <= $mo->stock_minimo ? 'bg-danger' : '' }}>
+                                                    <td>{{ $mo->material->nombre }}</td>
+                                                    <td>{{ $mo->stock_actual }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <h4>Herramientas en la obra</h4>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Herramienta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($obra->obra_herramientas as $oh)
+                                                <tr>
+                                                    <td>{{ $oh->herramienta->nombre }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <h4>Personal en la obra</h4>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Personal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($obra->obra_personals as $op)
+                                                <tr>
+                                                    <td>{{ $op->personal->full_name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <div class="col-md-4">
                                     <a href="{{ route('obras.index') }}" class="btn btn-default"><i

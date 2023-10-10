@@ -75,15 +75,15 @@ class SolicitudObraController extends Controller
 
     public function store(Obra $obra, Request $request)
     {
-        $request->validate([
-            "materials" => "required",
-            "herramientas" => "required",
-            "personals" => "required",
-        ], [
-            "materials.required" => "Debes ingresar al menos un material",
-            "herramientas.required" => "Debes ingresar al menos una herramienta",
-            "personals.required" => "Debes ingresar al menos un personal",
-        ]);
+        // $request->validate([
+        //     "materials" => "required",
+        //     "herramientas" => "required",
+        //     "personals" => "required",
+        // ], [
+        //     "materials.required" => "Debes ingresar al menos un material",
+        //     "herramientas.required" => "Debes ingresar al menos una herramienta",
+        //     "personals.required" => "Debes ingresar al menos un personal",
+        // ]);
 
         $solicitud_obra = $obra->solicitud_obra()->create([
             "aprobado" => 0,
@@ -94,35 +94,40 @@ class SolicitudObraController extends Controller
         $herramientas = $request->herramientas;
         $personals = $request->personals;
 
-        for ($i = 0; $i < count($materials); $i++) {
-            $array_material = explode("|", $materials[$i]);
-            $solicitud_obra->solicitud_materials()->create([
-                "material_id" => $array_material[1],
-                "cantidad" => $array_material[2],
-                "cantidad_usada" => 0,
-                "aprobado" => 0,
-            ]);
+        if (isset($materials)) {
+            for ($i = 0; $i < count($materials); $i++) {
+                $array_material = explode("|", $materials[$i]);
+                $solicitud_obra->solicitud_materials()->create([
+                    "material_id" => $array_material[1],
+                    "cantidad" => $array_material[2],
+                    "cantidad_usada" => 0,
+                    "aprobado" => 0,
+                ]);
+            }
         }
 
-        for ($i = 0; $i < count($herramientas); $i++) {
-            $array_herramienta = explode("|", $herramientas[$i]);
-            $solicitud_obra->solicitud_herramientas()->create([
-                "herramienta_id" => $array_herramienta[1],
-                "dias_uso" => $array_herramienta[2],
-                "fecha_asignacion" => $array_herramienta[3],
-                "fecha_finalizacion" => $array_herramienta[4],
-                "ingreso" => 0,
-                "aprobado" => 0,
-            ]);
+        if (isset($herramientas)) {
+            for ($i = 0; $i < count($herramientas); $i++) {
+                $array_herramienta = explode("|", $herramientas[$i]);
+                $solicitud_obra->solicitud_herramientas()->create([
+                    "herramienta_id" => $array_herramienta[1],
+                    "dias_uso" => $array_herramienta[2],
+                    "fecha_asignacion" => $array_herramienta[3],
+                    "fecha_finalizacion" => $array_herramienta[4],
+                    "ingreso" => 0,
+                    "aprobado" => 0,
+                ]);
+            }
         }
-
-        for ($i = 0; $i < count($personals); $i++) {
-            $array_personal = explode("|", $personals[$i]);
-            $solicitud_obra->solicitud_personals()->create([
-                "personal_id" => $array_personal[1],
-                "ingreso" => 0,
-                "aprobado" => 0,
-            ]);
+        if (isset($personals)) {
+            for ($i = 0; $i < count($personals); $i++) {
+                $array_personal = explode("|", $personals[$i]);
+                $solicitud_obra->solicitud_personals()->create([
+                    "personal_id" => $array_personal[1],
+                    "ingreso" => 0,
+                    "aprobado" => 0,
+                ]);
+            }
         }
 
         $nueva_notificacion = Notificacion::create([
@@ -171,16 +176,6 @@ class SolicitudObraController extends Controller
 
     public function update(SolicitudObra $solicitud_obra, Request $request)
     {
-        $request->validate([
-            "materials" => "required",
-            "herramientas" => "required",
-            "personals" => "required",
-        ], [
-            "materials.required" => "Debes ingresar al menos un material",
-            "herramientas.required" => "Debes ingresar al menos una herramienta",
-            "personals.required" => "Debes ingresar al menos un personal",
-        ]);
-
         $solicitud_obra->update([
             "aprobado" => 0,
             "fecha_registro" => date("Y-m-d")
@@ -192,46 +187,38 @@ class SolicitudObraController extends Controller
         $herramientas = $request->herramientas;
         $personals = $request->personals;
 
-        for ($i = 0; $i < count($materials); $i++) {
-            $array_material = explode("|", $materials[$i]);
-            if ($array_material[0] == 0) {
-                $solicitud_obra->aprobado = 0;
-                $solicitud_obra->solicitud_materials()->create([
-                    "material_id" => $array_material[1],
-                    "cantidad" => $array_material[2],
-                    "cantidad_usada" => 0,
-                    "aprobado" => 0,
-                ]);
-            } else {
-                $solicitud_material = SolicitudMaterial::find($array_material[0]);
-                $solicitud_material->update([
-                    "material_id" => $array_material[1],
-                    "cantidad" => $array_material[2],
-                    'cantidad_usada' => 0,
-                    "aprobado" => 0,
-                ]);
-                if ($solicitud_material->aprobado == 0) {
+        if (isset($materials)) {
+            for ($i = 0; $i < count($materials); $i++) {
+                $array_material = explode("|", $materials[$i]);
+                if ($array_material[0] == 0) {
                     $solicitud_obra->aprobado = 0;
+                    $solicitud_obra->solicitud_materials()->create([
+                        "material_id" => $array_material[1],
+                        "cantidad" => $array_material[2],
+                        "cantidad_usada" => 0,
+                        "aprobado" => 0,
+                    ]);
+                } else {
+                    $solicitud_material = SolicitudMaterial::find($array_material[0]);
+                    $solicitud_material->update([
+                        "material_id" => $array_material[1],
+                        "cantidad" => $array_material[2],
+                        'cantidad_usada' => 0,
+                        "aprobado" => 0,
+                    ]);
+                    if ($solicitud_material->aprobado == 0) {
+                        $solicitud_obra->aprobado = 0;
+                    }
                 }
             }
         }
 
-        for ($i = 0; $i < count($herramientas); $i++) {
-            $array_herramienta = explode("|", $herramientas[$i]);
-            if ($array_herramienta[0] == 0) {
-                $solicitud_obra->aprobado = 0;
-                $solicitud_obra->solicitud_herramientas()->create([
-                    "herramienta_id" => $array_herramienta[1],
-                    "dias_uso" => $array_herramienta[2],
-                    "fecha_asignacion" => $array_herramienta[3],
-                    "fecha_finalizacion" => $array_herramienta[4],
-                    "ingreso" => 0,
-                    "aprobado" => 0,
-                ]);
-            } else {
-                $solicitud_herramienta = SolicitudHerramienta::find($array_herramienta[0]);
-                if (!$solicitud_herramienta->asignado) {
-                    $solicitud_herramienta->update([
+        if (isset($herramientas)) {
+            for ($i = 0; $i < count($herramientas); $i++) {
+                $array_herramienta = explode("|", $herramientas[$i]);
+                if ($array_herramienta[0] == 0) {
+                    $solicitud_obra->aprobado = 0;
+                    $solicitud_obra->solicitud_herramientas()->create([
                         "herramienta_id" => $array_herramienta[1],
                         "dias_uso" => $array_herramienta[2],
                         "fecha_asignacion" => $array_herramienta[3],
@@ -239,33 +226,47 @@ class SolicitudObraController extends Controller
                         "ingreso" => 0,
                         "aprobado" => 0,
                     ]);
-                }
-                if ($solicitud_herramienta->aprobado == 0) {
-                    $solicitud_obra->aprobado = 0;
+                } else {
+                    $solicitud_herramienta = SolicitudHerramienta::find($array_herramienta[0]);
+                    if (!$solicitud_herramienta->asignado) {
+                        $solicitud_herramienta->update([
+                            "herramienta_id" => $array_herramienta[1],
+                            "dias_uso" => $array_herramienta[2],
+                            "fecha_asignacion" => $array_herramienta[3],
+                            "fecha_finalizacion" => $array_herramienta[4],
+                            "ingreso" => 0,
+                            "aprobado" => 0,
+                        ]);
+                    }
+                    if ($solicitud_herramienta->aprobado == 0) {
+                        $solicitud_obra->aprobado = 0;
+                    }
                 }
             }
         }
 
-        for ($i = 0; $i < count($personals); $i++) {
-            $array_personal = explode("|", $personals[$i]);
-            if ($array_personal[0] == 0) {
-                $solicitud_obra->aprobado = 0;
-                $solicitud_obra->solicitud_personals()->create([
-                    "personal_id" => $array_personal[1],
-                    "ingreso" => 0,
-                    "aprobado" => 0,
-                ]);
-            } else {
-                $solicitud_personal = SolicitudPersonal::find($array_personal[0]);
-                if (!$solicitud_personal->asignado) {
-                    $solicitud_personal->update([
+        if (isset($personals)) {
+            for ($i = 0; $i < count($personals); $i++) {
+                $array_personal = explode("|", $personals[$i]);
+                if ($array_personal[0] == 0) {
+                    $solicitud_obra->aprobado = 0;
+                    $solicitud_obra->solicitud_personals()->create([
                         "personal_id" => $array_personal[1],
                         "ingreso" => 0,
                         "aprobado" => 0,
                     ]);
-                }
-                if ($solicitud_personal->aprobado == 0) {
-                    $solicitud_obra->aprobado = 0;
+                } else {
+                    $solicitud_personal = SolicitudPersonal::find($array_personal[0]);
+                    if (!$solicitud_personal->asignado) {
+                        $solicitud_personal->update([
+                            "personal_id" => $array_personal[1],
+                            "ingreso" => 0,
+                            "aprobado" => 0,
+                        ]);
+                    }
+                    if ($solicitud_personal->aprobado == 0) {
+                        $solicitud_obra->aprobado = 0;
+                    }
                 }
             }
         }
@@ -325,7 +326,7 @@ class SolicitudObraController extends Controller
     public function cambiaEstado(SolicitudObra $solicitud_obra, Request $request)
     {
         $solicitud_obra->aprobado = $request->estado;
-
+        $obra = $solicitud_obra->obra;
         $solicitud_obra->save();
 
         if ($solicitud_obra->aprobado == 1) {
@@ -337,6 +338,20 @@ class SolicitudObraController extends Controller
             ]);
             $solicitud_obra->solicitud_personals()->update([
                 "aprobado" => 1,
+            ]);
+
+            $nueva_notificacion = Notificacion::create([
+                'registro_id' => $solicitud_obra->id,
+                'tipo'  => 'SOLICITUD',
+                'accion' => "NUEVO",
+                'mensaje' => "SE APROBÓ LA SOLICITUD DE LA OBRA: " . $solicitud_obra->obra->nombre,
+                'fecha' => date('Y-m-d'),
+                'hora' => date('H:i:s'),
+            ]);
+            NotificacionUser::create([
+                'notificacion_id' => $nueva_notificacion->id,
+                'user_id' => $obra->jefe_id,
+                'visto' => 0
             ]);
         } else {
             $solicitud_obra->solicitud_materials()->update([

@@ -212,8 +212,35 @@
             $materiales_obras = app\MaterialObra::where('estado', 1)
                 ->where('estado_stock', 'BAJO')
                 ->get();
+            if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+                if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                    $ids = app\Obra::where('jefe_id', Auth::user()->id)
+                        ->distinct()
+                        ->pluck('obras.id');
+                } else {
+                    $ids = app\Obra::where('auxiliar_id', Auth::user()->id)
+                        ->distinct()
+                        ->pluck('obras.id');
+                }
+
+                $materiales_obras = app\MaterialObra::where('estado', 1)
+                    ->whereIn('obra_id', $ids)
+                    ->where('estado_stock', 'BAJO')
+                    ->get();
+            }
             if (count($materiales_obras) > 0) {
                 $stock_bajo = 'SI';
+                $obras = [];
+                foreach ($materiales_obras as $mo) {
+                    if (!in_array($mo->obra_id, $obras)) {
+                        $obras[] = $mo->obra_id;
+                    }
+                }
+                $links = '';
+                foreach ($obras as $o) {
+                    $obra = app\Obra::find($o);
+                    $links .= '<a href="' . route('obras.show', $obra->id) . '" class="text-white"><i class="fa fa-arrow-right"></i> Ir a obra ' . $obra->nombre . '</a><br>';
+                }
             }
         @endphp
         <!-- Main Footer -->
@@ -363,7 +390,9 @@
         });
 
         @if ($stock_bajo == 'SI')
-            mensajeNotificacion2('Existen materiales con un stock por debajo del mínimo permitido', 'bg-danger',
+            mensajeNotificacion2(
+                'Existen materiales con un stock por debajo del mínimo permitido<br>{!! $links !!}',
+                'bg-danger',
                 'Revisar Stock Materiales');
         @endif
 

@@ -32,6 +32,15 @@ function validaFormulario() {
         errors += "<br>Debes ingresar al menos un personal";
         enviaForm = false;
     }
+
+    if (
+        input_herramientas.length > 0 ||
+        input_material.length > 0 ||
+        input_personal.length > 0
+    ) {
+        enviaForm = true;
+    }
+    
     if (!enviaForm) {
         swal.fire({
             title: "Error",

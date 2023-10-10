@@ -240,6 +240,6 @@ class ObraController extends Controller
         return redirect()->route('obras.index')
             ->with('no_asignadas', $no_asignadas ? "si" : "no")
             ->with('herramientas_no_asignadas', $herramientas_no_asignadas)
-            ->with('bien', 'Registro realizado con éxito');
+            ->with('bien', 'Copia realizada con éxito');
     }
 }

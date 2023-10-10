@@ -39,14 +39,30 @@ class HomeController extends Controller
         $usuarios = count(User::select('users.*')
             ->join('datos_usuarios', 'datos_usuarios.user_id', '=', 'users.id')
             ->where('users.estado', 1)
-            ->whereIn('users.tipo', ['ADMINISTRADOR', 'AUXILIAR'])
             ->get());
 
         $personals = count(Personal::where('estado', 1)->get());
 
-        $obras = count(Obra::all());
+        $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
+
+        $obras = count($obras);
 
         $_obras = Obra::all();
+
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $_obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $_obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
 
         $herramientas = count(Herramienta::all());
 

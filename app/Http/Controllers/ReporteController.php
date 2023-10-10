@@ -15,6 +15,7 @@ use app\Obra;
 use app\ObraHerramienta;
 use app\ObraPersonal;
 use app\Personal;
+use Illuminate\Support\Facades\Auth;
 
 class ReporteController extends Controller
 {
@@ -22,7 +23,31 @@ class ReporteController extends Controller
     {
         $personals = Personal::where('estado', 1)->get();
         $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         $herramientas = Herramienta::all();
+
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("jefe_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            } else {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("auxiliar_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            }
+            $herramientas = Herramienta::whereIn("id", $ids)->get();
+        }
         return view('reportes.index', compact('personals', 'obras', 'herramientas'));
     }
 
@@ -110,6 +135,14 @@ class ReporteController extends Controller
             $materiales = MaterialObra::select('material_obras.*')->join('obras', 'obras.id', '=', 'material_obras.obra_id')->where('material_obras.estado', 1)->where('obra_id', $obra)->orderBy('obras.nombre', 'asc')->get();
         }
         $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
+
         if ($obra != "todos") {
             $obras = Obra::where("id", $obra)->get();
         }
@@ -128,12 +161,26 @@ class ReporteController extends Controller
     public function g_materiales_obras()
     {
         $_obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $_obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $_obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         return view("reportes.g_materiales_obras", compact("_obras"));
     }
     public function obrasMateriales(Request $request)
     {
         $obra = $request->obra;
         $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         if ($obra != 'todos') {
             $obras = Obra::where('id', $obra)->get();
         }
@@ -188,9 +235,17 @@ class ReporteController extends Controller
     {
         $obra = $request->obra;
         $obras = Obra::all();
-        if ($obra != 'todos') {
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
+        if ($obra != "todos") {
             $obras = Obra::where('id', $obra)->get();
         }
+
         $materials = Material::all();
         $categorias = [];
         foreach ($obras as $o) {
@@ -280,6 +335,24 @@ class ReporteController extends Controller
         $fecha_fin = $request->fecha_fin;
 
         $herramientas = Herramienta::all();
+
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("jefe_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            } else {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("auxiliar_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            }
+            $herramientas = Herramienta::whereIn("id", $ids)->get();
+        }
+
         if ($filtro != 'todos') {
             switch ($filtro) {
                 case 'herramienta':
@@ -314,6 +387,22 @@ class ReporteController extends Controller
     public function g_monitoreo(Request $request)
     {
         $herramientas = Herramienta::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("jefe_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            } else {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("auxiliar_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            }
+            $herramientas = Herramienta::whereIn("id", $ids)->get();
+        }
         return view("reportes.g_monitoreo", compact("herramientas"));
     }
 
@@ -323,6 +412,22 @@ class ReporteController extends Controller
         $fecha = date('d/m/Y');
 
         $herramientas = Herramienta::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("jefe_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            } else {
+                $ids = Herramienta::join("obra_herramientas", "obra_herramientas.herramienta_id", "=", "herramientas.id")
+                    ->join("obras", "obras.id", "=", "obra_herramientas.obra_id")
+                    ->where("auxiliar_id", Auth::user()->id)
+                    ->distinct()
+                    ->pluck("herramientas.id");
+            }
+            $herramientas = Herramienta::whereIn("id", $ids)->get();
+        }
         if ($herramienta != "todos") {
             $herramientas = Herramienta::where("id", $herramienta)->get();
         }
@@ -351,13 +456,30 @@ class ReporteController extends Controller
         $fecha_fin = $request->fecha_fin;
 
         $obras = Obra::all();
-
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         if ($filtro != "todos") {
             if ($filtro == "obra" && $obra != "todos") {
                 $obras = Obra::where("id", $obra)->get();
             }
             if ($filtro == "fecha" && $fecha_ini && $fecha_fin) {
                 $obras = Obra::whereBetween("fecha_obra", [$fecha_ini, $fecha_fin])->get();
+                if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+                    if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                        $obras = Obra::where("jefe_id", Auth::user()->id)
+                            ->whereBetween("fecha_obra", [$fecha_ini, $fecha_fin])
+                            ->get();
+                    } else {
+                        $obras = Obra::where("auxiliar_id", Auth::user()->id)
+                            ->whereBetween("fecha_obra", [$fecha_ini, $fecha_fin])
+                            ->get();
+                    }
+                }
             }
         }
 
@@ -376,6 +498,13 @@ class ReporteController extends Controller
     public function g_obras(Request $request)
     {
         $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         return view("reportes.g_obras", compact("obras"));
     }
 
@@ -383,6 +512,13 @@ class ReporteController extends Controller
     {
         $obra = $request->obra;
         $obras = Obra::all();
+        if (Auth::user()->tipo == 'JEFE DE OBRA' || Auth::user()->tipo == 'AUXILIAR') {
+            if (Auth::user()->tipo == 'JEFE DE OBRA') {
+                $obras = Obra::where("jefe_id", Auth::user()->id)->get();
+            } else {
+                $obras = Obra::where("auxiliar_id", Auth::user()->id)->get();
+            }
+        }
         if ($obra != 'todos') {
             $obras = Obra::where('id', $obra)->get();
         }
