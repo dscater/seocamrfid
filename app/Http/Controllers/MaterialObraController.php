@@ -22,6 +22,16 @@ class MaterialObraController extends Controller
     public function index(Obra $obra)
     {
         $material_obras = MaterialObra::where('obra_id', $obra->id)->where('estado', 1)->get();
+
+        foreach ($material_obras as $mo) {
+            if ($mo->stock_actual >= $mo->stock_minimo) {
+                $mo->estado_stock = 'NORMAL';
+            } else {
+                $mo->estado_stock = 'BACJO';
+            }
+            $mo->save();
+        }
+
         return view('material_obras.index', compact('material_obras', 'obra'));
     }
 
