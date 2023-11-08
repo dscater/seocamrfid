@@ -20,6 +20,11 @@ class Personal extends Model
         return $ultima_obra;
     }
 
+    public function obra_personals()
+    {
+        return $this->hasMany(ObraPersonal::class, 'personal_id');
+    }
+
     public function getHabilitadoTxtAttribute()
     {
         return $this->habilitado ? "SI" : "NO";

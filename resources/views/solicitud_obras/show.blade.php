@@ -71,8 +71,21 @@
                                                                                     class="rounded bg-success p-1 text-xs">Aprobado
                                                                                     <i class="fa fa-check"></i></span>
                                                                             @else
-                                                                                <span class="rounded bg-gray p-1 text-xs">En
-                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                                                                                    <span class="contenedor_check">
+                                                                                        <input type="checkbox"
+                                                                                            name=""
+                                                                                            style="height: 15px;width:15px;"
+                                                                                            class="check_aprueba"
+                                                                                            data-id="{{ $value->id }}"
+                                                                                            data-tipo="material">
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span
+                                                                                        class="rounded bg-gray p-1 text-xs">En
+                                                                                        espera <i
+                                                                                            class="fa fa-eye"></i></span>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                         <div class="card-body pb-1">
@@ -114,8 +127,21 @@
                                                                                     class="rounded bg-success p-1 text-xs">Aprobado
                                                                                     <i class="fa fa-check"></i></span>
                                                                             @else
-                                                                                <span class="rounded bg-gray p-1 text-xs">En
-                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                                                                                    <span class="contenedor_check">
+                                                                                        <input type="checkbox"
+                                                                                            name=""
+                                                                                            style="height: 15px;width:15px;"
+                                                                                            class="check_aprueba"
+                                                                                            data-id="{{ $value->id }}"
+                                                                                            data-tipo="herramienta">
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span
+                                                                                        class="rounded bg-gray p-1 text-xs">En
+                                                                                        espera <i
+                                                                                            class="fa fa-eye"></i></span>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                         <div class="card-body pb-1">
@@ -165,8 +191,21 @@
                                                                                     class="rounded bg-success p-1 text-xs">Aprobado
                                                                                     <i class="fa fa-check"></i></span>
                                                                             @else
-                                                                                <span class="rounded bg-gray p-1 text-xs">En
-                                                                                    espera <i class="fa fa-eye"></i></span>
+                                                                                @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
+                                                                                    <span class="contenedor_check">
+                                                                                        <input type="checkbox"
+                                                                                            name=""
+                                                                                            style="height: 15px;width:15px;"
+                                                                                            class="check_aprueba"
+                                                                                            data-id="{{ $value->id }}"
+                                                                                            data-tipo="personal">
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span
+                                                                                        class="rounded bg-gray p-1 text-xs">En
+                                                                                        espera <i
+                                                                                            class="fa fa-eye"></i></span>
+                                                                                @endif
                                                                             @endif
                                                                         </div>
                                                                         <div class="card-body pb-1">
@@ -189,7 +228,7 @@
                             </div>
                         </div>
                         <!-- /.card-body -->
-                        <div class="card-footer">
+                        {{-- <div class="card-footer">
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <h4 class="card-title text-center w-100">ESTADO DE SOLICITUD</h4>
@@ -203,9 +242,9 @@
                                 @if (Auth::user()->tipo == 'ADMINISTRADOR' || Auth::user()->tipo == 'AUXILIAR')
                                     <div class="col-md-12 text-center">
                                         @if ($solicitud_obra->aprobado == 1)
-                                            {{-- <button type="button" id="btnCambiarEstado"
+                                            <button type="button" id="btnCambiarEstado"
                                                 class="btn btn-warning">DESAPROBAR
-                                                SOLICITUD</button> --}}
+                                                SOLICITUD</button>
                                         @else
                                             <button type="button" id="btnCambiarEstado" class="btn btn-primary">APROBAR
                                                 SOLICITUD</button>
@@ -213,7 +252,7 @@
                                     </div>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- /.card -->
                 </div>
@@ -230,32 +269,47 @@
     <script>
         let btnCambiarEstado = $("#btnCambiarEstado");
         let estado = $("#estado").val();
+        let contenedor = null;
         $(document).ready(function() {
-            btnCambiarEstado.click(function() {
-                let valor = 0;
-                let mensaje = "¿Estás seguro(a) de <strong>DESAPROBAR</strong> esta solicitud?"
-                if (estado == 0) {
-                    mensaje = "¿Estás seguro(a) de <strong>APROBAR</strong> esta solicitud?"
-                    valor = 1;
+            // btnCambiarEstado.click(function() {
+            //     let valor = 0;
+            //     let mensaje = "¿Estás seguro(a) de <strong>DESAPROBAR</strong> esta solicitud?"
+            //     if (estado == 0) {
+            //         mensaje = "¿Estás seguro(a) de <strong>APROBAR</strong> esta solicitud?"
+            //         valor = 1;
+            //     }
+            //     Swal.fire({
+            //         title: "Confirmación",
+            //         html: mensaje,
+            //         icon: "question",
+            //         showCancelButton: true,
+            //         confirmButtonText: "Si, estoy seguro(a)",
+            //         cancelButtonText: "Cancelar",
+            //         confirmButtonColor: "#28a745",
+            //         cancelButtonColor: "#dc3545",
+            //     }).then((result) => {
+            //         if (result.value) {
+            //             actualizaEstado(valor)
+            //         }
+            //     });
+            // });
+
+            $(".contenedor_check").on("change", ".check_aprueba", function(e) {
+                e.preventDefault();
+                let input = $(this);
+                let check = input.prop("checked");
+                let tipo = input.attr("data-tipo");
+                let id = input.attr("data-id");
+                let estado = 1;
+                if (!check) {
+                    estado = 0;
                 }
-                Swal.fire({
-                    title: "Confirmación",
-                    html: mensaje,
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonText: "Si, estoy seguro(a)",
-                    cancelButtonText: "Cancelar",
-                    confirmButtonColor: "#28a745",
-                    cancelButtonColor: "#dc3545",
-                }).then((result) => {
-                    if (result.value) {
-                        actualizaEstado(valor)
-                    }
-                });
-            });
+                actualizaEstado(estado, tipo, id);
+                contenedor = $(this).parent();
+            })
         });
 
-        function actualizaEstado(estado) {
+        function actualizaEstado(estado, tipo, id) {
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('#token').val()
@@ -263,11 +317,18 @@
                 type: "POST",
                 url: $("#urlCambiaEstadoSolicitud").val(),
                 data: {
-                    estado
+                    estado,
+                    tipo,
+                    id
                 },
                 dataType: "json",
                 success: function(response) {
-                    location.reload();
+                    // location.reload();
+                    contenedor.html(
+                        `<span class="rounded bg-success p-1 text-xs">Aprobado<i class="fa fa-check"></i></span>`
+                    );
+
+                    toastr.success("Solicitud aprobada");
                 }
             });
         }

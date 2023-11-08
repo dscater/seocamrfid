@@ -325,47 +325,59 @@ class SolicitudObraController extends Controller
 
     public function cambiaEstado(SolicitudObra $solicitud_obra, Request $request)
     {
-        $solicitud_obra->aprobado = $request->estado;
+        // $solicitud_obra->aprobado = $request->estado;
         $obra = $solicitud_obra->obra;
+        $id_solicitud = $request->id;
+        $tipo = $request->tipo;
         $solicitud_obra->save();
 
-        if ($solicitud_obra->aprobado == 1) {
-            $solicitud_obra->solicitud_materials()->update([
-                "aprobado" => 1,
-            ]);
-            $solicitud_obra->solicitud_herramientas()->update([
-                "aprobado" => 1,
-            ]);
-            $solicitud_obra->solicitud_personals()->update([
-                "aprobado" => 1,
-            ]);
-
-            $nueva_notificacion = Notificacion::create([
-                'registro_id' => $solicitud_obra->id,
-                'tipo'  => 'SOLICITUD',
-                'accion' => "NUEVO",
-                'mensaje' => "SE APROBÓ LA SOLICITUD DE LA OBRA: " . $solicitud_obra->obra->nombre,
-                'fecha' => date('Y-m-d'),
-                'hora' => date('H:i:s'),
-            ]);
-            NotificacionUser::create([
-                'notificacion_id' => $nueva_notificacion->id,
-                'user_id' => $obra->jefe_id,
-                'visto' => 0
-            ]);
-        } else {
-            $solicitud_obra->solicitud_materials()->update([
-                "aprobado" => 0,
-            ]);
-            $solicitud_obra->solicitud_herramientas()->update([
-                "ingreso" => 0,
-                "aprobado" => 0,
-            ]);
-            $solicitud_obra->solicitud_personals()->update([
-                "ingreso" => 0,
-                "aprobado" => 0,
-            ]);
+        if ($tipo == 'material') {
+            $solicitud_material = SolicitudMaterial::findOrFail($id_solicitud);
+            $solicitud_material->aprobado = $request->estado;
+            $solicitud_material->save();
         }
+
+        if ($tipo == 'herramienta') {
+            $solicitud_herramienta = SolicitudHerramienta::findOrFail($id_solicitud);
+            $solicitud_herramienta->aprobado = $request->estado;
+            $solicitud_herramienta->save();
+        }
+
+        if ($tipo == 'personal') {
+            $solicitud_personal = SolicitudPersonal::findOrFail($id_solicitud);
+            $solicitud_personal->aprobado = $request->estado;
+            $solicitud_personal->save();
+        }
+
+        // verificar aprobado
+        $total_solicitud_herramientas = count($solicitud_obra->solicitud_herramientas);
+        $total_solicitud_materials = count($solicitud_obra->solicitud_materials);
+        $solicitud_personals = count($solicitud_obra->solicitud_personals);
+        $total_solicitud_herramientas_aprobados = count($solicitud_obra->solicitud_herramientas->where("aprobado", 1));
+        $total_solicitud_materials_aprobados = count($solicitud_obra->solicitud_materials->where("aprobado", 1));
+        $solicitud_personals_aprobados = count($solicitud_obra->solicitud_personals->where("aprobado", 1));
+        if ($total_solicitud_herramientas == $total_solicitud_herramientas_aprobados && $total_solicitud_materials == $total_solicitud_materials_aprobados && $solicitud_personals == $solicitud_personals_aprobados) {
+            $solicitud_obra->aprobado = 1;
+            $solicitud_obra->save();
+        }
+
+
+        $tipo_txt = $tipo == 'material' ? 'MATERIAL' : ($tipo == 'herramienta' ? 'HERRAMIENTA' : ($tipo == 'personal' ? 'PERSONAL' : ''));
+
+        $nueva_notificacion = Notificacion::create([
+            'registro_id' => $solicitud_obra->id,
+            'tipo'  => 'SOLICITUD',
+            'accion' => "NUEVO",
+            'mensaje' => "SE APROBÓ LA SOLICITUD DE " . $tipo_txt . " EN LA OBRA: " . $solicitud_obra->obra->nombre,
+            'fecha' => date('Y-m-d'),
+            'hora' => date('H:i:s'),
+        ]);
+        NotificacionUser::create([
+            'notificacion_id' => $nueva_notificacion->id,
+            'user_id' => $obra->jefe_id,
+            'visto' => 0
+        ]);
+
         return response()->JSON(true);
     }
 

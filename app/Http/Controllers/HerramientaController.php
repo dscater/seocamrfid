@@ -30,7 +30,8 @@ class HerramientaController extends Controller
         $nuevo_monitoreo = MonitoreoHerramienta::create([
             'herramienta_id' => $nueva_herramienta->id,
             'accion' => 'INGRESO',
-            'fecha_registro' => date('Y-m-d')
+            'fecha_registro' => date('Y-m-d'),
+            "hora" => date("H:i:s"),
         ]);
 
         $mensaje = 'INGRESO DE LA HERRAMIENTA ' . $nuevo_monitoreo->herramienta->nombre;

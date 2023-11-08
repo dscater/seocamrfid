@@ -107,10 +107,19 @@ class ReporteController extends Controller
         $filtro = $request->filtro;
         $obra = $request->obra;
 
-        $personals = Personal::where('estado', 1)->get();
+        $personals = Personal::select("personals.*")
+            ->join("obra_personals", "obra_personals.personal_id", "=", "personals.id")
+            ->where('estado', 1)
+            ->distinct()
+            ->get();
         if ($filtro == 'obra') {
             if ($obra != 'todos') {
-                $personals = Personal::where('estado', 1)->where('obra_id', $obra)->get();
+                $personals = Personal::select("personals.*")
+                    ->join("obra_personals", "obra_personals.personal_id", "=", "personals.id")
+                    ->where('estado', 1)
+                    ->where('obra_id', $obra)
+                    ->distinct()
+                    ->get();
             }
         }
 

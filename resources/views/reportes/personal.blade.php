@@ -170,7 +170,7 @@
                 <th>Domicilio</th>
                 <th>Familiar Referencia</th>
                 <th>Celular</th>
-                <th>Obra</th>
+                <th>Obra(s)</th>
                 <th>Cargo</th>
                 <th>Habilitado</th>
                 <th width="7%">Fecha Registro</th>
@@ -183,14 +183,21 @@
             @foreach ($personals as $personal)
                 <tr>
                     <td>{{ $cont++ }}</td>
-                    <td class="img_celda"><img src="{{ asset('imgs/personals/' . $personal->foto) }}" alt="Foto"></td>
+                    <td class="img_celda"><img src="{{ asset('imgs/personals/' . $personal->foto) }}" alt="Foto">
+                    </td>
                     <td>{{ $personal->nombre }} {{ $personal->paterno }} {{ $personal->materno }}</td>
                     <td>{{ $personal->ci }} {{ $personal->ci_exp }}</td>
                     <td>{{ $personal->cel }}</td>
                     <td>{{ $personal->domicilio }}</td>
                     <td>{{ $personal->familiar_referencia }}</td>
                     <td>{{ $personal->cel_familiar }}</td>
-                    <td>{{ $personal->ultima_obra ? $personal->ultima_obra->obra->nombre : '-' }}</td>
+                    <td>
+                        <ul>
+                            @foreach ($personal->obra_personals as $op)
+                                <li>{{ $op->obra->nombre }}</li>
+                            @endforeach
+                        </ul>
+                    </td>
                     <td>{{ $personal->cargo }}</td>
                     <td>{{ $personal->habilitado_txt }}</td>
                     <td>{{ $personal->fecha_registro }}</td>

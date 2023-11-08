@@ -91,8 +91,10 @@ class MaterialObraController extends Controller
                     $solicitud_material->cantidad_usada = $solicitud_material->cantidad_usada + (float)$cantidad_ingresos[$i];
                     $solicitud_material->save();
 
-                    if ($material_obra->stock_actual <= $material_obra->stock_minimo) {
+                    if ($material_obra->stock_actual < $material_obra->stock_minimo) {
                         $material_obra->estado_stock = 'BAJO';
+                    } else {
+                        $material_obra->estado_stock = 'NORMAL';
                     }
                     // else{
                     //     throw new Exception('No es posible realizar el registro debido a que la cantidad supera al stock disponible ' . $material_obra->stock_actual);
@@ -148,8 +150,10 @@ class MaterialObraController extends Controller
                     if ($cantidad_salidas[$i] <= $material_obra->stock_actual) {
                         $material_obra->stock_actual = (float)$material_obra->stock_actual - $cantidad_salidas[$i];
                     }
-                    if ($material_obra->stock_actual <= $material_obra->stock_minimo) {
+                    if ($material_obra->stock_actual < $material_obra->stock_minimo) {
                         $material_obra->estado_stock = 'BAJO';
+                    } else {
+                        $material_obra->estado_stock = 'NORMAL';
                     }
                     $material_obra->save();
                     $nuevo_is = IngresoSalida::create([
