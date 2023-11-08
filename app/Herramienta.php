@@ -31,10 +31,12 @@ class Herramienta extends Model
         $almacen = ObraHerramientaUso::where("herramienta_id", $this->id)->sum("total_almacen");
         if ($almacen == 0) {
             $ultimo_ingreso = MonitoreoHerramienta::where("herramienta_id", $this->id)->get()->last();
-            if ($ultimo_ingreso && $ultimo_ingreso->accion == 'SALIDA') {
-                $almacen = 0;
-            } else {
-                $almacen = Herramienta::horasTranscurridas($ultimo_ingreso->fecha_registro, $ultimo_ingreso->hora, date("Y-m-d"), date("H:i"));
+            if ($ultimo_ingreso) {
+                if ($ultimo_ingreso->accion == 'SALIDA') {
+                    $almacen = 0;
+                } else {
+                    $almacen = Herramienta::horasTranscurridas($ultimo_ingreso->fecha_registro, $ultimo_ingreso->hora, date("Y-m-d"), date("H:i"));
+                }
             }
         }
         return $almacen; //INGRESOS
@@ -44,7 +46,7 @@ class Herramienta extends Model
         // obtener la suma total de salidas
         $uso = ObraHerramientaUso::where("herramienta_id", $this->id)->sum("total_uso");
         $ultimo_ingreso = MonitoreoHerramienta::where("herramienta_id", $this->id)->get()->last();
-        if ($this->asignacion_herramienta && $ultimo_ingreso->accion != "INGRESO") {
+        if ($ultimo_ingreso && $this->asignacion_herramienta && $ultimo_ingreso->accion != "INGRESO") {
             $uso = Herramienta::horasTranscurridas($ultimo_ingreso->fecha_registro, $ultimo_ingreso->hora, date("Y-m-d"), date("H:i"));
         } else {
             $uso = 0;
