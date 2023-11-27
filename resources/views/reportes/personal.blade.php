@@ -183,7 +183,7 @@
             @foreach ($personals as $personal)
                 <tr>
                     <td>{{ $cont++ }}</td>
-                    <td class="img_celda"><img src="{{ asset('imgs/personals/' . $personal->foto) }}" alt="Foto">
+                    <td class="img_celda"><img src="{{ $personal->url_foto }}" alt="Foto">
                     </td>
                     <td>{{ $personal->nombre }} {{ $personal->paterno }} {{ $personal->materno }}</td>
                     <td>{{ $personal->ci }} {{ $personal->ci_exp }}</td>

@@ -22,6 +22,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ["url_foto"];
+    public function getUrlFotoAttribute()
+    {
+        if ($this->foto && file_exists(public_path("/imgs/users/" . $this->foto))) {
+            return asset("/imgs/users/" . $this->foto);
+        }
+        return asset("/imgs/users/user_default.png");
+    }
+
+
     public function getFullNameAttribute()
     {
         if ($this->datosUsuario) {

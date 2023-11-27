@@ -54,7 +54,7 @@ class PersonalController extends Controller
         $personal->update(array_map('mb_strtoupper', $request->except('foto')));
         if ($request->hasFile('foto')) {
             // antiguo
-            $antiguo = $personal->user->foto;
+            $antiguo = $personal->foto;
             if ($antiguo != 'user_default.png') {
                 \File::delete(public_path() . '/imgs/personals/' . $antiguo);
             }
@@ -64,7 +64,7 @@ class PersonalController extends Controller
             $extension = "." . $file_foto->getClientOriginalExtension();
             $nom_foto = $personal->nombre . time() . $extension;
             $file_foto->move(public_path() . "/imgs/personals/", $nom_foto);
-            $personal->user->foto = $nom_foto;
+            $personal->foto = $nom_foto;
         }
         $personal->save();
         return redirect()->route('personals.index')->with('bien', 'personal modificado con éxito');
@@ -75,10 +75,10 @@ class PersonalController extends Controller
         return 'mostrar personal';
     }
 
-    public function destroy(User $user)
+    public function destroy(Personal $personal)
     {
-        $user->estado = 0;
-        $user->save();
+        $personal->estado = 0;
+        $personal->save();
         return redirect()->route('personals.index')->with('bien', 'Registro eliminado correctamente');
     }
 }

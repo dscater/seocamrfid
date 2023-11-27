@@ -175,8 +175,8 @@
                 <tr>
                     <td class="bold" width="14%">Usuario:</td>
                     <td>{{ $user->usuario }}</td>
-                    <td class="img_celda" colspan="2" rowspan="4"><img
-                            src="{{ asset('imgs/users/' . $user->foto) }}" alt="Foto"></td>
+                    <td class="img_celda" colspan="2" rowspan="4"><img src="{{ $user->user->url_foto }}"
+                            alt="Foto"></td>
                 </tr>
                 <tr>
                     <td class="bold">Nombre: </td>
@@ -228,15 +228,26 @@
                         $numero = 1;
                     @endphp
                     @foreach ($user->obras_asignadas as $oa)
-                        <tr>
-                            <td class="centreado">{{ $numero++ }}</td>
-                            <td>{{ $oa->nombre }}</td>
-                            <td>{{ $oa->fecha_obra }}</td>
-                            <td class="centreado">{{ $oa->c_material }}</td>
-                            <td class="centreado">{{ $oa->c_herramientas }}</td>
-                            <td class="centreado">{{ $oa->c_personal }}</td>
-                            <td class="centreado">{{ count($oa->nota_obras) }}</td>
-                        </tr>
+                        @php
+                            $muestra = true;
+                            if ($filtro == 'fecha') {
+                                $muestra = false;
+                                if (date('Y-m-d', strtotime($oa->created_at)) >= $fecha_ini && date('Y-m-d', strtotime($oa->created_at)) <= $fecha_fin) {
+                                    $muestra = true;
+                                }
+                            }
+                        @endphp
+                        @if ($muestra)
+                            <tr>
+                                <td class="centreado">{{ $numero++ }}</td>
+                                <td>{{ $oa->nombre }}</td>
+                                <td>{{ $oa->fecha_obra }}</td>
+                                <td class="centreado">{{ $oa->c_material }}</td>
+                                <td class="centreado">{{ $oa->c_herramientas }}</td>
+                                <td class="centreado">{{ $oa->c_personal }}</td>
+                                <td class="centreado">{{ count($oa->nota_obras) }}</td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

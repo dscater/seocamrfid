@@ -27,7 +27,7 @@ class MaterialObraController extends Controller
             if ($mo->stock_actual >= $mo->stock_minimo) {
                 $mo->estado_stock = 'NORMAL';
             } else {
-                $mo->estado_stock = 'BACJO';
+                $mo->estado_stock = 'BAJO';
             }
             $mo->save();
         }

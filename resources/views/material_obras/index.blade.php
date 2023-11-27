@@ -83,7 +83,8 @@
 
                                     <div class="col-md-6 overflow-auto">
                                         <h4>MATERIALES ASIGNADOS</h4>
-                                        <small class="text-gray d-flex w-100 justify-content-end">Para una busqueda mas especifica use comillas("Texto")</small>
+                                        <small class="text-gray d-flex w-100 justify-content-end">Para una busqueda mas
+                                            especifica use comillas("Texto")</small>
                                         <table class="datatable1 table table-bordered">
                                             <thead>
                                                 <tr class="bg-teal">
@@ -97,13 +98,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($material_obras as $material_obra)
-                                                    @php
-                                                        $color_stock = '';
-                                                        if ($material_obra->estado_stock == 'BAJO') {
-                                                            $color_stock = 'stock_bajo';
-                                                        }
-                                                    @endphp
-                                                    <tr class="{{ $color_stock }}">
+                                                    <tr
+                                                        class={{ $material_obra->stock_actual < $material_obra->stock_minimo ? 'bg-danger' : '' }}>
                                                         <td>{{ $material_obra->fecha_registro }}</td>
                                                         <td>{{ $material_obra->material->nombre }}</td>
                                                         <td>{{ $material_obra->stock_minimo }}</td>

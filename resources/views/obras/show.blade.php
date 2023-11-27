@@ -51,7 +51,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($obra->materials as $mo)
-                                                <tr class={{ $mo->stock_actual <= $mo->stock_minimo ? 'bg-danger' : '' }}>
+                                                <tr class={{ $mo->stock_actual < $mo->stock_minimo ? 'bg-danger' : '' }}>
                                                     <td>{{ $mo->material->nombre }}</td>
                                                     <td>{{ $mo->stock_actual }}</td>
                                                 </tr>

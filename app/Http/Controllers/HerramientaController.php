@@ -98,6 +98,7 @@ class HerramientaController extends Controller
 
     public function destroy(herramienta $herramienta)
     {
+        $herramienta->monitoreos()->delete();
         $herramienta->delete();
         return redirect()->route('herramientas.index')->with('bien', 'Registro eliminado correctamente');
     }

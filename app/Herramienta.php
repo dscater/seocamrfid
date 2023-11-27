@@ -60,7 +60,7 @@ class Herramienta extends Model
         $almacen = ObraHerramientaUso::where("herramienta_id", $this->id)->sum("total_almacen");
         if ($almacen == 0) {
             $ultimo_ingreso = MonitoreoHerramienta::where("herramienta_id", $this->id)->get()->last();
-            if ($ultimo_ingreso->accion == 'INGRESO') {
+            if ($ultimo_ingreso && $ultimo_ingreso->accion == 'INGRESO') {
                 $almacen = Herramienta::horasTranscurridas($ultimo_ingreso->fecha_registro, $ultimo_ingreso->hora, date("Y-m-d"), date("H:i"));
             }
         }

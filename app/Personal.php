@@ -12,7 +12,14 @@ class Personal extends Model
         'cel_familiar', 'foto', 'cargo', 'habilitado', 'fecha_registro', 'estado',
     ];
 
-    protected $appends = ["habilitado_txt", "full_name", "ultima_obra"];
+    protected $appends = ["habilitado_txt", "full_name", "ultima_obra", "url_foto"];
+    public function getUrlFotoAttribute()
+    {
+        if ($this->foto && file_exists(public_path("/imgs/personals/" . $this->foto))) {
+            return asset("/imgs/personals/" . $this->foto);
+        }
+        return asset("/imgs/personals/user_default.png");
+    }
 
     public function getUltimaObraAttribute()
     {

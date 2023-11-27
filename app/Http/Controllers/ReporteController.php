@@ -54,7 +54,9 @@ class ReporteController extends Controller
     public function usuarios(Request $request)
     {
         $filtro = $request->filtro;
-
+        $fecha_ini = $request->fecha_ini;
+        $fecha_fin = $request->fecha_fin;
+        
         $usuarios = DatosUsuario::select('datos_usuarios.*', 'users.id as user_id', 'users.name as usuario', 'users.tipo', 'users.foto')
             ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
             ->where('users.estado', 1)
@@ -87,10 +89,24 @@ class ReporteController extends Controller
                             ->get();
                     }
                     break;
+                case 'fecha':
+                    $fecha_ini = $request->fecha_ini;
+                    $fecha_fin = $request->fecha_fin;
+                    if ($fecha_ini && $fecha_fin) {
+                        $usuarios = DatosUsuario::select('datos_usuarios.*', 'users.id as user_id', 'users.name as usuario', 'users.tipo', 'users.foto')
+                            ->join('users', 'users.id', '=', 'datos_usuarios.user_id')
+                            ->join('obras', 'obras.jefe_id', '=', 'users.id')
+                            ->where('users.estado', 1)
+                            ->whereBetween('obras.created_at', [$fecha_ini, $fecha_fin])
+                            ->orderBy('datos_usuarios.nombre', 'ASC')
+                            ->distinct()
+                            ->get();
+                    }
+                    break;
             }
         }
 
-        $pdf = PDF::loadView('reportes.usuarios', compact('usuarios'))->setPaper('letter', 'portrait');
+        $pdf = PDF::loadView('reportes.usuarios', compact('usuarios', 'filtro', 'fecha_ini', 'fecha_fin'))->setPaper('letter', 'portrait');
         // ENUMERAR LAS PÁGINAS USANDO CANVAS
         $pdf->output();
         $dom_pdf = $pdf->getDomPDF();
@@ -121,6 +137,11 @@ class ReporteController extends Controller
                     ->distinct()
                     ->get();
             }
+        } else {
+            $personals = Personal::select("personals.*")
+                ->where('estado', 1)
+                ->distinct()
+                ->get();
         }
 
         $pdf = PDF::loadView('reportes.personal', compact('personals'))->setPaper('legal', 'landscape');
