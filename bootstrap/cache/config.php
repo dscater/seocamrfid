@@ -609,7 +609,7 @@
     array (
       'font_dir' => 'C:\\laragon\\www\\seocamrfid\\storage\\fonts/',
       'font_cache' => 'C:\\laragon\\www\\seocamrfid\\storage\\fonts/',
-      'temp_dir' => 'C:\\Users\\VICTOR\\AppData\\Local\\Temp',
+      'temp_dir' => 'C:\\Users\\victo\\AppData\\Local\\Temp',
       'chroot' => 'C:\\laragon\\www\\seocamrfid',
       'enable_font_subsetting' => false,
       'pdf_backend' => 'CPDF',
